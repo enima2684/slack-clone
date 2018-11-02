@@ -1,0 +1,23 @@
+{
+  "name": "slack-clone",
+  "version": "1.0.0",
+  "description": "A clone of slack",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/enima2684/slack-clone.git"
+  },
+  "author": "Amine Bouamama",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/enima2684/slack-clone/issues"
+  },
+  "homepage": "https://github.com/enima2684/slack-clone#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.1.1"
+  }
+}
