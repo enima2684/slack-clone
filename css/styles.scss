@@ -1,0 +1,243 @@
+$color-primary: #2c2d30;
+$color-secondary: #cac4c9;
+$color-bg: #4D394B;
+$color-bg-highlight: #3E313C;
+
+$side-bar-padding-left   : 15px;
+$side-bar-padding-right  : 12px;
+
+
+* { padding: 0; margin: 0; }
+
+html, body {
+  min-height: 100% !important;
+  height: 100%;
+  margin: 0;
+  font-size: 16px;
+  font-family:  NotoSansJP, Slack-Lato, appleLogo, sans-serif
+}
+
+ul{
+  list-style-type: none;
+}
+
+.body-container{
+  width: 100%;
+  display: flex;
+  height: 100%;
+}
+
+.side-bar{
+  background-color: #4D394B;
+  height: 100%;
+  flex-basis: 200px;
+  flex-grow: 0;
+  flex-shrink: 0;
+  color: $color-secondary;
+
+
+  .header{
+
+    margin: 15px 0;
+    padding: 0 $side-bar-padding-right 0 $side-bar-padding-right;
+
+    #workspace{
+      color: white;
+      cursor: pointer;
+      margin: 3px 0;
+      font-size: 1.1rem;
+    }
+
+    .user-status{
+      cursor: pointer;
+      font-size: 0.875rem;
+      margin: 5px 0;
+      i{
+        font-size: 0.6rem;
+        color: lightgreen;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .separator{
+    height: 18px;
+  }
+
+  >section{
+
+
+
+    h3{
+      font-size: 1rem;
+      font-weight: 400;
+      margin: 10px 0 3px 0;
+      cursor: pointer;
+      padding: 0 $side-bar-padding-right 0 $side-bar-padding-right;
+    }
+    h3:hover{
+      color: white;
+    }
+
+
+    ul{
+      li{
+        padding: 0 $side-bar-padding-right 0 $side-bar-padding-right;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        i{
+          font-size: 0.6rem;
+          color: lightgreen;
+        }
+        span{
+          margin-left: 5px;
+        }
+      }
+      li:hover{
+        background-color: #3E313C;
+
+      }
+    }
+  }
+
+
+}
+
+section.main{
+  width: 100%;
+  height: 100%;
+  padding-top: 11px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+
+  .header{
+    padding-left: 20.1px;
+    height: 49px;
+    border-bottom: 1px solid #cac4c9;
+
+
+    .meta-conv{
+      margin-top: 5px;
+      font-size: 0.8rem;
+      color: #717274;
+      height: 24px;
+      display: flex;
+
+      .separator{
+        padding: 0 5px;
+      }
+    }
+
+  }
+
+  .message-container{
+    flex-grow: 2;
+    margin-top: 10px;
+
+    ul{
+
+      li{
+
+        padding: 8px 0;
+        margin: 0 70px 0 20px;
+        display:flex;
+
+        .avatar{
+          height: 38px;
+          width: 38px;
+          padding-right: 8px;
+
+          img{
+            height: 100%;
+            width: 100%;
+            border-radius: 5px;
+          }
+        }
+
+        .msg{
+
+          .msg-metatdata{
+            display:flex;
+            align-items: flex-end;
+
+            .msg-sender{
+              font-size: 0.9375rem;
+              font-weight: 700;
+              padding-right: 5px
+            }
+
+            .msg-sending-time{
+              font-size: 0.75rem;
+              color: #717274;
+            }
+
+          }
+
+          .msg-content{
+            margin-top: 8px;
+            font-size: 0.9375rem;
+            color: #2c2d30;
+            //line-height: 1.375rem;
+          }
+
+        }
+
+      }
+
+    }
+
+  }
+
+  .input-container{
+    height: 66px;
+    //background-color: lightgreen;
+
+    .input{
+      height: 40px;
+      width: 95%;
+      border: 1px solid #717274;
+      margin: 0 auto;
+      border-radius: 10px;
+      display: flex;
+      flex-grow: 1;
+
+      .btn-attachment{
+        height: 100%;
+        width: 40px;
+        color: #717274;
+        flex-grow: 0;
+        flex-basis: 40px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        //font-weight: 700;
+        cursor: pointer;
+        border-bottom-left-radius: 10px;
+        border-top-left-radius: 10px;
+      }
+
+      .btn-attachment:hover{
+        background-color: #56B68B;
+        color: white;
+        background-size: cover;
+      }
+
+      input{
+        flex-grow: 2;
+        font-size: 1.0rem;
+        font-weight: 300;
+        padding-left: 5px;
+      }
+
+
+
+    }
+
+
+  }
+
+}

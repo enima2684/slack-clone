@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Slack</title>
+
+  <!--CSS Imports-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+
+  <!--JS Packages Imports-->
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+
+</head>
+<body>
+
+<div class="body-container">
+
+  <div class="side-bar">
+    <div class="header">
+      <h2 id="workspace">Ironhack</h2>
+      <div class="user-status">
+        <i class="fas fa-circle"></i><span>Amine</span>
+      </div>
+    </div>
+    <div class="separator"></div>
+    <section class="channels">
+      <h3>Chaînes</h3>
+      <ul class="ul-sidebar">
+        <li># <span>code-help</span></li>
+        <li># <span>general</span></li>
+        <li># <span>jobs-global</span></li>
+        <li># <span>ux-surveys</span></li>
+        <li># <span>webparis-1018</span></li>
+      </ul>
+    </section>
+    <div class="separator"></div>
+    <section class="direct-messages">
+      <h3>Messages Directs</h3>
+      <ul class="ul-sidebar">
+        <li><i class="fas fa-circle"></i> <span class="other-user">Amine (you)</span></li>
+        <li><i class="fas fa-circle"></i> <span class="other-user">Antoine</span></li>
+        <li><i class="fas fa-circle"></i> <span class="other-user">Filippo</span></li>
+        <li><i class="fas fa-circle"></i> <span class="other-user">Marie</span></li>
+        <li><i class="fas fa-circle"></i> <span class="other-user">Nizaroni</span></li>
+      </ul>
+    </section>
+  </div>
+
+  <section class="main">
+
+    <div class="header">
+      <h3>#code-help</h3>
+      <div class="meta-conv">
+
+        <div class="item favorite">
+          <i class="far fa-star"></i>
+        </div>
+
+        <div class="separator">|</div>
+
+        <div class="item persons-count">
+          <i class="far fa-user"></i>
+          <span>506</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="message-container">
+
+      <ul>
+
+        <li>
+          <div class="avatar"><img src="assets/avatar-7.png" alt=""></div>
+          <div class="msg">
+            <div class="msg-metatdata">
+              <div class="msg-sender">Amine</div>
+              <div class="msg-sending-time">10 h 27</div>
+            </div>
+            <div class="msg-content">
+              yes. I have usually 2h of transports per day, and it can be much more during public holidays
+            </div>
+
+          </div>
+        </li>
+
+        <li>
+          <div class="avatar"><img src="assets/avatar-12.png" alt=""></div>
+          <div class="msg">
+            <div class="msg-metatdata">
+              <div class="msg-sender">SomeOne</div>
+              <div class="msg-sending-time">10 h 28</div>
+            </div>
+            <div class="msg-content">
+              I know, it is always a pain in the ass..
+            </div>
+
+          </div>
+        </li>
+
+      </ul>
+
+
+    </div>
+
+    <div class="input-container">
+
+      <div class="input">
+
+        <div class="btn-attachment"><i class="fas fa-plus"></i></div>
+        <input id="msg-input" type="text">
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+
+
+<script src="js/index.js"></script>
+</body>
+</html>
