@@ -4,6 +4,7 @@
 }
 
 html, body {
+  margin: 0;
   min-height: 100% !important;
   height: 100%;
   margin: 0;
@@ -106,6 +107,9 @@ section.main .header .meta-conv .separator {
 section.main .message-container {
   flex-grow: 2;
   margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 section.main .message-container ul li {
   padding: 8px 0;
@@ -175,6 +179,12 @@ section.main .input-container .input input {
   font-size: 1rem;
   font-weight: 300;
   padding-left: 5px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+section.main .input-container .input input::placeholder {
+  font-size: 0.875rem;
+  letter-spacing: 0.3px;
 }
 
 /*# sourceMappingURL=styles.css.map */
