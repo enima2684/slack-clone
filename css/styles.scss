@@ -55,7 +55,7 @@ ul{
       margin: 5px 0;
       i{
         font-size: 0.6rem;
-        color: lightgreen;
+        color: #38978D;
         margin-right: 5px;
       }
     }
@@ -90,7 +90,7 @@ ul{
         cursor: pointer;
         i{
           font-size: 0.6rem;
-          color: lightgreen;
+          color: #38978D;
         }
         span{
           margin-left: 5px;
@@ -113,6 +113,7 @@ section.main{
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  box-sizing: border-box;
 
   .header{
     padding-left: 20.1px;
@@ -198,14 +199,14 @@ section.main{
 
   .input-container{
     height: 66px;
-    //background-color: lightgreen;
+    //margin-bottom: 10px;
 
     .input{
       height: 40px;
       width: 95%;
-      border: 1px solid #717274;
+      border: 2px solid #717274;
       margin: 0 auto;
-      border-radius: 10px;
+      border-radius: 5px;
       display: flex;
       flex-grow: 1;
 
@@ -221,8 +222,9 @@ section.main{
         justify-content: center;
         //font-weight: 700;
         cursor: pointer;
-        border-bottom-left-radius: 10px;
-        border-top-left-radius: 10px;
+        border-bottom-left-radius: 5px;
+        border-top-left-radius: 5px;
+        border-right: 2px solid #717274;
       }
 
       .btn-attachment:hover{
@@ -236,19 +238,15 @@ section.main{
         font-size: 1.0rem;
         font-weight: 300;
         padding-left: 5px;
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-
-
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border: none;
       }
 
       input::placeholder{
         font-size: 0.875rem;
         letter-spacing: 0.3px;
       }
-
-
-
 
     }
 
