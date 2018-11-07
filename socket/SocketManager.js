@@ -92,8 +92,6 @@
       // config the handler
       this.socket.on(messageId, callback);
     }
-
-
   }
 
   exports.SocketManager = SocketManager;

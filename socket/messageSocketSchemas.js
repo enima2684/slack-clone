@@ -35,5 +35,9 @@
     channelId             : Joi.string().required(),
   });
 
+  /*** user:disconnect ***/
+  messageSocketSchemas["disconnect"] = Joi.object().keys({});
+
+
   exports.messageSocketSchemas = messageSocketSchemas;
 })(typeof exports === 'undefined'? window: module.exports);

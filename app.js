@@ -1,3 +1,4 @@
+/*** External imports ***/
 const express = require('express');
 const app     = express();
 const http    = require('http').Server(app);
@@ -10,7 +11,7 @@ app.use('/socket', express.static('socket'));
 
 /*** Internal imports ***/
 const config  = require('./config/config.js');
-const SocketManager = require('./socket/SocketManager').SocketManager;
+const SocketMessageHandler = require('./server/SocketMessageHandler').SocketMessageHandler;
 
 
 /*** Routes ***/
@@ -19,31 +20,9 @@ app.get('/', (req, res) => {
 });
 
 
-/*** Sockets ***/
-// FIXME: all of this is a mess
-
-
-io.on('connection', client => {
-
-  const socketManager = new SocketManager({
-    socket: client,
-    io: io
-  });
-
-  socketManager.on("message:submit", message => {
-    let broadcastedMessage = Object.assign({}, message);
-    broadcastedMessage.broadcastingTimestamp = +new Date();
-
-    socketManager.emit({
-      id: "message:broadcast",
-      message: broadcastedMessage,
-      senderIsServer: true
-    });
-  })
-
-  // client.on("message:submit", )
-
-});
+/*** Message Sockets ***/
+let socketMessageHandler = new SocketMessageHandler({io});
+socketMessageHandler.initListenners();
 
 
 /*** Listen ***/
