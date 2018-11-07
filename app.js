@@ -3,12 +3,15 @@ const app     = express();
 const http    = require('http').Server(app);
 const io      = require('socket.io')(http);
 
-const config  = require('./config/config.js');
-
-
 /*** Serve Static Files  ***/
 app.use('/assets', express.static('assets'));
 app.use('/socket', express.static('socket'));
+
+
+/*** Internal imports ***/
+const config  = require('./config/config.js');
+const SocketManager = require('./socket/SocketManager').SocketManager;
+
 
 /*** Routes ***/
 app.get('/', (req, res) => {
@@ -18,15 +21,24 @@ app.get('/', (req, res) => {
 
 /*** Sockets ***/
 // FIXME: all of this is a mess
+
+
 io.on('connection', client => {
 
-  client.on("message:submit", message => {
-    console.log(message);
+  const socketManager = new SocketManager({
+    socket: client,
+    io: io
+  });
 
+  client.on("message:submit", message => {
     let broadcastedMessage = Object.assign({}, message);
     broadcastedMessage.broadcastingTimestamp = +new Date();
-    io.emit("message:broadcast", broadcastedMessage)
 
+    socketManager.emit({
+      id: "message:broadcast",
+      message: broadcastedMessage,
+      senderIsServer: true
+    });
   })
 
 });

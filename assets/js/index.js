@@ -4,14 +4,14 @@
 $(document).ready(()=>{
 
   const socket = io();
-  const socketManager = new SocketManager({socket});
+  const socketManager = new window.SocketManager({socket});
 
-  let messageDomHandler = new MessageDomHandler({
+  const messageDomHandler = new MessageDomHandler({
     MessageSocketSender,
     socketManager,
   });
 
-  let socketListenner = new MessageSocketListenner({
+  const socketListenner = new MessageSocketListenner({
     socket: socket,
     domHandler: messageDomHandler,
   });
