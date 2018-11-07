@@ -11,14 +11,13 @@ app.use('/socket', express.static('socket'));
 
 /*** Internal imports ***/
 const config  = require('./config/config.js');
+const logger  = require('./config/logger.js');
 const SocketMessageHandler = require('./server/SocketMessageHandler').SocketMessageHandler;
-
 
 /*** Routes ***/
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
-
 
 /*** Message Sockets ***/
 let socketMessageHandler = new SocketMessageHandler({io});
@@ -26,4 +25,4 @@ socketMessageHandler.initListenners();
 
 
 /*** Listen ***/
-http.listen(config.web.port, ()=>console.log(`listenning on ${config.web.port}`));
+http.listen(config.web.port, ()=>logger.info(`web server listenning on port ${config.web.port}`));
