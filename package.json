@@ -18,6 +18,12 @@
   "homepage": "https://github.com/enima2684/slack-clone#readme",
   "dependencies": {
     "express": "^4.16.4",
+    "joi": "^14.0.4",
+    "joi-browser": "^13.4.0",
+    "nodemon": "^1.18.6",
     "socket.io": "^2.1.1"
+  },
+  "browser": {
+    "joi": "joi-browser"
   }
 }

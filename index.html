@@ -9,9 +9,10 @@
 
   <!--CSS Imports-->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
-  <link rel="stylesheet" href="assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/styles.css">
 
   <!--JS Packages Imports-->
+  <script src="https://cdn.jsdelivr.net/npm/joi-browser@13.4.0/dist/joi-browser.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
 
@@ -54,7 +55,7 @@
   <section class="main">
 
     <div class="header">
-      <h3>#code-help</h3>
+      <h3>#general</h3>
       <div class="meta-conv">
 
         <div class="item favorite">
@@ -73,35 +74,21 @@
 
     <div class="message-container">
 
-      <ul>
+      <ul id="msg-ul">
 
-        <li>
-          <div class="avatar"><img src="assets/avatars/avatar-7.png" alt=""></div>
-          <div class="msg">
-            <div class="msg-metatdata">
-              <div class="msg-sender">Amine</div>
-              <div class="msg-sending-time">10 h 27</div>
-            </div>
-            <div class="msg-content">
-              yes. I have usually 2h of transports per day, and it can be much more during public holidays
-            </div>
+        <!--<li>-->
+          <!--<div class="avatar"><img src="assets/avatars/avatar-7.png" alt=""></div>-->
+          <!--<div class="msg">-->
+            <!--<div class="msg-metatdata">-->
+              <!--<div class="msg-sender">Amine</div>-->
+              <!--<div class="msg-sending-time">10 h 27</div>-->
+            <!--</div>-->
+            <!--<div class="msg-content">-->
+              <!--yes. I have usually 2h of transports per day, and it can be much more during public holidays-->
+            <!--</div>-->
 
-          </div>
-        </li>
-
-        <li>
-          <div class="avatar"><img src="assets/avatars/avatar-12.png" alt=""></div>
-          <div class="msg">
-            <div class="msg-metatdata">
-              <div class="msg-sender">Pirate</div>
-              <div class="msg-sending-time">10 h 28</div>
-            </div>
-            <div class="msg-content">
-              I know, it is always a pain in the ass.. But believe me, it is even worse on high sea !
-            </div>
-
-          </div>
-        </li>
+          <!--</div>-->
+        <!--</li>-->
 
       </ul>
 
@@ -121,9 +108,12 @@
 
 </div>
 
-
-
-
-<script src="assets/js/index.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/socket/messageSocketSchemas.js"></script>
+<script src="/socket/SocketManager.js"></script>
+<script src="/assets/js/MessageSocketSender.js"></script>
+<script src="/assets/js/MessageSocketListenner.js"></script>
+<script src="/assets/js/MessageDomHandler.js"></script>
+<script src="/assets/js/index.js"></script>
 </body>
 </html>
