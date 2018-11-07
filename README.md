@@ -1,5 +1,5 @@
 # Next steps :
-- Setup logger
+
 - Write tests
 - use hbs
 - DB models with sequelize
