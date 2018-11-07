@@ -10,3 +10,12 @@
 - different channels
 - different workspaces
 - fine tune with additional features
+
+
+## tests:
+modules that need tests are :
+- server/SocketMessageGendler
+- socket/SocketManager
+- assets/js/MessageSocketSender
+- assets/js/MessageSocketListenner
+- assets/js/MessageDomHandler

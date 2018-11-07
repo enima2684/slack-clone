@@ -23,6 +23,7 @@ class SocketMessageHandler{
 
       socketManager.on('disconnect', ()=>this.onDisconnect(socketManager));
 
+      return this
     });
 
   }
@@ -47,6 +48,8 @@ class SocketMessageHandler{
       senderIsServer: true
     });
     logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
+
+    return this
   }
 
   /**
@@ -55,6 +58,7 @@ class SocketMessageHandler{
    */
   onDisconnect(socketManager){
     logger.debug(`user ${socketManager.socket.id} is now disconnected`);
+    return this
   }
 
 }
