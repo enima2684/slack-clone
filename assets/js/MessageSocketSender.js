@@ -6,12 +6,12 @@ class MessageSocketSender{
   /**
    *
    * @param content - content of the message to be sent
-   * @param socket - socket object
+   * @param socketManager - socketManager object
    * @param senderId - id of the user sending the message
    * @param channelId - id of the channel receiving the message. N.B : the channel cna be one user
    */
-  constructor({content, socket, senderId, channelId}){
-    this.socket    = socket;
+  constructor({content, socketManager, senderId, channelId}){
+    this.socketManager = socketManager;
     this.content   = content;
     this.senderId  = senderId;
     this.channelId = channelId;
@@ -24,7 +24,12 @@ class MessageSocketSender{
 
     let message = this.buildMessage();
 
-    this.socket.emit('message:submit', message);
+    this.socketManager.emit({
+      id:'message:submit',
+      message: message,
+      senderIsServer: false
+    });
+
   }
 
   /**

@@ -8,6 +8,7 @@ const config  = require('./config/config.js');
 
 /*** Serve Static Files  ***/
 app.use('/assets', express.static('assets'));
+app.use('/socket', express.static('socket'));
 
 /*** Routes ***/
 app.get('/', (req, res) => {

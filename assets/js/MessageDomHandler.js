@@ -6,10 +6,10 @@ class MessageDomHandler{
   /**
    *
    * @param MessageSocketSender: constructor of the MessageSocketSender class
-   * @param socket: instance of a socket
+   * @param socketManager: instance of a SocketManager
    */
-  constructor({socket, MessageSocketSender}){
-    this.socket = socket;
+  constructor({socketManager, MessageSocketSender}){
+    this.socketManager = socketManager;
     this.MessageSocketSender = MessageSocketSender;
   }
 
@@ -44,10 +44,10 @@ class MessageDomHandler{
     // send message
     let messageSender =
       new this.MessageSocketSender({
+        content: messageContent,
+        socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
-        socket: this.socket,
-        content: messageContent
       });
     messageSender.send();
 
@@ -68,7 +68,7 @@ class MessageDomHandler{
    */
   getSenderId(){
     // FIXME : information has to come from the current session
-    return "Amine"
+    return "amine"
   }
 
   /**
@@ -113,7 +113,6 @@ class MessageDomHandler{
 
     return this
   }
-
 
 
   /**

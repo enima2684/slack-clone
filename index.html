@@ -14,6 +14,7 @@
   <!--JS Packages Imports-->
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/joi-browser@13.4.0/dist/joi-browser.min.js"></script>
 
 
 </head>
@@ -55,7 +56,7 @@
   <section class="main">
 
     <div class="header">
-      <h3>#code-help</h3>
+      <h3>#general</h3>
       <div class="meta-conv">
 
         <div class="item favorite">
@@ -90,20 +91,6 @@
           <!--</div>-->
         <!--</li>-->
 
-        <!--<li>-->
-          <!--<div class="avatar"><img src="assets/avatars/avatar-12.png" alt=""></div>-->
-          <!--<div class="msg">-->
-            <!--<div class="msg-metatdata">-->
-              <!--<div class="msg-sender">Pirate</div>-->
-              <!--<div class="msg-sending-time">10 h 28</div>-->
-            <!--</div>-->
-            <!--<div class="msg-content">-->
-              <!--I know, it is always a pain in the ass.. But believe me, it is even worse on high sea !-->
-            <!--</div>-->
-
-          <!--</div>-->
-        <!--</li>-->
-
       </ul>
 
     </div>
@@ -122,7 +109,8 @@
 
 </div>
 
-
+<script src="socket/messageSocketSchemas.js"></script>
+<script src="socket/SocketManager.js"></script>
 <script src="assets/js/MessageSocketSender.js"></script>
 <script src="assets/js/MessageSocketListenner.js"></script>
 <script src="assets/js/MessageDomHandler.js"></script>
