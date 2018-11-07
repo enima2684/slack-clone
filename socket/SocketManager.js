@@ -37,17 +37,11 @@
      */
     emit({id, message, senderIsServer=true}){
 
-      // 1. do the checks
-      let schema = this.getSchema(id);
-      const {error, value} = Joi.validate(message, schema);
-      let isValidMessage = (error === null);
+      // 1.validate message
+      this.validateSchema(id, message);
 
-      // 2. handle not valid message
-      if(!isValidMessage){
-        throw new Error("Trying to send message with wrong schema through socket : " + error.message);
-      }
 
-      // 3. send the message
+      // 2. send the message
       if(senderIsServer){
         this.io.emit(id, message);
       } else {
@@ -57,12 +51,48 @@
     }
 
     /**
+     * Returns true if a message is conform to the expected schema, returns false otherwise
+     * @param id - id to identify the message
+     * @param message - content of the message to be sent
+     */
+    validateSchema(id, message){
+      let schema = this.getSchema(id);
+      const {error, value} = Joi.validate(message, schema);
+      let isValidMessage = error === null;
+
+      // 2. handle not valid message
+      if(!isValidMessage){
+        throw new Error("Message with wrong schema through socket : " + error.message);
+      }
+
+      return isValidMessage
+    }
+
+    /**
      * Gets the schema for a given message id
      * @param id
      */
     getSchema(id){
-      return messageSocketSchemas[id];
+      if(messageSocketSchemas.hasOwnProperty(id)){
+        return messageSocketSchemas[id];
+      } else {
+        throw new Error(`Message of ${id} does not have a specified schema. Please specify a schema for it !`)
+      }
     }
+
+    /**
+     * Sets up a handler when config io receives a message
+     * @param messageId
+     * @param callback
+     */
+    on(messageId, callback){
+      // check if schema exists - otherwise this will return an error
+      let schema = this.getSchema(messageId);
+
+      // config the handler
+      this.socket.on(messageId, callback);
+    }
+
 
   }
 

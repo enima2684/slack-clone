@@ -30,7 +30,7 @@ io.on('connection', client => {
     io: io
   });
 
-  client.on("message:submit", message => {
+  socketManager.on("message:submit", message => {
     let broadcastedMessage = Object.assign({}, message);
     broadcastedMessage.broadcastingTimestamp = +new Date();
 
@@ -40,6 +40,8 @@ io.on('connection', client => {
       senderIsServer: true
     });
   })
+
+  // client.on("message:submit", )
 
 });
 
