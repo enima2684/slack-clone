@@ -1,4 +1,5 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
+const logger  = require('../config/logger.js');
 
 class SocketMessageHandler{
 
@@ -14,11 +15,14 @@ class SocketMessageHandler{
 
     this.io.on('connection', client => {
 
+      logger.debug(`socket ${client.id} connected`);
+
       let socketManager = new SocketManager({socket: client, io: this.io});
 
       socketManager.on('message:submit', message => this.onMessageSubmit(socketManager,message));
 
-      socketManager.on('disconnect', (socketManager)=>this.onDisconnect(socketManager));
+      socketManager.on('disconnect', ()=>this.onDisconnect(socketManager));
+
     });
 
   }
@@ -30,6 +34,8 @@ class SocketMessageHandler{
    */
   onMessageSubmit(socketManager, message) {
 
+    logger.debug(`message submitted from user ${message.senderId}`);
+
     // add the broadcasting time to the message
     let broadcastedMessage = Object.assign({}, message);
     broadcastedMessage.broadcastingTimestamp = +new Date();
@@ -40,6 +46,7 @@ class SocketMessageHandler{
       message: broadcastedMessage,
       senderIsServer: true
     });
+    logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
   }
 
   /**
@@ -47,7 +54,7 @@ class SocketMessageHandler{
    * @param socketManager
    */
   onDisconnect(socketManager){
-    console.log("a user got disconnected");
+    logger.debug(`user ${socketManager.socket.id} is now disconnected`);
   }
 
 }
