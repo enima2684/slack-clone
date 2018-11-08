@@ -3,11 +3,15 @@ const express = require('express');
 const app     = express();
 const http    = require('http').Server(app);
 const io      = require('socket.io')(http);
+const hbs     = require('hbs');
 
 /*** Serve Static Files  ***/
 app.use('/assets', express.static('assets'));
 app.use('/socket', express.static('socket'));
 
+/** setup view engine : hbs**/
+app.set('view engine', 'hbs');
+hbs.registerPartials(__dirname + '/views/partials');
 
 /*** Internal imports ***/
 const config  = require('./config/config.js');
@@ -16,7 +20,7 @@ const SocketMessageHandler = require('./server/SocketMessageHandler').SocketMess
 
 /*** Routes ***/
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.render('index');
 });
 
 /*** Message Sockets ***/

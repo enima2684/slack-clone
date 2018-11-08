@@ -1,6 +1,5 @@
 # Next steps :
 
-- Write tests
 - use hbs
 - DB models with sequelize
 - Create some users
