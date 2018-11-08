@@ -8,6 +8,7 @@ const hbs     = require('hbs');
 /*** Serve Static Files  ***/
 app.use('/assets', express.static('assets'));
 app.use('/socket', express.static('socket'));
+app.use('/views', express.static('views'));
 
 /** setup view engine : hbs**/
 app.set('view engine', 'hbs');
@@ -26,7 +27,6 @@ app.get('/', (req, res) => {
 /*** Message Sockets ***/
 let socketMessageHandler = new SocketMessageHandler({io});
 socketMessageHandler.initListenners();
-
 
 /*** Listen ***/
 http.listen(config.web.port, ()=>logger.info(`web server listenning on port ${config.web.port}`));

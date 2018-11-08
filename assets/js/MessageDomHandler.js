@@ -92,26 +92,20 @@ class MessageDomHandler{
    */
   renderMessage({senderId, timestamp, content}){
 
-    const message = {senderId, timestamp, content};
+    $.get('views/partials/message.hbs', messageTemplate => {
+      let renderMessage = Handlebars.compile(messageTemplate);
+      let templateParams = {
+        senderId,
+        content,
+        avatar: 'assets/avatars/avatar-7.png',
+        timestamp: this.getFormatedTime(timestamp)
+      };
 
-    let htmlMessage = `
-      <li>
-        <div class="avatar"><img src="assets/avatars/avatar-7.png" alt=""></div>
-        <div class="msg">
-          <div class="msg-metatdata">
-            <div class="msg-sender">${message.senderId}</div>
-            <div class="msg-sending-time">${this.getFormatedTime(message.timestamp)}</div>
-          </div>
-          <div class="msg-content">
-            ${message.content}
-          </div>
-        </div>
-      </li>
-    `;
+      $("#msg-ul").append(renderMessage(templateParams));
 
-    $("#msg-ul").append(htmlMessage);
+      return this
+    });
 
-    return this
   }
 
 

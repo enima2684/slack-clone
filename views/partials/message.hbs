@@ -1,16 +1,16 @@
 <li>
-  <div class="avatar"><img src="assets/avatars/avatar-7.png" alt=""></div>
+  <div class="avatar"><img src="{{ avatar }}" alt=""></div>
   <div class="msg">
     <div class="msg-metatdata">
       <div class="msg-sender">
-        {{ message.senderId }}
+        {{ senderId }}
       </div>
       <div class="msg-sending-time">
-        {{ message.timestamp }}
+        {{ timestamp }}
       </div>
     </div>
     <div class="msg-content">
-      {{ message.content }}
+      {{ content }}
     </div>
   </div>
 </li>
