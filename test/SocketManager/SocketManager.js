@@ -90,7 +90,6 @@ describe("socket/SocketManager", () => {
 
   });
 
-
   describe('emit', () => {
     it("emits a message without an error", () => {
       let socketManager = new SocketManager({socket: io, io});
@@ -105,7 +104,5 @@ describe("socket/SocketManager", () => {
       })
     });
   });
-
-
 
 });
