@@ -40,7 +40,6 @@
       // 1.validate message
       this.validateSchema(id, message);
 
-
       // 2. send the message
       if(senderIsServer){
         this.io.emit(id, message);
@@ -51,11 +50,15 @@
     }
 
     /**
-     * Returns true if a message is conform to the expected schema, returns false otherwise
+     * Returns true if a message is conform to the expected schema, returns an error otherwise
      * @param id - id to identify the message
      * @param message - content of the message to be sent
      */
     validateSchema(id, message){
+
+      if(message === undefined) { throw new Error("Please provide a message to the validateSchema method") };
+      if(id === undefined) { throw new Error("Please provide an id to the validateSchema method") };
+
       let schema = this.getSchema(id);
       const {error, value} = Joi.validate(message, schema);
       let isValidMessage = error === null;

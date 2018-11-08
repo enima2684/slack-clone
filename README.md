@@ -14,8 +14,8 @@
 
 ## tests:
 modules that need tests are :
-- server/SocketMessageGendler
-- socket/SocketManager
+- server/SocketMessageGendler  -- OK
+- socket/SocketManager  -- OK
 - assets/js/MessageSocketSender
 - assets/js/MessageSocketListenner
 - assets/js/MessageDomHandler

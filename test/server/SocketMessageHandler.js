@@ -3,7 +3,7 @@ const app     = express();
 const http    = require('http').Server(app);
 const io      = require('socket.io')(http);
 const assert  = require('assert');
-const expect  = require('chai').expect
+const expect  = require('chai').expect;
 
 const logger  = require('../../config/logger.js');
 const SocketMessageHandler = require('../../server/SocketMessageHandler').SocketMessageHandler;
@@ -12,10 +12,9 @@ const SocketManager = require('../../socket/SocketManager').SocketManager;
 describe("server/SocketMessageHandler", () => {
 
   describe("initListenners", ()=>{
-    it('should run without returning an error', (done)=>{
+    it('should run without returning an error', ()=>{
       let socketMessageHandler = new SocketMessageHandler({io});
       socketMessageHandler.initListenners();
-      done();à
     })
   });
 
@@ -84,6 +83,16 @@ describe("server/SocketMessageHandler", () => {
         senderId: "amine",
         // channelId: "general"
       };
+      expect(
+        () => socketMessageHandler.onMessageSubmit({socketManager, message})
+      ).to.throw();
+    });
+
+
+    it('expect to throw if receiving empty message', () => {
+      let socketMessageHandler = new SocketMessageHandler({io});
+      let socketManager = new SocketManager({socket: io, io});
+      let message = {};
       expect(
         () => socketMessageHandler.onMessageSubmit({socketManager, message})
       ).to.throw();
