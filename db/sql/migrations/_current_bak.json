@@ -45,12 +45,6 @@
                 "content": {
                     "seqType": "Sequelize.STRING"
                 },
-                "senderId": {
-                    "seqType": "Sequelize.STRING"
-                },
-                "channelId": {
-                    "seqType": "Sequelize.STRING"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
@@ -58,6 +52,36 @@
                 "updatedAt": {
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
+                },
+                "ChannelId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Channels",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "senderId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "channelId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Channels",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
                 },
                 "UserId": {
                     "allowNull": true,
@@ -199,5 +223,5 @@
             "indexes": []
         }
     },
-    "revision": 5
+    "revision": 8
 }

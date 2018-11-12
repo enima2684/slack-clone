@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'workspaceId'
     });
 
-    Workspace.hasMany(models.Channel);
+    Workspace.hasMany(models.Channel, {foreignKey: 'workspaceId'});
   };
   return Workspace;
 };

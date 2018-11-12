@@ -11,9 +11,8 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'channelId'
     });
 
-    Channel.belongsTo(models.Workspace);
-
-    Channel.hasMany(models.Message);
+    Channel.belongsTo(models.Workspace, {as: 'workspace', foreignKey: 'workspaceId'});
+    Channel.hasMany(models.Message, {foreignKey: 'channelId'});
   };
   return Channel;
 };
