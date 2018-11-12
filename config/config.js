@@ -15,6 +15,7 @@ config.db = {};
 config.db.sql = {
   dialect: 'postgres',
   username: 'amine',
+  password: null,
   host: 'localhost',
   port: 5432,
   database: 'slack_db_dev'
@@ -23,8 +24,7 @@ config.db.sql = {
 
 
 // Redis Database
-config.db.redis = {}
-
+config.db.redis = {};
 
 
 module.exports = config;
