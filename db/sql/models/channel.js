@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Channel.belongsTo(models.Workspace);
+
+    Channel.hasMany(models.Message);
   };
   return Channel;
 };

@@ -59,6 +59,16 @@
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
                 },
+                "ChannelId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Channels",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "UserId": {
                     "allowNull": true,
                     "references": {
@@ -199,5 +209,5 @@
             "indexes": []
         }
     },
-    "revision": 5
+    "revision": 6
 }
