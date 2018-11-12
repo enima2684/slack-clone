@@ -14,7 +14,7 @@ config.db = {};
 // SQL Database
 config.db.sql = {
   driver: 'postgres',
-  username: 'bouamamaa amine',
+  username: 'amine',
   host: 'localhost',
   port: 5432,
   dbName: 'slack_db_dev'
