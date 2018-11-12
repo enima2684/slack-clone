@@ -6,11 +6,10 @@ module.exports = (sequelize, DataTypes) => {
     createdBy: DataTypes.STRING,
   }, {});
   Workspace.associate = function(models) {
-
     Workspace.belongsToMany(models.User, {
       as: 'users',
       through: 'WorkspacesUsers',
-      foreignKey: 'id'
+      foreignKey: 'workspaceId'
     });
   };
   return Workspace;

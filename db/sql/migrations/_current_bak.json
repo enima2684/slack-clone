@@ -96,6 +96,9 @@
                 "image": {
                     "seqType": "Sequelize.STRING"
                 },
+                "createdBy": {
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
@@ -110,10 +113,16 @@
         "WorkspacesUsers": {
             "tableName": "WorkspacesUsers",
             "schema": {
-                "id": {
+                "createdAt": {
                     "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "userId": {
                     "primaryKey": true,
-                    "autoIncrement": true,
                     "references": {
                         "model": "Users",
                         "key": "id"
@@ -122,13 +131,15 @@
                     "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "createdAt": {
-                    "allowNull": false,
-                    "seqType": "Sequelize.DATE"
-                },
-                "updatedAt": {
-                    "allowNull": false,
-                    "seqType": "Sequelize.DATE"
+                "workspaceId": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Workspaces",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []

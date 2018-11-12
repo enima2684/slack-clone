@@ -9,14 +9,14 @@ var Sequelize = require('sequelize');
  * createTable "Messages", deps: []
  * createTable "Users", deps: []
  * createTable "Workspaces", deps: []
- * createTable "WorkspacesUsers", deps: [Users]
+ * createTable "WorkspacesUsers", deps: [Users, Workspaces]
  *
  **/
 
 var info = {
     "revision": 1,
-    "name": "initial migration",
-    "created": "2018-11-12T14:14:39.876Z",
+    "name": "init",
+    "created": "2018-11-12T15:10:38.304Z",
     "comment": ""
 };
 
@@ -127,6 +127,9 @@ var migrationCommands = [{
                 "image": {
                     "type": Sequelize.STRING
                 },
+                "createdBy": {
+                    "type": Sequelize.STRING
+                },
                 "createdAt": {
                     "type": Sequelize.DATE,
                     "allowNull": false
@@ -144,18 +147,6 @@ var migrationCommands = [{
         params: [
             "WorkspacesUsers",
             {
-                "id": {
-                    "type": Sequelize.INTEGER,
-                    "onUpdate": "CASCADE",
-                    "onDelete": "CASCADE",
-                    "references": {
-                        "model": "Users",
-                        "key": "id"
-                    },
-                    "autoIncrement": true,
-                    "primaryKey": true,
-                    "allowNull": false
-                },
                 "createdAt": {
                     "type": Sequelize.DATE,
                     "allowNull": false
@@ -163,6 +154,26 @@ var migrationCommands = [{
                 "updatedAt": {
                     "type": Sequelize.DATE,
                     "allowNull": false
+                },
+                "userId": {
+                    "type": Sequelize.INTEGER,
+                    "onUpdate": "CASCADE",
+                    "onDelete": "CASCADE",
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "primaryKey": true
+                },
+                "workspaceId": {
+                    "type": Sequelize.INTEGER,
+                    "onUpdate": "CASCADE",
+                    "onDelete": "CASCADE",
+                    "references": {
+                        "model": "Workspaces",
+                        "key": "id"
+                    },
+                    "primaryKey": true
                 }
             },
             {}

@@ -4,7 +4,11 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING
   }, {});
   Channel.associate = function(models) {
-    // associations can be defined here
+    Channel.belongsToMany(models.User,{
+      as:'users',
+      through: 'ChannelsUsers',
+      foreignKey: 'channelId'
+    });
   };
   return Channel;
 };
