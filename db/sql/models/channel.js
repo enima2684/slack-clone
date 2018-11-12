@@ -1,8 +1,18 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Channel = sequelize.define('Channel', {
-    name: DataTypes.STRING
-  }, {});
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
+  }, {
+    indexes: [
+      {
+        unique: true,
+        fields: ['name']
+      }
+    ]
+  });
   Channel.associate = function(models) {
 
     Channel.belongsToMany(models.User, {

@@ -1,7 +1,10 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Message = sequelize.define('Message', {
-    content: DataTypes.STRING
+    content: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
   }, {});
   Message.associate = function(models) {
 
