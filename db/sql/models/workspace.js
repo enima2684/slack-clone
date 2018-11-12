@@ -6,11 +6,14 @@ module.exports = (sequelize, DataTypes) => {
     createdBy: DataTypes.STRING,
   }, {});
   Workspace.associate = function(models) {
+
     Workspace.belongsToMany(models.User, {
       as: 'users',
       through: 'WorkspacesUsers',
       foreignKey: 'workspaceId'
     });
+
+    Workspace.hasMany(models.Channel);
   };
   return Workspace;
 };

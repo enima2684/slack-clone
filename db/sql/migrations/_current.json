@@ -19,6 +19,16 @@
                 "updatedAt": {
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
+                },
+                "WorkspaceId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Workspaces",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -179,5 +189,5 @@
             "indexes": []
         }
     },
-    "revision": 2
+    "revision": 4
 }

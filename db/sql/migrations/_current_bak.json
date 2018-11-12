@@ -19,6 +19,26 @@
                 "updatedAt": {
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
+                },
+                "workspaceId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Workspaces",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "WorkspaceId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Workspaces",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
@@ -110,6 +130,40 @@
             },
             "indexes": []
         },
+        "ChannelsUsers": {
+            "tableName": "ChannelsUsers",
+            "schema": {
+                "createdAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "channelId": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Channels",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userId": {
+                    "primaryKey": true,
+                    "references": {
+                        "model": "Users",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
         "WorkspacesUsers": {
             "tableName": "WorkspacesUsers",
             "schema": {
@@ -145,5 +199,5 @@
             "indexes": []
         }
     },
-    "revision": 1
+    "revision": 3
 }
