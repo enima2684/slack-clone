@@ -41,22 +41,6 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
-/*** TESTS - should be empty !***/
-db.sql.User
-  .bulkCreate([
-    {nickname: 'amine', email:'amine@gmail.com', avatar:'myAvatar'},
-    {nickname: 'antoine', email:'antoine@gmail.com', avatar:'myAvatar'},
-    {nickname: 'niccolo', email:'niccolo@gmail.com', avatar:'myAvatar'},
-    {nickname: 'fareha', email:'fareha@gmail.com', avatar:'myAvatar'},
-  ])
-  .then(() => {
-  logger.info('user data inserted successfully');
-})
-  .catch(err => {
-    logger.error(`Error while inserting users : ${err}`);
-  })
-;
-
 
 /*** Listen ***/
 http.listen(config.web.port, ()=>logger.info(`web server listenning on port ${config.web.port}`));
