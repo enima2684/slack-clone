@@ -1,18 +1,18 @@
 
 
-const configg = {};
+const config = {};
 
 
 /**** Web Config ****/
-configg.web = {
+config.web = {
   port: process.env.WEB_PORT || 5000
 };
 
 /**** DATABASE ****/
-configg.db = {};
+config.db = {};
 
 // SQL Database
-configg.db.sql = {
+config.db.sql = {
   dialect: 'postgres',
   username: 'amine',
   host: 'localhost',
@@ -23,8 +23,8 @@ configg.db.sql = {
 
 
 // Redis Database
-configg.db.redis = {}
+config.db.redis = {}
 
 
 
-module.exports = configg;
+module.exports = config;
