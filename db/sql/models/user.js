@@ -1,12 +1,20 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    nickname: DataTypes.STRING,
-    email: DataTypes.STRING,
-    avatar: DataTypes.STRING
+    nickname: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    email: {
+      type: DataTypes.STRING,
+      unique: true
+    },
+    avatar: {
+      type: DataTypes.STRING,
+      defaultValue: '/assets/avatars/avatar.png'
+    }
   }, {});
   User.associate = function(models) {
-
 
     User.belongsToMany(models.Workspace, {
       as: 'workspaces',

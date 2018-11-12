@@ -20,7 +20,7 @@
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
                 },
-                "WorkspaceId": {
+                "workspaceId": {
                     "allowNull": true,
                     "references": {
                         "model": "Workspaces",
@@ -53,26 +53,6 @@
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
                 },
-                "ChannelId": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "Channels",
-                        "key": "id"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.INTEGER"
-                },
-                "senderId": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "Users",
-                        "key": "id"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "channelId": {
                     "allowNull": true,
                     "references": {
@@ -83,7 +63,7 @@
                     "onUpdate": "CASCADE",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "UserId": {
+                "userId": {
                     "allowNull": true,
                     "references": {
                         "model": "Users",
@@ -109,6 +89,7 @@
                     "seqType": "Sequelize.STRING"
                 },
                 "email": {
+                    "unique": true,
                     "seqType": "Sequelize.STRING"
                 },
                 "avatar": {
@@ -223,5 +204,5 @@
             "indexes": []
         }
     },
-    "revision": 8
+    "revision": 10
 }

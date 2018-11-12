@@ -86,12 +86,17 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "nickname": {
+                    "allowNull": false,
                     "seqType": "Sequelize.STRING"
                 },
                 "email": {
+                    "unique": true,
                     "seqType": "Sequelize.STRING"
                 },
                 "avatar": {
+                    "defaultValue": {
+                        "value": "/assets/avatars/avatar.png"
+                    },
                     "seqType": "Sequelize.STRING"
                 },
                 "createdAt": {
@@ -203,5 +208,5 @@
             "indexes": []
         }
     },
-    "revision": 9
+    "revision": 11
 }
