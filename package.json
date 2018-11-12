@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "test": "mocha --recursive",
-    "sequelize": "sequelize --options-path=db/options.js"
+//    "sequelize": "sequelize --options-path=db/options.js"
   },
   "repository": {
     "type": "git",
