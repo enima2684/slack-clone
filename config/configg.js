@@ -1,28 +1,30 @@
 
 
-const config = {};
+const configg = {};
 
 
 /**** Web Config ****/
-config.web = {
+configg.web = {
   port: process.env.WEB_PORT || 5000
 };
 
 /**** DATABASE ****/
-config.db = {};
+configg.db = {};
 
 // SQL Database
-config.db.sql = {
-  driver: 'postgres',
+configg.db.sql = {
+  dialect: 'postgres',
   username: 'amine',
   host: 'localhost',
   port: 5432,
-  dbName: 'slack_db_dev'
+  database: 'slack_db_dev'
 };
 
+
+
 // Redis Database
-config.db.redis = {}
+configg.db.redis = {}
 
 
 
-module.exports = config;
+module.exports = configg;

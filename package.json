@@ -4,7 +4,8 @@
   "description": "A clone of slack",
   "main": "index.html",
   "scripts": {
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "sequelize": "sequelize --options-path=db/options.js"
   },
   "repository": {
     "type": "git",

@@ -15,7 +15,7 @@ app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
 
 /*** Internal imports ***/
-const config  = require('./config/config.js');
+const config  = require('./config/configg.js');
 const logger  = require('./config/logger.js');
 const SocketMessageHandler = require('./server/SocketMessageHandler').SocketMessageHandler;
 
