@@ -1,7 +1,11 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Workspace = sequelize.define('Workspace', {
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
     image: DataTypes.STRING,
     createdBy: DataTypes.STRING,
   }, {});

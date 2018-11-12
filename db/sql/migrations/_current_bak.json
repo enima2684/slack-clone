@@ -10,6 +10,7 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "name": {
+                    "allowNull": false,
                     "seqType": "Sequelize.STRING"
                 },
                 "createdAt": {
@@ -31,7 +32,17 @@
                     "seqType": "Sequelize.INTEGER"
                 }
             },
-            "indexes": []
+            "indexes": {
+                "0ff570737e17d9fa187078048b653dc06d87ac45": {
+                    "unique": true,
+                    "fields": [
+                        "name"
+                    ],
+                    "options": {
+                        "indicesType": "UNIQUE"
+                    }
+                }
+            }
         },
         "Messages": {
             "tableName": "Messages",
@@ -43,6 +54,7 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "content": {
+                    "allowNull": false,
                     "seqType": "Sequelize.STRING"
                 },
                 "createdAt": {
@@ -208,5 +220,5 @@
             "indexes": []
         }
     },
-    "revision": 11
+    "revision": 12
 }
