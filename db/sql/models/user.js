@@ -6,7 +6,13 @@ module.exports = (sequelize, DataTypes) => {
     avatar: DataTypes.STRING
   }, {});
   User.associate = function(models) {
-    // associations can be defined here
+
+    User.belongsToMany(models.Workspace, {
+      through: 'WorkspacesUsers',
+      as: 'workspaces',
+      foreignKey: 'id'
+    })
+
   };
   return User;
 };

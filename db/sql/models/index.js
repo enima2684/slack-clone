@@ -15,17 +15,6 @@ if (config.use_env_variable) {
 } else {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
-//
-//
-// // let  sequelize = new Sequelize(config.db.sql.database, config.db.sql.username, config.db.sql.password, config.db.sql);
-// let sequelize = new Sequelize({
-//   database: config.db.sql.database,
-//   username: config.db.sql.username,
-//   password: config.db.sql.password,
-//   host: config.db.sql.host,
-//   port: config.db.sql.port,
-//   dialect: config.db.sql.dialect,
-// });
 
 
 fs

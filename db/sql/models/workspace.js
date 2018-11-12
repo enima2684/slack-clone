@@ -5,7 +5,13 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING
   }, {});
   Workspace.associate = function(models) {
-    // associations can be defined here
+
+    Workspace.belongsToMany(model.User, {
+      as: 'users',
+      through: 'WorkspacesUsers',
+      foreignKey: 'id'
+    });
+
   };
   return Workspace;
 };
