@@ -2,7 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   const Workspace = sequelize.define('Workspace', {
     name: DataTypes.STRING,
-    image: DataTypes.STRING
+    image: DataTypes.STRING,
+    createdBy: DataTypes.STRING,
   }, {});
   Workspace.associate = function(models) {
 

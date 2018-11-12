@@ -35,8 +35,8 @@ if(!process.env.PWD){
     process.env.PWD = process.cwd()
 }
 
-let migrationsDir = path.join(process.env.PWD, options['migrations-path'] || 'migrations'),
-    modelsDir     = path.join(process.env.PWD, options['models-path'] || 'models');
+let migrationsDir = path.join(process.env.PWD, options['migrations-path'] || 'db/sql/migrations'),
+    modelsDir     = path.join(process.env.PWD, options['models-path'] || 'db/sql/models');
 
 
 // current state
