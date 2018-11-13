@@ -4,7 +4,10 @@
   "description": "A clone of slack",
   "main": "index.html",
   "scripts": {
-    "test": "mocha --recursive"
+    "test": "mocha --recursive",
+    "makemigration": "node ./helpers/sequelize-auto-migrations/bin/makemigration.js",
+    "runmigration": "node ./helpers/sequelize-auto-migrations/bin/runmigration.js",
+    "mockdata": "node ./db/sql/seeders/mock.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +26,10 @@
     "joi": "^14.0.4",
     "joi-browser": "^13.4.0",
     "mocha": "^5.2.0",
+    "pg": "^7.6.1",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.41.1",
+    "sequelize-auto-migrations": "^1.0.2",
     "socket.io": "^2.1.1",
     "winston": "^3.1.0"
   },
