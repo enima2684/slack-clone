@@ -3,12 +3,24 @@
 
 # Next steps :
 
-- Login functionality
+- Login functionality:
+    - SignUp
+        - Front end
+        - Back end
+    - Login
+        - Front end
+        - Back end
+
 - tests on the db
+
 - different users send different messages on the general channel
+
 - set up redis
+
 - different channels
+
 - different workspaces
+
 - functional features
 
 Done :
