@@ -6,7 +6,6 @@
       "routes/**/*.js",
       "assets/**/*.js",
       "bin/**/*.js",
-      "db/**/*.js",
       "heplers/**/*.js"
     ],
     "excluded": [
