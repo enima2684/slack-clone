@@ -15,11 +15,11 @@
 
 - different users send different messages on the general channel
 
-- set up redis
-
 - different channels
 
 - different workspaces
+
+- set up redis
 
 - functional features
 

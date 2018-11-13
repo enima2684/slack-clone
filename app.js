@@ -41,6 +41,10 @@ app.get('/', (req, res) => {
   res.render('index');
 });
 
+app.get('/login', (req, res, next) =>{
+  res.render('login');
+});
+
 
 /*** Listen ***/
 http.listen(config.web.port, ()=>logger.info(`web server listenning on port ${config.web.port}`));
