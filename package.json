@@ -6,7 +6,8 @@
   "scripts": {
     "test": "mocha --recursive",
     "makemigration": "node ./helpers/sequelize-auto-migrations/bin/makemigration.js",
-    "runmigration": "node ./helpers/sequelize-auto-migrations/bin/runmigration.js"
+    "runmigration": "node ./helpers/sequelize-auto-migrations/bin/runmigration.js",
+    "mockdata": "node ./db/sql/seeders/mock.js"
   },
   "repository": {
     "type": "git",
