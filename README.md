@@ -1,4 +1,5 @@
 [![CircleCI](https://circleci.com/gh/enima2684/slack-clone.svg?style=svg)](https://circleci.com/gh/enima2684/slack-clone)
+[![Inline docs](https://inch-ci.org/github/enima2684/slack-clone?branch=master)](https://inch-ci.org/github/enima2684/slack-clone?branch=master)
 
 # Next steps :
 
