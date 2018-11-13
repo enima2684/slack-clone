@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/enima2684/slack-clone.svg?style=svg)](https://circleci.com/gh/enima2684/slack-clone)
+
 # Next steps :
 
 - Login functionality
