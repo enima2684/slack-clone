@@ -9,11 +9,10 @@
 - functional features
 
 Done :
+- setup CI
 - Create some users
 - DB models with sequelize
 - refactor socket
 - add logger
 - create tests
 - use hbs
-
-This is a random change
