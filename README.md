@@ -1,6 +1,5 @@
 # Next steps :
 
-- DB models with sequelize
 - Create some users
 - Login functionality
 - different users send different messages on the general channel
@@ -11,6 +10,7 @@
 
 
 Done :
+- DB models with sequelize
 - refactor socket
 - add logger
 - create tests
