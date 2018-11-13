@@ -3,7 +3,6 @@
 - Login functionality
 - tests on the db
 - different users send different messages on the general channel
-- setup continuous integration
 - set up redis
 - different channels
 - different workspaces
