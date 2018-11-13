@@ -1,15 +1,17 @@
 # Next steps :
 
-- Create some users
+
 - Login functionality
+- tests on the db
 - different users send different messages on the general channel
 - set up redis
 - different channels
 - different workspaces
-- fine tune with additional features
+- functional features
 
 
 Done :
+- Create some users
 - DB models with sequelize
 - refactor socket
 - add logger
