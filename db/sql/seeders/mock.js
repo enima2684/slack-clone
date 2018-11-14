@@ -3,6 +3,11 @@
 const db      = require('../../index.js').db;
 const logger  = require('../../../config/logger.js');
 const {User, Workspace, Message, Channel} = db.sql;
+const readline = require('readline');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 
 /*** Initialization **/
@@ -204,15 +209,27 @@ function createMessages(users){
 }
 
 /*** MAIN ***/
-initDb()
-  .then(() => createUsers(users))
-  .then(() => createWorkspaces(workspaces))
-  .then(() => createWorkspaceUserAssociations(users, workspaces, associations))
-  .then(() => createChannels(workspaces))
-  .then(() => createChannelUserInterractions())
-  .then(() => createMessages(users))
-  .then(() => logger.info('All db operations are done!'))
-  .catch(err => {
-    logger.error(err);
-    throw err;
-  });
+
+rl.question('Deleting all data in the database. Are you sure to continue (y/n)? ', (answer) => {
+
+  if(answer === 'y'){
+    initDb()
+    .then(() => createUsers(users))
+    .then(() => createWorkspaces(workspaces))
+    .then(() => createWorkspaceUserAssociations(users, workspaces, associations))
+    .then(() => createChannels(workspaces))
+    .then(() => createChannelUserInterractions())
+    .then(() => createMessages(users))
+    .then(() => logger.info('All db operations are done!'))
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
+  }
+
+  rl.close();
+});
+
+
+
+

@@ -10,7 +10,7 @@ app.use('/assets', express.static('assets'));
 app.use('/socket', express.static('socket'));
 app.use('/views', express.static('views'));
 
-/** setup view engine : hbs**/
+/*** setup view engine : hbs ***/
 app.set('view engine', 'hbs');
 hbs.registerPartials(__dirname + '/views/partials');
 
@@ -19,6 +19,7 @@ const config  = require('./config/config.js');
 const logger  = require('./config/logger.js');
 const SocketMessageHandler = require('./server/SocketMessageHandler').SocketMessageHandler;
 const db      = require('./db/index.js').db;
+const index   = require('./routes/index');
 
 
 /*** Test connection to the db ***/
@@ -27,8 +28,9 @@ db.sql.sequelize
   .then(() => {
     logger.info('Connection to SQL db has been established successfully.');
   })
-  .catch(() => {
+  .catch(err => {
     logger.error(`Unable to connect to the database: ${err}`);
+    throw err;
   });
 
 
@@ -37,12 +39,25 @@ let socketMessageHandler = new SocketMessageHandler({io});
 socketMessageHandler.initListenners();
 
 /*** Routes ***/
-app.get('/', (req, res) => {
-  res.render('index');
+app.use('/', index);
+
+/*** Error handling ***/
+// catch 404 and render a not-found.hbs template
+app.use((req, res, next) => {
+  res.status(404);
+  res.render('not-found');
 });
 
-app.get('/login', (req, res, next) =>{
-  res.render('login');
+// catch 500
+app.use((err, req, res, next) => {
+  // always log the error
+  console.error('ERROR', req.method, req.path, err);
+
+  // only render if the error ocurred before sending the response
+  if (!res.headersSent) {
+    res.status(500);
+    res.render('error');
+  }
 });
 
 
