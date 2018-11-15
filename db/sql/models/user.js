@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     avatar: {
       type: DataTypes.STRING,
       defaultValue: '/assets/avatars/avatar.png'
+    },
+    password: {
+      type: DataTypes.STRING
     }
   }, {});
   User.associate = function(models) {
