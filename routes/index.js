@@ -5,7 +5,7 @@ const Channel    = require('../db/index').db.sql.Channel;
 const Workspace  = require('../db/index').db.sql.Workspace;
 
 
-router.get('/', (req, res, next) => {
+router.get('/:workspaceName', (req, res, next) => {
 
   if(!req.user){
     req.flash('info', `Please login `);
@@ -19,9 +19,17 @@ router.get('/', (req, res, next) => {
 
     try{
 
-      let channels = await user.getChannels();
-      // I need to be on a workspace
+      let workspace = await Workspace.findOne({where: {name: req.params.workspaceName}});
+      if(workspace === null) {res.status(404); res.redirect('/');} // TODO
+      let workspaceChannels = await workspace.getChannels();
 
+      // TODO: ask nizar : how can we filter an array based on a promise ?
+      let channels = [];
+      for(let i=0; i<workspaceChannels.length; i++){
+        let channel = workspaceChannels[i];
+        let channelHasUser = await channel.hasUser(user);
+        if(channelHasUser) channels.push(channel);
+      }
       let channelNames =  channels.map(channel => channel.name);
       res.render('index', {channelNames});
 
@@ -81,22 +89,22 @@ router.get('/logout', (req, res, next) => {
   req.flash("success", "Logged Out Successfully! 👏");
   res.redirect('/');
 });
-
-
-// WORKSPACE ROUTE
-router.get('/:workspaceName', (req, res, next) => {
-  const {workspaceName} = req.params;
-  // get all data concerning workspace: name,
-  Workspace.findOne({where: {name: workspaceName}})
-    .then(workspace => {
-      res.locals.workspaceName = workspace.name;
-      res.render('index');
-    })
-    .catch(err => {
-      log.error(err);
-      next(err);
-    });
-});
+//
+//
+// // WORKSPACE ROUTE
+// router.get('/:workspaceName', (req, res, next) => {
+//   const {workspaceName} = req.params;
+//   // get all data concerning workspace: name,
+//   Workspace.findOne({where: {name: workspaceName}})
+//     .then(workspace => {
+//       res.locals.workspaceName = workspace.name;
+//       res.render('index');
+//     })
+//     .catch(err => {
+//       log.error(err);
+//       next(err);
+//     });
+// });
 
 
 // CHANNEL ROUTE (either channel or direct message)
