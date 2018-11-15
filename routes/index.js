@@ -1,6 +1,8 @@
-const express = require('express');
-const router  = express.Router();
-const User    = require('../db/index').db.sql.User;
+const express    = require('express');
+const router     = express.Router();
+const User       = require('../db/index').db.sql.User;
+const Channel    = require('../db/index').db.sql.Channel;
+const Workspace  = require('../db/index').db.sql.Workspace;
 
 
 router.get('/', (req, res, next) => {
@@ -62,5 +64,36 @@ router.get('/logout', (req, res, next) => {
   res.redirect('/');
 });
 
+
+// WORKSPACE ROUTE
+router.get('/:workspaceName', (req, res, next) => {
+  const {workspaceName} = req.params;
+  // get all data concerning workspace: name,
+  Workspace.findOne({where: {name: workspaceName}})
+    .then(workspace => {
+      res.locals.workspaceName = workspace.name;
+      res.render('index');
+    })
+    .catch(err => {
+      log.error(err);
+      next(err);
+    });
+});
+
+
+// CHANNEL ROUTE (either channel or direct message)
+router.get('/:workspaceName/:channelId', (req, res, next) => {
+  const {workspaceName, channelId} = req.params;
+  
+  Workspace.findOne({where: {name: workspaceName}})
+  .then(workspace => {
+    res.locals.workspaceName = workspace.name;
+    res.render('index');
+  })
+  .catch(err => {
+    log.error(err);
+    next(err);
+  });
+});
 
 module.exports = router;
