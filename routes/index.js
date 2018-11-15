@@ -4,6 +4,13 @@ const User    = require('../db/index').db.sql.User;
 
 
 router.get('/', (req, res, next) => {
+
+  if(!req.user){
+    req.flash('info', `Please login `);
+    res.redirect('/login');
+    return;
+  }
+
   res.render('index');
 });
 
@@ -29,7 +36,7 @@ router.post('/process-login', (req, res, next) => {
     // if user found
 
     // check password
-    let isValidPassword = true; // TODO: FIXME
+    let isValidPassword = user.checkPassword(originalPassword);
 
     if(!isValidPassword){
       req.flash('error', `Sorry ! 🤭 Wrong Password ! `);
@@ -37,14 +44,23 @@ router.post('/process-login', (req, res, next) => {
       return
     }
 
-    req.logIn(user, () => {
-      req.flash("success", `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
+    req.logIn(user, (err) => {
+      if (err) { return next(err); }
+      req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
       res.redirect('/');
     });
 
   }
-  login();
+  return login();
 
 });
+
+
+router.get('/logout', (req, res, next) => {
+  req.logOut();
+  req.flash("success", "Logged Out Successfully! 👏");
+  res.redirect('/');
+});
+
 
 module.exports = router;

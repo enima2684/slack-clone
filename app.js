@@ -11,6 +11,7 @@ const flash          = require('connect-flash');
 const passport       = require('passport');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
+require('./config/config-passport.js');
 
 /*** Serve Static Files  ***/
 app.use('/assets', express.static('assets'));

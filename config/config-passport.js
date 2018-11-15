@@ -1,7 +1,7 @@
 const passport = require("passport");
 
 const User = require('../db/index').db.sql.User;
-const logger = require('logger');
+const logger = require('./logger');
 
 /// serializeUser defines what data we are saving in the session
 // (happens when you log on successfully)
@@ -16,8 +16,6 @@ passport.deserializeUser((userId, done) => {
   logger.debug("DESERIALIZE (retrievieng user info form the DB! ");
   User
     .findById(userId)
-    .then(user => {
-      done(null, user);
-    })
+    .then(user => done(null, user))
     .catch(err => done(err));
 });

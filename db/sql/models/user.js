@@ -1,5 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
+const bcrypt = require('bcryptjs');
 
 // check this link for documentaion on how to integrate a class inside a sequelize model
 // https://codewithhugo.com/using-es6-classes-for-sequelize-4-models/
@@ -46,7 +47,24 @@ class User extends Sequelize.Model {
     User.hasMany(models.Message, {foreignKey: 'userId'});
   }
 
-}
+  /**
+   * Checks if the user is using the correct password
+   * Returns a boolean
+   * @param originalPwd : non-encrypted password
+   */
+  checkPassword(originalPwd){
+    return bcrypt.compareSync(originalPwd, this.password);
+  }
 
+  /**
+   * Sets a password for a user.
+   * Takes as an input a decrypted password, encrypts it and sets it on the password property
+   * @param pwd
+   */
+  setPassword(pwd){
+    this.password = bcrypt.hashSync(pwd, 10);
+  }
+
+}
 
 module.exports = User;

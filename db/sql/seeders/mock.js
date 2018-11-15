@@ -26,7 +26,7 @@ users.push(
   new User({nickname: 'amine', email:'amine@gmail.com'})
 );
 users.push(
-  new User({nickname: 'antoine', email:'antoine@gmail.com', avatar:'myAvatar'})
+  new User({nickname: 'corrado', email:'corrado@gmail.com', avatar:'myAvatar'})
 );
 users.push(
   new User({nickname: 'niccolo', email:'niccolo@gmail.com'})
@@ -40,6 +40,10 @@ users.push(
 users.push(
   new User({nickname: 'marie', email:'marie@gmail.com'})
 );
+
+users.forEach(user => {
+  user.setPassword("default");
+});
 
 function createUser(user){
   return user.save()
