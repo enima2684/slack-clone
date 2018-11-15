@@ -1,19 +1,33 @@
 'use strict';
-module.exports = (sequelize, DataTypes) => {
-  const Channel = sequelize.define('Channel', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
-    }
-  }, {
-    indexes: [
+const Sequelize = require('sequelize');
+
+
+// check this link for documentaion on how to integrate a class inside a sequelize model
+// https://codewithhugo.com/using-es6-classes-for-sequelize-4-models/
+class Channel extends Sequelize.Model {
+
+  static init(sequelize, DataTypes) {
+    return super.init(
       {
-        unique: true,
-        fields: ['name']
-      }
-    ]
-  });
-  Channel.associate = function(models) {
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false
+        }
+      },
+      {
+        sequelize,
+        indexes: [
+          {
+            unique: true,
+            fields: ['name']
+          }
+        ]
+      })
+  }
+
+
+  static associate(models) {
+    // here we have the different associations with other models
 
     Channel.belongsToMany(models.User, {
       as:'users',
@@ -23,6 +37,9 @@ module.exports = (sequelize, DataTypes) => {
 
     Channel.belongsTo(models.Workspace, {as: 'workspace', foreignKey: 'workspaceId'});
     Channel.hasMany(models.Message, {foreignKey: 'channelId'});
-  };
-  return Channel;
-};
+  }
+
+}
+
+
+module.exports = Channel;

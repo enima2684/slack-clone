@@ -88,6 +88,33 @@
             },
             "indexes": []
         },
+        "Sessions": {
+            "tableName": "Sessions",
+            "schema": {
+                "sid": {
+                    "primaryKey": true,
+                    "seqType": "Sequelize.STRING"
+                },
+                "userId": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "expires": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "data": {
+                    "seqType": "Sequelize.STRING(50000)"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
         "Users": {
             "tableName": "Users",
             "schema": {
@@ -109,6 +136,9 @@
                     "defaultValue": {
                         "value": "/assets/avatars/avatar.png"
                     },
+                    "seqType": "Sequelize.STRING"
+                },
+                "password": {
                     "seqType": "Sequelize.STRING"
                 },
                 "createdAt": {
@@ -222,5 +252,5 @@
             "indexes": []
         }
     },
-    "revision": 13
+    "revision": 15
 }

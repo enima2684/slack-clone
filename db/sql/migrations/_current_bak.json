@@ -111,6 +111,9 @@
                     },
                     "seqType": "Sequelize.STRING"
                 },
+                "password": {
+                    "seqType": "Sequelize.STRING"
+                },
                 "createdAt": {
                     "allowNull": false,
                     "seqType": "Sequelize.DATE"
@@ -132,6 +135,8 @@
                     "seqType": "Sequelize.INTEGER"
                 },
                 "name": {
+                    "allowNull": false,
+                    "unique": true,
                     "seqType": "Sequelize.STRING"
                 },
                 "image": {
@@ -220,5 +225,5 @@
             "indexes": []
         }
     },
-    "revision": 12
+    "revision": 14
 }

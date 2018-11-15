@@ -3,6 +3,11 @@
 const db      = require('../../index.js').db;
 const logger  = require('../../../config/logger.js');
 const {User, Workspace, Message, Channel} = db.sql;
+const readline = require('readline');
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 
 /*** Initialization **/
@@ -21,7 +26,7 @@ users.push(
   new User({nickname: 'amine', email:'amine@gmail.com'})
 );
 users.push(
-  new User({nickname: 'antoine', email:'antoine@gmail.com', avatar:'myAvatar'})
+  new User({nickname: 'corrado', email:'corrado@gmail.com', avatar:'myAvatar'})
 );
 users.push(
   new User({nickname: 'niccolo', email:'niccolo@gmail.com'})
@@ -35,6 +40,10 @@ users.push(
 users.push(
   new User({nickname: 'marie', email:'marie@gmail.com'})
 );
+
+users.forEach(user => {
+  user.setPassword("default");
+});
 
 function createUser(user){
   return user.save()
@@ -203,15 +212,27 @@ function createMessages(users){
 }
 
 /*** MAIN ***/
-initDb()
-  .then(() => createUsers(users))
-  .then(() => createWorkspaces(workspaces))
-  .then(() => createWorkspaceUserAssociations(users, workspaces, associations))
-  .then(() => createChannels(workspaces))
-  .then(() => createChannelUserInterractions())
-  .then(() => createMessages(users))
-  .then(() => logger.info('All db operations are done!'))
-  .catch(err => {
-    logger.error(err);
-    throw err;
-  });
+
+rl.question('Deleting all data in the database. Are you sure to continue (y/n)? ', (answer) => {
+
+  if(answer === 'y'){
+    initDb()
+    .then(() => createUsers(users))
+    .then(() => createWorkspaces(workspaces))
+    .then(() => createWorkspaceUserAssociations(users, workspaces, associations))
+    .then(() => createChannels(workspaces))
+    .then(() => createChannelUserInterractions())
+    .then(() => createMessages(users))
+    .then(() => logger.info('All db operations are done!'))
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
+  }
+
+  rl.close();
+});
+
+
+
+
