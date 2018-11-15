@@ -1,15 +1,15 @@
 /*** External imports ***/
-const bodyParser   = require('body-parser');
-const cookieParser = require('cookie-parser');
-const express      = require('express');
-const app          = express();
-const http         = require('http').Server(app);
-const io           = require('socket.io')(http);
-const hbs          = require('hbs');
-const session      = require('express-session');
-const flash        = require('connect-flash');
-const passport     = require('passport');
-
+const bodyParser     = require('body-parser');
+const cookieParser   = require('cookie-parser');
+const express        = require('express');
+const app            = express();
+const http           = require('http').Server(app);
+const io             = require('socket.io')(http);
+const hbs            = require('hbs');
+const session        = require('express-session');
+const flash          = require('connect-flash');
+const passport       = require('passport');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 
 /*** Serve Static Files  ***/
@@ -48,9 +48,13 @@ db.sql.sequelize.authenticate()
 /*** Session + Passport + Flash ***/
 app.use(session({
   secret: 'keyboard cat',
-  resave: true,
+  resave: false,
   saveUninitialized: true,
-  store: new (require('connect-pg-simple')(session))(),
+  store: new SequelizeStore({
+    db: db.sql.sequelize,
+    table: 'Session'
+  }),
+  // store: new (require('connect-pg-simple')(session))(),
 }));
 app.use(passport.initialize());
 app.use(passport.session());

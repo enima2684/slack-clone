@@ -33,3 +33,8 @@ Done :
 - use hbs
 
 blabla
+
+
+
+
+psql mydatabase < node_modules/connect-pg-simple/table.sql
