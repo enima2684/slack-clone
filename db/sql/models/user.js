@@ -1,5 +1,4 @@
 'use strict';
-
 const Sequelize = require('sequelize');
 
 // check this link for documentaion on how to integrate a class inside a sequelize model
