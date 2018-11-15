@@ -9,7 +9,7 @@ class Session extends Sequelize.Model {
     return super.init(
       {
         // Model definition
-        id: {
+        sid: {
             type: DataTypes.STRING,
             primaryKey: true
         },
