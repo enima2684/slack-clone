@@ -46,8 +46,7 @@ function createUser(user){
 }
 
 function createUsers(users){
-  return Promise
-    .all( users.map(createUser))
+  return Promise.all(users.map(createUser))
     .then(() => logger.info('all users saved in db !'))
     .catch(err => {throw err})
 }

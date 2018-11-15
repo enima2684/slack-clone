@@ -14,13 +14,13 @@ class MessageSocketListenner{
    */
   onReceiveBroadcastedMessage(message){
 
-    const messageToSend = {
+    const messageToDisplay = {
       senderId: message.senderId,
       content: message.content,
       timestamp: message.broadcastingTimestamp
     };
 
-    this.domHandler.renderMessage(messageToSend);
+    this.domHandler.renderMessage(messageToDisplay);
   }
 
 }

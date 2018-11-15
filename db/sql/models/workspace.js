@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     image: DataTypes.STRING,
     createdBy: DataTypes.STRING,
   }, {});
+  
   Workspace.associate = function(models) {
 
     Workspace.belongsToMany(models.User, {
