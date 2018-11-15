@@ -25,29 +25,28 @@
     <div class="header">
       <h2 id="workspace">Ironhack</h2>
       <div class="user-status">
-        <i class="fas fa-circle"></i><span>Amine</span>
+        <i class="fas fa-circle"></i>
+        <span>{{currentUser.nickname}}</span>
       </div>
     </div>
     <div class="separator"></div>
     <section class="channels">
       <h3>Chaînes</h3>
       <ul class="ul-sidebar">
-        <li># <span>code-help</span></li>
-        <li># <span>general</span></li>
-        <li># <span>jobs-global</span></li>
-        <li># <span>ux-surveys</span></li>
-        <li># <span>webparis-1018</span></li>
+        {{#each channelNames}}
+          <li># <span>{{this}}</span></li>
+        {{/each}}
       </ul>
     </section>
     <div class="separator"></div>
     <section class="direct-messages">
       <h3>Messages Directs</h3>
       <ul class="ul-sidebar">
-        <li><i class="fas fa-circle"></i> <span class="other-user">Amine (you)</span></li>
-        <li><i class="fas fa-circle"></i> <span class="other-user">Antoine</span></li>
-        <li><i class="fas fa-circle"></i> <span class="other-user">Filippo</span></li>
-        <li><i class="fas fa-circle"></i> <span class="other-user">Marie</span></li>
-        <li><i class="fas fa-circle"></i> <span class="other-user">Nizaroni</span></li>
+        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Amine (you)</span></li>-->
+        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Antoine</span></li>-->
+        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Filippo</span></li>-->
+        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Marie</span></li>-->
+        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Nizaroni</span></li>-->
       </ul>
     </section>
   </div>

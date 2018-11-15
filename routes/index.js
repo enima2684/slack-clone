@@ -11,7 +11,25 @@ router.get('/', (req, res, next) => {
     return;
   }
 
-  res.render('index');
+  let user = req.user;
+
+  async function asyncRenderView(user){
+
+    try{
+
+      let channels = await user.getChannels();
+      // I need to be on a workspace
+
+      let channelNames =  channels.map(channel => channel.name);
+      res.render('index', {channelNames});
+
+     }
+     catch (err) {
+      next(err);
+    }
+  }
+  asyncRenderView(user);
+
 });
 
 router.get('/login', (req, res, next) =>{
