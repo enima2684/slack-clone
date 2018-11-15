@@ -6,8 +6,6 @@ const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../../../config/config-sequelize.js')[env];
-const db = {};
-
 
 let sequelize;
 if (config.use_env_variable) {
@@ -16,22 +14,29 @@ if (config.use_env_variable) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
+/*** SCHEMAS IMPORT ***/
+const User      = require('./user');
+const Channel   = require('./channel');
+const Workspace = require('./workspace');
+const Message   = require('./message');
+const Session   = require('./session');
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
-  });
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
+const db = {
+  User: User.init(sequelize, Sequelize),
+  Channel: Channel.init(sequelize, Sequelize),
+  Workspace: Workspace.init(sequelize, Sequelize),
+  Message: Message.init(sequelize, Sequelize),
+  Session: Session.init(sequelize, Sequelize),
+};
+
+
+// Run `.associate` if it exists,
+// ie create relationships in the ORM
+Object.values(db)
+  .filter(model => typeof model.associate === "function")
+  .forEach(model => model.associate(models));
+
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
