@@ -35,7 +35,7 @@ const db = {
 // ie create relationships in the ORM
 Object.values(db)
   .filter(model => typeof model.associate === "function")
-  .forEach(model => model.associate(models));
+  .forEach(model => model.associate(db));
 
 
 db.sequelize = sequelize;
