@@ -1,6 +1,7 @@
 /*** External imports ***/
 const bodyParser     = require('body-parser');
 const cookieParser   = require('cookie-parser');
+const path           = require('path');
 const express        = require('express');
 const app            = express();
 const http           = require('http').Server(app);
@@ -20,7 +21,7 @@ app.use('/views', express.static('views'));
 
 /*** setup view engine : hbs ***/
 app.set('view engine', 'hbs');
-hbs.registerPartials(__dirname + '/views/partials');
+hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 
 /** body-cookie parsers**/
 app.use(bodyParser.json());

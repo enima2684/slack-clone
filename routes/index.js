@@ -5,7 +5,7 @@ const Channel    = require('../db/index').db.sql.Channel;
 const Workspace  = require('../db/index').db.sql.Workspace;
 
 
-router.get('/:workspaceName', (req, res, next) => {
+router.get('/ws/:workspaceName', (req, res, next) => {
 
   if(!req.user){
     req.flash('info', `Please login `);
@@ -14,36 +14,47 @@ router.get('/:workspaceName', (req, res, next) => {
   }
 
   let user = req.user;
+  let workspaceName = req.params.workspaceName;
 
-  async function asyncRenderView(user){
+  async function asyncRenderView(user, workspaceName){
 
     try{
 
-      let workspace = await Workspace.findOne({where: {name: req.params.workspaceName}});
-      if(workspace === null) {res.status(404); res.redirect('/');} // TODO
-      let workspaceChannels = await workspace.getChannels();
+      // find workspace
+      let workspace = await Workspace.findOne({where: {name: workspaceName}});
+      if(workspace === null) {next(); return;}
 
-      // TODO: ask nizar : how can we filter an array based on a promise ?
-      let channels = [];
-      for(let i=0; i<workspaceChannels.length; i++){
-        let channel = workspaceChannels[i];
-        let channelHasUser = await channel.hasUser(user);
-        if(channelHasUser) channels.push(channel);
+      // check appartenance to the workspace
+      let userBelongsToWorkspace = await user.hasWorkspace(workspace);
+      if(!userBelongsToWorkspace){
+        req.flash('error', '🧐 Ohh ! It seems like you need an invite to join this workspace !');
+        next(); // TODO: redirect to an error friendly page
+        return;
       }
+
+      // get channels on the workspace
+      let channels = await user.getChannelsInWorkspace(workspace);
       let channelNames =  channels.map(channel => channel.name);
-      res.render('index', {channelNames});
+
+      // query users on the same workspace
+      let users = await workspace.getUsers();
+      let userNames = users.map(user => user.nickname);
+
+      res.render('index', {channelNames, userBelongsToWorkspace, userNames});
 
      }
      catch (err) {
       next(err);
     }
   }
-  asyncRenderView(user);
+  asyncRenderView(user, workspaceName);
 
 });
 
+router.get('/ws/:workspaceName/:')
+
 router.get('/login', (req, res, next) =>{
-  res.render('login');
+  res.render('login.hbs');
 });
 
 router.post('/process-login', (req, res, next) => {
@@ -61,7 +72,6 @@ router.post('/process-login', (req, res, next) => {
       return
     }
 
-    // if user found
 
     // check password
     let isValidPassword = user.checkPassword(originalPassword);
@@ -75,7 +85,15 @@ router.post('/process-login', (req, res, next) => {
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
-      res.redirect('/');
+
+      //FIXME: instead of redirecting the user to the first workspace, we have to redirect him to a page to choose the workspace
+      user
+        .getWorkspaces()
+        .then(workspaces => {
+          let workspace = workspaces[0];
+          res.redirect(`/ws/${workspace.name}`);
+        });
+
     });
 
   }
@@ -83,11 +101,10 @@ router.post('/process-login', (req, res, next) => {
 
 });
 
-
 router.get('/logout', (req, res, next) => {
   req.logOut();
   req.flash("success", "Logged Out Successfully! 👏");
-  res.redirect('/');
+  res.redirect('/login');
 });
 //
 //
@@ -107,19 +124,19 @@ router.get('/logout', (req, res, next) => {
 // });
 
 
-// CHANNEL ROUTE (either channel or direct message)
-router.get('/:workspaceName/:channelId', (req, res, next) => {
-  const {workspaceName, channelId} = req.params;
-  
-  Workspace.findOne({where: {name: workspaceName}})
-  .then(workspace => {
-    res.locals.workspaceName = workspace.name;
-    res.render('index');
-  })
-  .catch(err => {
-    log.error(err);
-    next(err);
-  });
-});
+// // CHANNEL ROUTE (either channel or direct message)
+// router.get('/:workspaceName/:channelId', (req, res, next) => {
+//   const {workspaceName, channelId} = req.params;
+//
+//   Workspace.findOne({where: {name: workspaceName}})
+//   .then(workspace => {
+//     res.locals.workspaceName = workspace.name;
+//     res.render('index');
+//   })
+//   .catch(err => {
+//     log.error(err);
+//     next(err);
+//   });
+// });
 
 module.exports = router;

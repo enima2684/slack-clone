@@ -42,6 +42,10 @@
     <section class="direct-messages">
       <h3>Messages Directs</h3>
       <ul class="ul-sidebar">
+        {{#each userNames}}
+          <li><i class="fas fa-circle"></i> <span class="other-user">{{this}}</span></li></li>
+        {{/each}}
+
         <!--<li><i class="fas fa-circle"></i> <span class="other-user">Amine (you)</span></li>-->
         <!--<li><i class="fas fa-circle"></i> <span class="other-user">Antoine</span></li>-->
         <!--<li><i class="fas fa-circle"></i> <span class="other-user">Filippo</span></li>-->
@@ -72,7 +76,7 @@
     </div>
 
     <div class="message-container">
-
+      {{> flash_messages}}
       <ul id="msg-ul">
         {{#each chatMessages}}
           {{> chatMessage}}
@@ -82,7 +86,6 @@
     </div>
 
     <div class="input-container">
-
       <div class="input">
 
         <div class="btn-attachment"><i class="fas fa-plus"></i></div>
