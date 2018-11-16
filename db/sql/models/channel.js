@@ -54,7 +54,6 @@ class Channel extends Sequelize.Model {
    */
   async getLatestMessages(){
 
-
     let messages = await this.getMessages();
     return messages;
   }

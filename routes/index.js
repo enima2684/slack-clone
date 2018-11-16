@@ -47,7 +47,6 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
 
 }
 
-
 router.get('/ws/:workspaceName', (req, res, next) => {
 
   if(!req.user){
@@ -66,7 +65,6 @@ router.get('/ws/:workspaceName', (req, res, next) => {
 });
 
 router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
-
 
   if(!req.user){
     req.flash('info', `Please login `);
@@ -154,37 +152,5 @@ router.get('/logout', (req, res, next) => {
   req.flash("success", "Logged Out Successfully! 👏");
   res.redirect('/login');
 });
-//
-//
-// // WORKSPACE ROUTE
-// router.get('/:workspaceName', (req, res, next) => {
-//   const {workspaceName} = req.params;
-//   // get all data concerning workspace: name,
-//   Workspace.findOne({where: {name: workspaceName}})
-//     .then(workspace => {
-//       res.locals.workspaceName = workspace.name;
-//       res.render('index');
-//     })
-//     .catch(err => {
-//       log.error(err);
-//       next(err);
-//     });
-// });
-
-
-// // CHANNEL ROUTE (either channel or direct message)
-// router.get('/:workspaceName/:channelId', (req, res, next) => {
-//   const {workspaceName, channelId} = req.params;
-//
-//   Workspace.findOne({where: {name: workspaceName}})
-//   .then(workspace => {
-//     res.locals.workspaceName = workspace.name;
-//     res.render('index');
-//   })
-//   .catch(err => {
-//     log.error(err);
-//     next(err);
-//   });
-// });
 
 module.exports = router;
