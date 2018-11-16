@@ -5,6 +5,35 @@ const Channel    = require('../db/index').db.sql.Channel;
 const Workspace  = require('../db/index').db.sql.Workspace;
 
 
+
+async function asyncRenderView(req, res, next, user, workspaceName){
+
+    // find workspace
+    let workspace = await Workspace.findOne({where: {name: workspaceName}});
+    if(workspace === null) {next(); return;}
+
+    // check appartenance to the workspace
+    let userBelongsToWorkspace = await user.hasWorkspace(workspace);
+    if(!userBelongsToWorkspace){
+      req.flash('error', '🧐 Ohh ! It seems like you need an invite to join this workspace !');
+      next(); // TODO: redirect to an error friendly page
+      return;
+    }
+
+    // get channels on the workspace
+    let channels = await user.getChannelsInWorkspace(workspace);
+    let channelNames = channels.map(channel => channel.name);
+
+    // query users on the same workspace
+    let users = await workspace.getUsers();
+    let userNames = users.map(user => user.nickname);
+
+    // res.render('index', {channelNames, userBelongsToWorkspace, userNames});
+    return {channelNames, userBelongsToWorkspace, userNames, workspaceName}
+
+}
+
+
 router.get('/ws/:workspaceName', (req, res, next) => {
 
   if(!req.user){
@@ -16,42 +45,17 @@ router.get('/ws/:workspaceName', (req, res, next) => {
   let user = req.user;
   let workspaceName = req.params.workspaceName;
 
-  async function asyncRenderView(user, workspaceName){
-
-    try{
-
-      // find workspace
-      let workspace = await Workspace.findOne({where: {name: workspaceName}});
-      if(workspace === null) {next(); return;}
-
-      // check appartenance to the workspace
-      let userBelongsToWorkspace = await user.hasWorkspace(workspace);
-      if(!userBelongsToWorkspace){
-        req.flash('error', '🧐 Ohh ! It seems like you need an invite to join this workspace !');
-        next(); // TODO: redirect to an error friendly page
-        return;
-      }
-
-      // get channels on the workspace
-      let channels = await user.getChannelsInWorkspace(workspace);
-      let channelNames =  channels.map(channel => channel.name);
-
-      // query users on the same workspace
-      let users = await workspace.getUsers();
-      let userNames = users.map(user => user.nickname);
-
-      res.render('index', {channelNames, userBelongsToWorkspace, userNames});
-
-     }
-     catch (err) {
-      next(err);
-    }
-  }
-  asyncRenderView(user, workspaceName);
+  asyncRenderView(req, res, next, user, workspaceName)
+    .then(locals  => res.render('index', locals))
+    .catch(err => next(err));
 
 });
 
-router.get('/ws/:workspaceName/:')
+router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
+
+
+
+});
 
 router.get('/login', (req, res, next) =>{
   res.render('login.hbs');
