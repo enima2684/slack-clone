@@ -33,8 +33,12 @@
     <section class="channels">
       <h3>Chaînes</h3>
       <ul class="ul-sidebar">
-        {{#each channelNames}}
-          <li># <span>{{this}}</span></li>
+        {{#each channelInfos}}
+          <li>#
+            <a href="/ws/{{../workspaceName}}/{{this.id}}">
+              <span>{{this.name}}</span>
+            </a>
+          </li>
         {{/each}}
       </ul>
     </section>
@@ -43,14 +47,13 @@
       <h3>Messages Directs</h3>
       <ul class="ul-sidebar">
         {{#each userNames}}
-          <li><i class="fas fa-circle"></i> <span class="other-user">{{this}}</span></li></li>
+          <li>
+            <i class="fas fa-circle"></i>
+            <a href="/ws/{{../workspaceName}}/{{this.channelId}}">
+              <span class="other-user">{{this}}</span>   <!-- FIXME: get the id of the discussion -->
+            </a>
+          </li>
         {{/each}}
-
-        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Amine (you)</span></li>-->
-        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Antoine</span></li>-->
-        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Filippo</span></li>-->
-        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Marie</span></li>-->
-        <!--<li><i class="fas fa-circle"></i> <span class="other-user">Nizaroni</span></li>-->
       </ul>
     </section>
   </div>
@@ -58,7 +61,7 @@
   <section class="main">
 
     <div class="header">
-      <h3>#general</h3>
+      <h3>#{{channelName}}</h3>
       <div class="meta-conv">
 
         <div class="item favorite">
@@ -69,7 +72,7 @@
 
         <div class="item persons-count">
           <i class="far fa-user"></i>
-          <span>506</span>
+          <span>{{nbUsersChannel}}</span>
         </div>
 
       </div>
@@ -79,7 +82,7 @@
       {{> flash_messages}}
       <ul id="msg-ul">
         {{#each chatMessages}}
-          {{> chatMessage}}
+          {{> message}}
         {{/each}}
       </ul>
 

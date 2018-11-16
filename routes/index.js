@@ -5,8 +5,17 @@ const Channel    = require('../db/index').db.sql.Channel;
 const Workspace  = require('../db/index').db.sql.Workspace;
 
 
-
-async function asyncRenderView(req, res, next, user, workspaceName){
+/***
+ * Helper function to make queries to get the data to render for a workspace route
+ * It is externalised from the /ws/:workspace route in order to use the same code in the route /ws/:workspace/:id
+ * @param req
+ * @param res
+ * @param next
+ * @param user : instance of User - Should be the current logged in user
+ * @param workspaceName : string - name of the workspace we are in
+ * @return {Promise<{channelNames: *, userBelongsToWorkspace: *, userNames: *, workspaceName: *}>}
+ */
+async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
 
     // find workspace
     let workspace = await Workspace.findOne({where: {name: workspaceName}});
@@ -22,14 +31,19 @@ async function asyncRenderView(req, res, next, user, workspaceName){
 
     // get channels on the workspace
     let channels = await user.getChannelsInWorkspace(workspace);
-    let channelNames = channels.map(channel => channel.name);
+    let channelInfos = channels.map(channel => {
+      return {
+        name: channel.name,
+        id: channel.id
+      }
+    });
 
     // query users on the same workspace
     let users = await workspace.getUsers();
     let userNames = users.map(user => user.nickname);
 
     // res.render('index', {channelNames, userBelongsToWorkspace, userNames});
-    return {channelNames, userBelongsToWorkspace, userNames, workspaceName}
+    return {channelInfos, userBelongsToWorkspace, userNames, workspaceName}
 
 }
 
@@ -45,7 +59,7 @@ router.get('/ws/:workspaceName', (req, res, next) => {
   let user = req.user;
   let workspaceName = req.params.workspaceName;
 
-  asyncRenderView(req, res, next, user, workspaceName)
+  getWorkspaceLocalVariable(req, res, next, user, workspaceName)
     .then(locals  => res.render('index', locals))
     .catch(err => next(err));
 
@@ -54,6 +68,36 @@ router.get('/ws/:workspaceName', (req, res, next) => {
 router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 
 
+  if(!req.user){
+    req.flash('info', `Please login `);
+    res.redirect('/login');
+    return;
+  }
+
+  let user = req.user;
+  let {workspaceName, channelId} = req.params;
+
+  async function loadChannelLocals(workspaceLocals, channelId){
+
+    let locals = workspaceLocals;
+
+    // get the channel name
+    let channel = await Channel.findById(channelId);
+    locals.channelName = channel.name;
+
+    // get number of users in the channel
+    locals.nbUsersChannel = await channel.getNumberUsers();
+
+    // load the messages
+    locals.chatMessages = await channel.getLatestMessages();
+
+    return locals
+  }
+
+  getWorkspaceLocalVariable(req, res, next, user, workspaceName)
+    .then(workspaceLocals => loadChannelLocals(workspaceLocals, channelId))
+    .then(locals => res.render('index', locals))
+    .catch(err => next(err));
 
 });
 
