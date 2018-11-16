@@ -46,11 +46,11 @@
     <section class="direct-messages">
       <h3>Messages Directs</h3>
       <ul class="ul-sidebar">
-        {{#each userNames}}
+        {{#each discussionInfos}}
           <li>
             <i class="fas fa-circle"></i>
-            <a href="/ws/{{../workspaceName}}/{{this.channelId}}">
-              <span class="other-user">{{this}}</span>   <!-- FIXME: get the id of the discussion -->
+            <a href="/ws/{{../workspaceName}}/{{this.id}}">
+              <span class="other-user">{{this.otherUserName}}</span>
             </a>
           </li>
         {{/each}}

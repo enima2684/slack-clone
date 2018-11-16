@@ -31,19 +31,55 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
 
     // get channels on the workspace
     let channels = await user.getChannelsInWorkspace(workspace);
-    let channelInfos = channels.map(channel => {
+
+
+    // we do not need to query the users here, we need to query channels with two persons involving user
+    // the channel will be named as the other user
+    // channels contains all channels, with two persons and more
+
+    let numberUsers = await Promise.all(
+      channels.map(channel => channel.getNumberUsers())
+    );
+
+    let discussions = [];  // less or equal than 2 people
+    let bigDiscussions = []; // more than 2 people
+    channels.forEach((channel, index) =>{
+      let nbUsers = numberUsers[index];
+      if(nbUsers > 2){
+        bigDiscussions.push(channel);
+      } else {
+        discussions.push(channel)
+      }
+    });
+
+    async function getOtherUser(channel){
+      let users = await channel.getUsers();
+      let otherUser = users.filter(person => person.id !== user.id);
+      return otherUser.nickname
+    }
+
+    let otherUserNames = await Promise.all(discussions.map(getOtherUser));
+
+    let discussionInfos = discussions.map(discussion => {
+      return {
+        otherUserName: otherUserNames[index],
+        id: discussion.id
+      }
+    });
+
+
+    let channelInfos = bigDiscussions.map((channel, index) => {
       return {
         name: channel.name,
         id: channel.id
       }
     });
 
-    // query users on the same workspace
     let users = await workspace.getUsers();
     let userNames = users.map(user => user.nickname);
 
     // res.render('index', {channelNames, userBelongsToWorkspace, userNames});
-    return {channelInfos, userBelongsToWorkspace, userNames, workspaceName}
+    return {channelInfos, discussionInfos, userBelongsToWorkspace, userNames, workspaceName}
 
 }
 
