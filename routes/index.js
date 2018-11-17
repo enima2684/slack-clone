@@ -134,6 +134,10 @@ router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 });
 
 router.get('/login', (req, res, next) =>{
+    if(req.user){
+    req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
+    res.redirect('/');
+  }
   res.render('auth/login.hbs', {layout: 'auth/auth_layout.hbs'});
 });
 
@@ -182,7 +186,42 @@ router.post('/process-login', (req, res, next) => {
 });
 
 router.get('/signup', (req, res, next) => {
+
+  // if already connected, redirect
+  if(req.user){
+    req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
+    res.redirect('/');
+  }
+
   res.render('auth/signup.hbs', {layout: 'auth/auth_layout.hbs'});
+});
+
+router.post('/process-signup', (req, res, next) => {
+  let {nickname, email, originalPassword, originalPassword2} = req.body;
+
+  if(originalPassword !== originalPassword2){
+    req.flash('error', 'The two passwords you entered are not the same 🧐');
+    res.redirect('/signup');
+  }
+
+  async function registerUser(){
+    let userExists = await User.exists(email);
+
+    if(userExists){
+      req.flash('error', 'Sorry bro 😩 ! A user with same email adress already exists ! ');
+      res.redirect('/signup');
+    }
+
+    let user = new User({nickname: nickname, email: email});
+    user.setPassword(originalPassword);
+
+    // create the user
+    await user.save();
+    req.flash('success', "👏🙌🍾🎉 Congrats for joining the Slack community ! You can login into your account right now !");
+    res.redirect('/login');
+  }
+  registerUser();
+
 });
 
 router.get('/logout', (req, res, next) => {
