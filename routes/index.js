@@ -32,7 +32,6 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
     // get channels on the workspace
     let channels = await user.getChannelsInWorkspace(workspace);
 
-
     // we do not need to query the users here, we need to query channels with two persons involving user
     // the channel will be named as the other user
     // channels contains all channels, with two persons and more
@@ -199,8 +198,9 @@ router.get('/workspace-choice', (req, res, next) => {
 
 router.get('/login', (req, res, next) =>{
   if(req.user){
+    console.log("🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦");
     req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
-    res.redirect('/');
+    res.redirect('/workspace-choice');
   }
   res.render('auth/login.hbs', {layout: 'auth/auth_layout.hbs'});
 });
@@ -220,7 +220,6 @@ router.post('/process-login', (req, res, next) => {
       return
     }
 
-
     // check password
     let isValidPassword = user.checkPassword(originalPassword);
 
@@ -233,19 +232,18 @@ router.post('/process-login', (req, res, next) => {
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
-
       //FIXME: instead of redirecting the user to the first workspace, we have to redirect him to a page to choose the workspace
+      // res.redirect('/workspace-choice');
       user
         .getWorkspaces()
         .then(workspaces => {
           let workspace = workspaces[0];
           res.redirect(`/ws/${workspace.name}`);
         });
-
     });
 
   }
-  return login();
+  login();
 
 });
 
@@ -254,9 +252,8 @@ router.get('/signup', (req, res, next) => {
   // if already connected, redirect
   if(req.user){
     req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
-    res.redirect('/');
+    res.redirect('/workspace-choice');
   }
-
   res.render('auth/signup.hbs', {layout: 'auth/auth_layout.hbs'});
 });
 
@@ -289,9 +286,12 @@ router.post('/process-signup', (req, res, next) => {
 });
 
 router.get('/logout', (req, res, next) => {
-  req.logOut();
-  req.flash("success", "Logged Out Successfully! 👏");
-  res.redirect('/login');
+  // req.logOut is not reliable ..
+  // check https://stackoverflow.com/a/19132999/6744511
+  req.session.destroy(function (err) {
+    // req.flash("success", "Logged Out Successfully! 👏");
+    res.redirect('/login');
+  });
 });
 
 module.exports = router;

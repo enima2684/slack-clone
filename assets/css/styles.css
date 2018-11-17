@@ -41,14 +41,28 @@ ul {
   font-size: 1.1rem;
 }
 .side-bar .header .user-status {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
   cursor: pointer;
   font-size: 0.875rem;
   margin: 5px 0;
 }
-.side-bar .header .user-status i {
+.side-bar .header .user-status i.fa-circle {
   font-size: 0.6rem;
   color: #38978D;
   margin-right: 5px;
+}
+.side-bar .header .user-status span {
+  flex-grow: 2;
+  cursor: none;
+}
+.side-bar .header .user-status a {
+  text-decoration: none;
+  color: #cac4c9;
+}
+.side-bar .header .user-status a i.fa-sign-out-alt:hover {
+  color: white;
 }
 .side-bar .separator {
   height: 18px;

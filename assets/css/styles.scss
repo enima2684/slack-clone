@@ -51,14 +51,34 @@ ul{
     }
 
     .user-status{
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+
       cursor: pointer;
       font-size: 0.875rem;
       margin: 5px 0;
-      i{
+
+      i.fa-circle{
         font-size: 0.6rem;
         color: #38978D;
         margin-right: 5px;
       }
+
+      span{
+        flex-grow: 2;
+        cursor: none;
+      }
+
+      a{
+        text-decoration: none;
+        color: $color-secondary;
+        i.fa-sign-out-alt:hover{
+          color: white;
+        }
+      }
+
+
     }
   }
 
