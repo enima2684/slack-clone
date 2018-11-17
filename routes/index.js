@@ -54,7 +54,7 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
     async function getOtherUser(channel){
       let users = await channel.getUsers();
       let otherUser = users.filter(person => person.id !== user.id);
-      return otherUser.nickname
+      return otherUser.nickname ? otherUser.nickname : `empty (${channel.name})`;
     }
 
     let otherUserNames = await Promise.all(discussions.map(getOtherUser));
