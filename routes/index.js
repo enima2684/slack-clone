@@ -90,21 +90,6 @@ router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 
     // load the messages
     locals.chatMessages = await channel.getLatestMessages();
-
-    // load user data
-    let senders = await Promise.all(locals.chatMessages.map(message => {
-      return User.findById(message.userId);
-    }));
-    
-    // append relevant user data to messages
-    locals.chatMessages = locals.chatMessages.map((message, idx) => {
-      return {message, 
-        senderName: senders[idx].nickname,
-        senderAvatar: senders[idx].avatar,
-        displayDate: message.createdAt.toLocaleString(),
-        displayTime: message.createdAt.toLocaleTimeString(),
-      };
-    });
     
     return locals;
   }
