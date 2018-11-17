@@ -1,7 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
 
-
 // check this link for documentaion on how to integrate a class inside a sequelize model
 // https://codewithhugo.com/using-es6-classes-for-sequelize-4-models/
 class Channel extends Sequelize.Model {
@@ -56,6 +55,26 @@ class Channel extends Sequelize.Model {
 
     let messages = await this.getMessages();
     return messages;
+  }
+
+  /**
+   * Returns true if a channel with the name `channelName` exists on the given worksapce
+   * @param channelName
+   * @param workspace: instance of a workspace
+   */
+  static async exists(channelName, workspace){
+
+    const Workspace = require('./index').Workspace;
+
+    let channel =  await Channel.findOne({
+      where: {name: channelName},
+      include: [{
+        model: Workspace,
+        where: {id: workspace.id},
+        as: 'workspace'
+      }]
+    });
+    return channel !== null
   }
 
 }

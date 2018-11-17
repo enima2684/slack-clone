@@ -60,7 +60,7 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
 
     let otherUserNames = await Promise.all(discussions.map(getOtherUser));
 
-    let discussionInfos = discussions.map(discussion => {
+    let discussionInfos = discussions.map((discussion, index) => {
       return {
         otherUserName: otherUserNames[index],
         id: discussion.id
@@ -118,6 +118,46 @@ router.get('/ws/:workspaceName/create', (req, res, next) => {
 
 });
 
+router.post('/ws/:workspaceName/channel-create-process', (req, res, next) => {
+
+  if(!req.user){
+    req.flash('info', `Please login before trying to access your messages`);
+    res.redirect('/login');
+    return;
+  }
+
+  let user = req.user;
+  let workspaceName = req.params.workspaceName;
+  let {channelName} = req.body;
+
+  async function createChannel(){
+
+      try{
+        let workspace = await Workspace.findOneByName(workspaceName);
+        let channelSameNameExists = await Channel.exists(channelName, workspace);
+
+        if (channelSameNameExists) {
+          flash('error', 'A channel with the same name already exists on this workspace 🧐');
+          res.redirect(`/ws/${workspaceName}/create`);
+        }
+
+        let channel = await new Channel({name: channelName, workspaceId: workspace.id});
+        channel = await channel.save();
+        channel.addUser(user);
+        return channel
+
+      } catch (err) { throw err;}
+  }
+  createChannel()
+    .then(channel => {
+      req.flash('success', `Nice ! The channel ${channelName} has been created !`);
+      res.redirect(`/ws/${workspaceName}/${channel.id}`);
+    })
+    .catch(err => next(err));
+
+
+});
+
 router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 
   if(!req.user){
@@ -153,13 +193,12 @@ router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 
 });
 
-
 router.get('/workspace-choice', (req, res, next) => {
   res.render('workspace_choice');
 });
 
 router.get('/login', (req, res, next) =>{
-    if(req.user){
+  if(req.user){
     req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
     res.redirect('/');
   }
