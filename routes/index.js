@@ -198,7 +198,6 @@ router.get('/workspace-choice', (req, res, next) => {
 
 router.get('/login', (req, res, next) =>{
   if(req.user){
-    console.log("🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦🧦");
     req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
     res.redirect('/workspace-choice');
   }
