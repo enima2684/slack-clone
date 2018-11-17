@@ -181,8 +181,8 @@ router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 
     // load the messages
     locals.chatMessages = await channel.getLatestMessages();
-
-    return locals
+    
+    return locals;
   }
 
   getWorkspaceLocalVariable(req, res, next, user, workspaceName)

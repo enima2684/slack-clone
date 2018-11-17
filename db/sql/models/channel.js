@@ -1,5 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
+const logger    = require('../../../config/logger');
 
 // check this link for documentaion on how to integrate a class inside a sequelize model
 // https://codewithhugo.com/using-es6-classes-for-sequelize-4-models/
@@ -51,10 +52,33 @@ class Channel extends Sequelize.Model {
    * Returns an array of objects [{senderId, timestamp, content, avatar}]
    * @return {Promise<void>}
    */
-  async getLatestMessages(){
 
-    let messages = await this.getMessages();
-    return messages;
+   async getLatestMessages(){
+
+    const User = require('./index').User;
+
+    let messages = await this.getMessages({
+      include: [{
+        model: User,
+        as: 'sender',
+      }]
+    });
+    return messages.map(message => {
+      return {
+        senderId: message.sender.nickname,
+        content: message.content,
+        avatar: message.sender.avatar,
+        timestamp: this.getFormatedTime(message.createdAt),
+      };
+    });
+  }
+
+  getFormatedTime(timestamp){
+    let date = new Date(timestamp);
+    let hours = "0" + date.getHours();
+    let minutes = "0" + date.getMinutes();
+
+    return `${hours.substr(-2)} h ${minutes.substr(-2)}`
   }
 
   /**
