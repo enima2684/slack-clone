@@ -74,8 +74,12 @@ ul {
   font-size: 0.6rem;
   color: #38978D;
 }
-.side-bar > section ul li span {
+.side-bar > section ul li a {
+  text-decoration: none;
+}
+.side-bar > section ul li a span {
   margin-left: 5px;
+  color: #cac4c9;
 }
 .side-bar > section ul li:hover {
   background-color: #3E313C;

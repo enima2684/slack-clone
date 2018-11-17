@@ -65,6 +65,29 @@ class User extends Sequelize.Model {
     this.password = bcrypt.hashSync(pwd, 10);
   }
 
+  /**
+   * Get for this user the list of channels he belongs to on a given workspace
+   * @param workspace
+   */
+  async getChannelsInWorkspace(workspace){
+
+      //TODO: change this to a single query
+
+      let workspaceChannels = await workspace.getChannels();
+
+      // boolean array of the same length as workspaceChannels
+      // element i is true if the workspaceChannels[i] hasUser user
+      let appartenanceArray = await Promise.all(
+        workspaceChannels.map(channel => channel.hasUser(this))
+      );
+
+      let channels = workspaceChannels.filter((channel, index) => {
+        return appartenanceArray[index]
+      });
+
+      return channels
+  }
+
 }
 
 module.exports = User;

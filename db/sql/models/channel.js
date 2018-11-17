@@ -39,6 +39,25 @@ class Channel extends Sequelize.Model {
     Channel.hasMany(models.Message, {foreignKey: 'channelId'});
   }
 
+  /**
+   * Returns the number of users in the channel
+   */
+  async getNumberUsers(){
+    //TODO: use a count - do not have ot query the full objects and apply a length !!
+    let users = await this.getUsers();
+    return users.length
+  }
+
+  /**
+   * Returns an array of objects [{senderId, timestamp, content, avatar}]
+   * @return {Promise<void>}
+   */
+  async getLatestMessages(){
+
+    let messages = await this.getMessages();
+    return messages;
+  }
+
 }
 
 
