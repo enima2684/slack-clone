@@ -25,7 +25,8 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
     let userBelongsToWorkspace = await user.hasWorkspace(workspace);
     if(!userBelongsToWorkspace){
       req.flash('error', '🧐 Ohh ! It seems like you need an invite to join this workspace !');
-      next(); // TODO: redirect to an error friendly page
+      res.redirect('/workspace-choice');
+      return
     }
 
     // get channels on the workspace
@@ -84,7 +85,7 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
 router.get('/ws/:workspaceName', (req, res, next) => {
 
   if(!req.user){
-    req.flash('info', `Please login `);
+    req.flash('info', `Please login before trying to access your messages`);
     res.redirect('/login');
     return;
   }
@@ -101,7 +102,7 @@ router.get('/ws/:workspaceName', (req, res, next) => {
 router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 
   if(!req.user){
-    req.flash('info', `Please login `);
+    req.flash('info', `Please login before trying to access your messages`);
     res.redirect('/login');
     return;
   }
@@ -131,6 +132,11 @@ router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
     .then(locals => res.render('channel', locals))
     .catch(err => next(err));
 
+});
+
+
+router.get('/workspace-choice', (req, res, next) => {
+  res.render('workspace_choice');
 });
 
 router.get('/login', (req, res, next) =>{
