@@ -91,7 +91,22 @@ router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
     // load the messages
     locals.chatMessages = await channel.getLatestMessages();
 
-    return locals
+    // load user data
+    let senders = await Promise.all(locals.chatMessages.map(message => {
+      return User.findById(message.userId);
+    }));
+    
+    // append relevant user data to messages
+    locals.chatMessages = locals.chatMessages.map((message, idx) => {
+      return {message, 
+        senderName: senders[idx].nickname,
+        senderAvatar: senders[idx].avatar,
+        displayDate: message.createdAt.toLocaleString(),
+        displayTime: message.createdAt.toLocaleTimeString(),
+      };
+    });
+    
+    return locals;
   }
 
   getWorkspaceLocalVariable(req, res, next, user, workspaceName)
@@ -154,37 +169,5 @@ router.get('/logout', (req, res, next) => {
   req.flash("success", "Logged Out Successfully! 👏");
   res.redirect('/login');
 });
-//
-//
-// // WORKSPACE ROUTE
-// router.get('/:workspaceName', (req, res, next) => {
-//   const {workspaceName} = req.params;
-//   // get all data concerning workspace: name,
-//   Workspace.findOne({where: {name: workspaceName}})
-//     .then(workspace => {
-//       res.locals.workspaceName = workspace.name;
-//       res.render('index');
-//     })
-//     .catch(err => {
-//       log.error(err);
-//       next(err);
-//     });
-// });
-
-
-// // CHANNEL ROUTE (either channel or direct message)
-// router.get('/:workspaceName/:channelId', (req, res, next) => {
-//   const {workspaceName, channelId} = req.params;
-//
-//   Workspace.findOne({where: {name: workspaceName}})
-//   .then(workspace => {
-//     res.locals.workspaceName = workspace.name;
-//     res.render('index');
-//   })
-//   .catch(err => {
-//     log.error(err);
-//     next(err);
-//   });
-// });
 
 module.exports = router;
