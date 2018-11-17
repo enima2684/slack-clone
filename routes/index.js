@@ -26,7 +26,6 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
     if(!userBelongsToWorkspace){
       req.flash('error', '🧐 Ohh ! It seems like you need an invite to join this workspace !');
       next(); // TODO: redirect to an error friendly page
-      return;
     }
 
     // get channels on the workspace
@@ -78,7 +77,6 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
     let users = await workspace.getUsers();
     let userNames = users.map(user => user.nickname);
 
-    // res.render('index', {channelNames, userBelongsToWorkspace, userNames});
     return {channelInfos, discussionInfos, userBelongsToWorkspace, userNames, workspaceName}
 
 }
@@ -136,7 +134,7 @@ router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 });
 
 router.get('/login', (req, res, next) =>{
-  res.render('login.hbs');
+  res.render('auth/login.hbs', {layout: 'auth/auth_layout.hbs'});
 });
 
 router.post('/process-login', (req, res, next) => {
@@ -181,6 +179,10 @@ router.post('/process-login', (req, res, next) => {
   }
   return login();
 
+});
+
+router.get('/signup', (req, res, next) => {
+  res.render('auth/signup.hbs', {layout: 'auth/auth_layout.hbs'});
 });
 
 router.get('/logout', (req, res, next) => {

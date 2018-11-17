@@ -1,0 +1,19 @@
+<div class="form-container">
+  <div class="form-title">
+    <h2>Sign up to the Slack community!</h2>
+    <p>slack.com</p>
+  </div>
+
+  <p>Enter tour <strong>email adress</strong> and <strong>password</strong>.</p>
+
+  <form action="/process-login" method="POST">
+    <input type="text" placeholder="you@example.com" name="email">
+    <input type="password" placeholder="secret password ! Shuuuut !" name="originalPassword">
+    <input type="password" placeholder="secret password again !" name="originalPassword2">
+    <input type="submit" value="Sign Up!">
+  </form>
+</div>
+
+<div class="signup-invite">
+  <p>Already have an account ? <a href="/login">Login here!</a></p>
+</div>
