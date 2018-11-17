@@ -135,7 +135,6 @@ function createChannels(workspaces){
 function createChannelUser(channel, user){
  // TODO: I am here: create the channels / users relation
 
-
   return channel
     .addUser(user)
     .then(() => logger.info(`user ${user.nickname} added to channel ${channel.name} on workspace ${channel.workspaceId}`))
@@ -143,6 +142,14 @@ function createChannelUser(channel, user){
       logger.error(`error while assigning user ${user.nickanme} to channel ${channel.name} on workspace ${channel.workspaceId}`);
       throw err;
     })
+}
+
+async function createDiscussion(user1, user2, workspace){
+  return await Channel.create({
+    name: `${user1.nickname}_${user2.nickname}`,
+    workspaceId:workspace.id
+  })
+    .then(channel => channel.addUsers([user1, user2]));
 }
 
 function createChannelUserInterractions(){
@@ -208,7 +215,6 @@ function createMessages(users){
   ])
     .then(logger.info(`all messages created in db !`))
     .catch(err => {throw err})
-
 }
 
 /*** MAIN ***/

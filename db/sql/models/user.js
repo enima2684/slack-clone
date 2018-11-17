@@ -88,6 +88,16 @@ class User extends Sequelize.Model {
       return channels
   }
 
+
+  /***
+   * Returns true if a user with the given email adress already exists
+   * @param email
+   */
+  static async exists(email){
+    let user =  await User.findOne({where: {email: email}});
+    return user !== null
+  }
+
 }
 
 module.exports = User;
