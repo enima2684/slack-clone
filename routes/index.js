@@ -93,7 +93,7 @@ router.get('/ws/:workspaceName', (req, res, next) => {
   let workspaceName = req.params.workspaceName;
 
   getWorkspaceLocalVariable(req, res, next, user, workspaceName)
-    .then(locals  => res.render('index', locals))
+    .then(locals  => res.render('workspace', locals))
     .catch(err => next(err));
 
 });
@@ -128,7 +128,7 @@ router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 
   getWorkspaceLocalVariable(req, res, next, user, workspaceName)
     .then(workspaceLocals => loadChannelLocals(workspaceLocals, channelId))
-    .then(locals => res.render('index', locals))
+    .then(locals => res.render('channel', locals))
     .catch(err => next(err));
 
 });
