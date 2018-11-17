@@ -92,12 +92,12 @@ class MessageDomHandler{
    */
   renderMessage({senderId, timestamp, content}){
 
-    $.get('views/partials/message.hbs', messageTemplate => {
+    $.get('/views/partials/message.hbs', messageTemplate => {
       let renderMessage = Handlebars.compile(messageTemplate);
       let templateParams = {
         senderId,
         content,
-        avatar: 'assets/avatars/avatar-7.png',
+        avatar: '/assets/avatars/avatar-7.png',
         timestamp: this.getFormatedTime(timestamp)
       };
 
