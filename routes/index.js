@@ -99,6 +99,25 @@ router.get('/ws/:workspaceName', (req, res, next) => {
 
 });
 
+router.get('/ws/:workspaceName/create', (req, res, next) => {
+
+
+  if(!req.user){
+    req.flash('info', `Please login before trying to access your messages`);
+    res.redirect('/login');
+    return;
+  }
+
+  let user = req.user;
+  let workspaceName = req.params.workspaceName;
+
+  getWorkspaceLocalVariable(req, res, next, user, workspaceName)
+    .then(locals  => res.render('channel_create', locals))
+    .catch(err => next(err));
+
+
+});
+
 router.get('/ws/:workspaceName/:channelId', (req, res, next) => {
 
   if(!req.user){

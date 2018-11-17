@@ -19,7 +19,7 @@
 </head>
 <body>
 
-  <div class="body-container">
+<div class="body-container">
 
   <div class="side-bar">
     <div class="header">
@@ -31,7 +31,10 @@
     </div>
     <div class="separator"></div>
     <section class="channels">
-      <h3>Chaînes</h3>
+      <div class="title-section">
+        <h3>Channels</h3>
+        <a href="/ws/{{workspaceName}}/create"><i class="far fa-plus-square"></i></a>
+      </div>
       <ul class="ul-sidebar">
         {{#each channelInfos}}
           <li>#
@@ -44,7 +47,10 @@
     </section>
     <div class="separator"></div>
     <section class="direct-messages">
-      <h3>Messages Directs</h3>
+      <div class="title-section">
+        <h3>Direct Messages</h3>
+        <a href="#0"><i class="far fa-plus-square"></i></a>
+      </div>
       <ul class="ul-sidebar">
         {{#each discussionInfos}}
           <li>
