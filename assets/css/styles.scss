@@ -114,6 +114,28 @@ section.main{
   flex-grow: 1;
   box-sizing: border-box;
 
+
+  .info-for-user{
+    margin: 0 auto;
+    width: 100%;
+
+    img{
+      margin: 0 30%;
+      height: 40%;
+    }
+
+    p{
+      padding: 10% 20%;
+      margin: 0 auto;
+      font-size: 1.5rem;
+      text-align: center;
+      color: $color-primary;
+      font-weight: 700;
+
+    }
+
+  }
+
   .header{
     padding-left: 20.1px;
     height: 49px;

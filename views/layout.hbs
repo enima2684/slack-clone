@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Slack</title>
+
+  <!--CSS Imports-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+
+  <!--JS Packages Imports-->
+  <script src="https://cdn.jsdelivr.net/npm/joi-browser@13.4.0/dist/joi-browser.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
+
+</head>
+<body>
+
+  <div class="body-container">
+
+  <div class="side-bar">
+    <div class="header">
+      <h2 id="workspace">{{workspaceName}}</h2>
+      <div class="user-status">
+        <i class="fas fa-circle"></i>
+        <span>{{currentUser.nickname}}</span>
+      </div>
+    </div>
+    <div class="separator"></div>
+    <section class="channels">
+      <h3>Chaînes</h3>
+      <ul class="ul-sidebar">
+        {{#each channelInfos}}
+          <li>#
+            <a href="/ws/{{../workspaceName}}/{{this.id}}">
+              <span>{{this.name}}</span>
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+    <div class="separator"></div>
+    <section class="direct-messages">
+      <h3>Messages Directs</h3>
+      <ul class="ul-sidebar">
+        {{#each discussionInfos}}
+          <li>
+            <i class="fas fa-circle"></i>
+            <a href="/ws/{{../workspaceName}}/{{this.id}}">
+              <span class="other-user">{{this.otherUserName}}</span>
+            </a>
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  </div>
+
+  {{> flash_messages}}
+  <section class="main">
+  {{{body}}}
+  </section>
+
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/socket/messageSocketSchemas.js"></script>
+<script src="/socket/SocketManager.js"></script>
+<script src="/assets/js/MessageSocketSender.js"></script>
+<script src="/assets/js/MessageSocketListenner.js"></script>
+<script src="/assets/js/MessageDomHandler.js"></script>
+<script src="/assets/js/index.js"></script>
+</body>
+</html>

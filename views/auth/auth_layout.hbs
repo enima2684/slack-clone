@@ -12,7 +12,6 @@
 
 <div class="container">
 
-
   <header>
 
     <nav>
@@ -24,7 +23,7 @@
         <li><a href="#0">Support</a></li>
         <li><a href="#0">Create a new workspace</a></li>
         <li><a href="#0">Find your workspace</a></li>
-        <li class="btn-signin"><a href="#0">Sign in</a></li>
+        <li class="btn-signin"><a href="/login">Log In</a></li>
       </ul>
     </nav>
 
@@ -32,25 +31,7 @@
 
   <main>
     {{> flash_messages}}
-    <div class="form-container">
-      <div class="form-title">
-        <h2>Sign in to Slack</h2>
-        <p>slack.com</p>
-      </div>
-
-      <p>Enter tour <strong>email adress</strong> and <strong>password</strong>.</p>
-
-      <form action="/process-login" method="POST">
-        <input type="text" placeholder="you@example.com" name="email">
-        <input type="password" placeholder="secret password ! Shuuuut !" name="originalPassword">
-        <input type="submit" value="Sign in">
-      </form>
-    </div>
-
-    <div class="signup-invite">
-      <p>Trying to sign up to Slack ? <a href="#0">Create a new account</a></p>
-    </div>
-
+    {{{body}}}
   </main>
 
   <footer>
