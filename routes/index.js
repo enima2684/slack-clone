@@ -252,6 +252,7 @@ router.get('/signup', (req, res, next) => {
   if(req.user){
     req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
     res.redirect('/workspace-choice');
+    return;
   }
   res.render('auth/signup.hbs', {layout: 'auth/auth_layout.hbs'});
 });
@@ -262,6 +263,7 @@ router.post('/process-signup', (req, res, next) => {
   if(originalPassword !== originalPassword2){
     req.flash('error', 'The two passwords you entered are not the same 🧐');
     res.redirect('/signup');
+    return;
   }
 
   async function registerUser(){
@@ -270,6 +272,7 @@ router.post('/process-signup', (req, res, next) => {
     if(userExists){
       req.flash('error', 'Sorry bro 😩 ! A user with same email adress already exists ! ');
       res.redirect('/signup');
+      return;
     }
 
     let user = new User({nickname: nickname, email: email});
