@@ -121,8 +121,7 @@ section.main {
   padding-top: 11px;
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  box-sizing: border-box;
+  justify-content: space-between;
 }
 section.main .info-for-user {
   margin: 10% auto;
@@ -146,6 +145,7 @@ section.main .header {
   padding-left: 20.1px;
   height: 49px;
   border-bottom: 1px solid #cac4c9;
+  flex-shrink: 0;
 }
 section.main .header .meta-conv {
   margin-top: 5px;
@@ -158,11 +158,17 @@ section.main .header .meta-conv .separator {
   padding: 0 5px;
 }
 section.main .message-container {
-  flex-grow: 2;
   margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  flex-grow: 1;
+  flex-shrink: 1;
+  /* 2 */
+  overflow: scroll;
+  display: block;
+  position: relative;
+}
+section.main .message-container ul {
+  position: absolute;
+  bottom: 0;
 }
 section.main .message-container ul li {
   padding: 8px 0;
@@ -199,6 +205,7 @@ section.main .message-container ul li .msg .msg-content {
 }
 section.main .input-container {
   height: 66px;
+  flex-shrink: 0;
 }
 section.main .input-container .input {
   height: 40px;

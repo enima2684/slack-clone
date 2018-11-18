@@ -178,6 +178,11 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
     // get the channel name
     let channel = await Channel.findById(channelId);
+    if(channel === null){
+      req.flash('error', '🧐 The channel you try to access  does not exist');
+      res.redirect('/');
+      return;
+    }
     locals.channelName = channel.name;
 
     // get number of users in the channel
