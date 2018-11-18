@@ -18,14 +18,30 @@ class SocketMessageHandler{
       logger.debug(`socket ${client.id} connected`);
 
       let socketManager = new SocketManager({socket: client, io: this.io});
-
+      
       socketManager.on('message:submit', message => this.onMessageSubmit(socketManager,message));
+
+      socketManager.on('message:subscribe', message => this.onJoin(socketManager,message));
+
+      // Do we even need something like this? An user should already leave a room when disconnecting, right?
+      // socketManager.on('message:unsubscribe', message => socketManager.leave(message.channelId));
 
       socketManager.on('disconnect', ()=>this.onDisconnect(socketManager));
 
       return this
     });
 
+  }
+
+  /**
+   * Executed when an user accesses a channel
+   * @param socketManager: instance of a SocketManager
+   * @param message
+   */
+  onJoin(socketManager, message) {
+    if (message.channelId) {
+      socketManager.join(message.channelId, () => logger.debug(`User ${message.senderId} joined channel ${message.channelId}`));
+    }
   }
 
   /**
@@ -42,10 +58,10 @@ class SocketMessageHandler{
     broadcastedMessage.broadcastingTimestamp = +new Date();
 
     // broadcast this new message to all clients
-    socketManager.emit({
+    socketManager.in(message.channelId).emit({
       id: "message:broadcast",
       message: broadcastedMessage,
-      senderIsServer: true
+      senderIsServer: true,
     });
     logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
 

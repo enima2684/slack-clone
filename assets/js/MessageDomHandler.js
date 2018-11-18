@@ -19,7 +19,7 @@ class MessageDomHandler{
   initEvents(){
     $("#msg-input").keydown(event => this.onTyping(event));
   }
-
+  
   /**
    * Event handler when typing message
    * @param event
@@ -29,6 +29,21 @@ class MessageDomHandler{
     if(event.keyCode === 13) {
       this.onSubmit();
     }
+  }
+  
+  /**
+   * Subscription to channel on page load
+   */
+  joinRoom(){
+    // send message
+    let messageSender =
+      new this.MessageSocketSender({
+        content: 'Subscribe to room',
+        socketManager: this.socketManager,
+        senderId: this.getSenderId(),
+        channelId: this.getChannelId(),
+      });
+    messageSender.send('message:subscribe');
   }
 
   /**
@@ -49,7 +64,7 @@ class MessageDomHandler{
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
       });
-    messageSender.send();
+    messageSender.send('message:submit');
 
     // clear the input
     this.clearInput();
@@ -68,15 +83,15 @@ class MessageDomHandler{
    */
   getSenderId(){
     // FIXME : information has to come from the current session
-    return "amine"
+    return "placeholder"
   }
 
   /**
-   * Gets the id od the channel to which the message will be sent
+   * Gets the id of the channel to which the message will be sent
    */
   getChannelId(){
-    // FIXME : information has to come from the current session
-    return "general"
+    // channelId consists of :workspaceName/:channelName
+    return window.location.pathname.slice(4);
   }
 
   /**

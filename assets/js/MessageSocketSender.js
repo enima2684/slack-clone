@@ -20,12 +20,11 @@ class MessageSocketSender{
   /**
    * Sends a message through the socket
    */
-  send(){
+  send(id){
 
     let message = this.buildMessage();
-
     this.socketManager.emit({
-      id:'message:submit',
+      id:id,
       message: message,
       senderIsServer: false
     });

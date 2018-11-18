@@ -46,6 +46,15 @@
     channelId             : Joi.string().required(),
   });
 
+  /*** message:broadcast ***/
+  messageSocketSchemas["message:subscribe"] = Joi.object().keys({
+    content               : Joi.string().min(1).required(),
+    sendingTimestamp      : Joi.number().min(0).integer().required(),
+    // broadcastingTimestamp : Joi.number().min(0).integer().required(),
+    senderId              : Joi.string().required(),
+    channelId             : Joi.string().required(),
+  });
+
   /*** user:disconnect ***/
   messageSocketSchemas["disconnect"] = Joi.object().keys({});
 

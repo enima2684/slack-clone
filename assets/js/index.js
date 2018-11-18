@@ -5,6 +5,7 @@ $(document).ready(()=>{
 
   const socket = io();
   const socketManager = new window.SocketManager({socket});
+  console.log(socketManager)
 
   const messageDomHandler = new MessageDomHandler({
     MessageSocketSender,
@@ -17,5 +18,6 @@ $(document).ready(()=>{
   });
 
   messageDomHandler.initEvents();
-
+  
+  messageDomHandler.joinRoom();
 });

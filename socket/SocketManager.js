@@ -43,10 +43,23 @@
       // 2. send the message
       if(senderIsServer){
         this.io.emit(id, message);
-      } else {
+      } else {        
         this.socket.emit(id, message);
       }
-
+    }
+    
+    in(senderRoom) {
+      this.io.in(senderRoom);
+      return this;
+    }
+    
+    /**
+     * Join a room when a client connects to a channel
+     * @param senderRoom - channel that contains the message
+     */
+    join(senderRoom){
+      // this.socket.rooms = senderRoom;
+      this.socket.join(senderRoom);
     }
 
     /**
