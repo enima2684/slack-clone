@@ -199,8 +199,57 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
 });
 
-router.get('/workspace-choice', (req, res, next) => {
-  res.render('workspace_choice');
+router.get('/workspace-choice', async (req, res, next) => {
+  try {
+    let user = req.user;
+    let workspaces = await Workspace.findAll({
+      // where: 
+      include: [{
+        model: User,
+        as: 'users',
+      }]
+    });
+    res.render('workspace_choice', {layout: 'ws_pick_layout.hbs', workspaces});
+  } catch (err){ next(err) }
+});
+
+router.get('/workspace-create', (req, res, next) => {
+  if(!req.user){
+    req.flash('info', `Please login before trying to create a new workspace`);
+    res.redirect('/login');
+    return;
+  }
+  res.render('workspace_create');
+});
+
+router.post('/workspace-create-process', async (req, res, next) => {
+
+  try{
+    if(!req.user){
+      req.flash('info', `Please login before trying to create a new workspace`);
+      res.redirect('/login');
+      return;
+    }
+  
+    const user = req.user;
+    const {workspaceName, imageUrl} = req.body;
+
+    let workspaceSameNameExists = await Workspace.findOneByName(workspaceName);
+    if (workspaceSameNameExists) {
+      req.flash('error', 'A workspace with the same name already exists on Slack');
+      res.redirect(`/workspace-create`);
+      return;
+    }
+    
+    // create the workspace
+    let workspace = new Workspace({name: workspaceName, image: imageUrl, createdBy: user.id });
+    workspace = await workspace.save();
+    await workspace.addUser(user);
+
+    req.flash('success', `Nice ! The workspace ${workspaceName} has been created ! `);
+    res.redirect(`/ws/${workspaceName}`);
+
+    } catch (err){ next(err) }
 });
 
 router.get('/login', (req, res, next) =>{
