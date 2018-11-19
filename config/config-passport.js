@@ -15,7 +15,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((userId, done) => {
   logger.debug("DESERIALIZE (retrievieng user info form the DB! ");
   User
-    .findById(userId)
+    .findOne({where: {id: userId}})
     .then(user => done(null, user))
     .catch(err => done(err));
 });

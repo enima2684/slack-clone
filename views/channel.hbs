@@ -19,11 +19,13 @@
 
 <div class="message-container">
   {{> flash_messages}}
-  <ul id="msg-ul">
-    {{#each chatMessages}}
-      {{> message}}
-    {{/each}}
-  </ul>
+  <!--<div class="inner-container">-->
+    <ul id="msg-ul">
+      {{#each chatMessages}}
+        {{> message}}
+      {{/each}}
+    </ul>
+  <!--</div>-->
 
 </div>
 

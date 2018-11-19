@@ -52,7 +52,7 @@ class Channel extends Sequelize.Model {
    * Returns an array of objects [{senderId, timestamp, content, avatar}]
    * @return {Promise<void>}
    */
-  
+
    async getLatestMessages(){
 
     const User = require('./index').User;
@@ -79,6 +79,26 @@ class Channel extends Sequelize.Model {
     let minutes = "0" + date.getMinutes();
 
     return `${hours.substr(-2)} h ${minutes.substr(-2)}`
+  }
+
+  /**
+   * Returns true if a channel with the name `channelName` exists on the given worksapce
+   * @param channelName
+   * @param workspace: instance of a workspace
+   */
+  static async exists(channelName, workspace){
+
+    const Workspace = require('./index').Workspace;
+
+    let channel =  await Channel.findOne({
+      where: {name: channelName},
+      include: [{
+        model: Workspace,
+        where: {id: workspace.id},
+        as: 'workspace'
+      }]
+    });
+    return channel !== null
   }
 
 }

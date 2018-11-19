@@ -48,15 +48,16 @@ db.sql.sequelize.authenticate()
 
 
 /*** Session + Passport + Flash ***/
+// app.set('trust proxy', 1); // trust first proxy
 app.use(session({
   secret: 'keyboard cat',
   resave: false,
   saveUninitialized: true,
+  // cookie: { secure: true },
   store: new SequelizeStore({
     db: db.sql.sequelize,
     table: 'Session'
   }),
-  // store: new (require('connect-pg-simple')(session))(),
 }));
 app.use(passport.initialize());
 app.use(passport.session());
