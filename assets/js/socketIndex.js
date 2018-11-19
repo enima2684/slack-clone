@@ -17,5 +17,6 @@ $(document).ready(()=>{
   });
 
   messageDomHandler.initEvents();
-
+  
+  messageDomHandler.joinRoom();
 });
