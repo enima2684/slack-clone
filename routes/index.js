@@ -200,16 +200,35 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 });
 
 router.get('/workspace-choice', async (req, res, next) => {
-  try {
+  if(!req.user){
+    req.flash('info', `Please login before trying to access the workspaces`);
+    res.redirect('/login');
+    return;
+  }
+  try {    
     let user = req.user;
     let workspaces = await Workspace.findAll({
-      // where: 
       include: [{
         model: User,
         as: 'users',
+        where: { id: user.id }
       }]
     });
-    res.render('workspace_choice', {layout: 'ws_pick_layout.hbs', workspaces});
+    let workspaceDetails = await Promise.all(
+      workspaces.map(workspace => workspace.getWorkSpaceDetails())
+    );
+
+    let workspacesData = workspaces.map((workspace, index) => {
+      return {
+        name: workspace.name,
+        id: workspace.id,
+        image: workspace.image,
+        ...workspaceDetails[index],
+      }
+    });
+
+    // res.send(workspacesData);
+    res.render('workspace_choice', {layout: 'workspace_layout.hbs', workspacesData});
   } catch (err){ next(err) }
 });
 
@@ -219,7 +238,7 @@ router.get('/workspace-create', (req, res, next) => {
     res.redirect('/login');
     return;
   }
-  res.render('workspace_create');
+  res.render('workspace_create', {layout: 'workspace_layout.hbs'});
 });
 
 router.post('/workspace-create-process', async (req, res, next) => {
@@ -287,14 +306,7 @@ router.post('/process-login', (req, res, next) => {
     req.logIn(user, (err) => {
       if (err) { return next(err); }
       req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
-      //FIXME: instead of redirecting the user to the first workspace, we have to redirect him to a page to choose the workspace
-      // res.redirect('/workspace-choice');
-      user
-        .getWorkspaces()
-        .then(workspaces => {
-          let workspace = workspaces[0];
-          res.redirect(`/ws/${workspace.name}`);
-        });
+      res.redirect('/workspace-choice');
     });
 
   }

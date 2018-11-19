@@ -41,6 +41,18 @@ class Workspace extends Sequelize.Model {
     return Workspace.findOne({where: {name: name}});
   }
 
+  /**
+   * Returns the number of users in the workspace
+   */
+  async getWorkSpaceDetails(){
+    //TODO: use a count - do not have ot query the full objects and apply a length !!
+    let channels = await this.getChannels();
+    let users = await this.getUsers();
+    return {
+      numberOfUsers: users.length,
+      numberOfChannels: channels.length,
+    }
+  }
 }
 
 

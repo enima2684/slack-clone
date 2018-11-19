@@ -1,16 +1,18 @@
 <div class="workspace-create">
+  <section class="main-section">
+    <h1>Create a new workspace</h1>
 
-  <h1>Create a new workspace</h1>
+    <p>Create a new workspace or <a href="/workspace-choice">select an existing one</a></p>
 
-  <p class="desc">Workspace description</p>
-
-  <form action="/workspace-create-process" method="POST">
-    <label>Name</label>
-    <input type="text" placeholder="Charming Company" name='workspaceName'>
-
-    <input type="text" placeholder="Placeholder for file upload" name="imageUrl">
-
-    <button>Create Workspace</button>
-  </form>
+    <form action="/workspace-create-process" method="POST">
+      <label>Name
+        <input type="text" placeholder="Charming Company" name='workspaceName'>
+      </label>
+      <label>Workspace picture
+        <input type="text" placeholder="Placeholder for file upload" name="imageUrl">
+      </label>
+      <button>Create Workspace</button>
+    </form>
+  </section>
 </div>
 
