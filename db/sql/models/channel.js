@@ -29,7 +29,7 @@ class Channel extends Sequelize.Model {
         ]
       })
   }
-  
+
   static associate(models) {
     // here we have the different associations with other models
 
