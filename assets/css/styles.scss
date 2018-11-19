@@ -433,31 +433,42 @@ section.main{
         color: $color-primary;
         font-size: 2.125rem;
         font-weight: 900;
-        margin-bottom: 2.0rem;
+        margin-bottom: 0.5rem;
       }
-
+      >p{
+        text-align: center;
+        margin-bottom: 2.0rem;
+        color: $color-detail-text;
+        font-size: 0.9rem;
+      }
 
       form{
         width: 100%;
         display: flex;
+
         //flex-wrap: wrap;
 
-       input.user-search-bar{
+       #bloodhound{
+        width: 100%;
+        input.user-search-bar{
 
-      border: 1px solid $color-detail-text;
-      box-shadow: inset 0 0 0 1px rgba(44,45,48,.3);
-      font-size: 1.125rem;
-      padding: 0.75rem;
-      width: 100%;
-      color: $color-primary;
-      border-radius: 5px;
+          border: 1px solid $color-detail-text;
+          box-shadow: inset 0 0 0 1px rgba(44,45,48,.3);
+          font-size: 1.125rem;
+          padding: 0.75rem;
+          width: 100%;
+          color: $color-primary;
+          border-radius: 5px;
+          box-sizing: border-box;
 
-    }
-       input.user-search-bar:focus{
-      outline: none;
-    }
+        }
+        input.user-search-bar:focus{
+          outline: none;
+        }
+       }
 
-        button{
+
+      button{
           border:none;
           margin-left: 1.0rem;
           min-width: 80px;
@@ -470,7 +481,6 @@ section.main{
         }
 
       }
-
 
     }
 
@@ -499,7 +509,6 @@ section.main{
     }
 
   }
-
 
 
 }
