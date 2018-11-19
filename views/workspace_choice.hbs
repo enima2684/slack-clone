@@ -2,8 +2,10 @@
   <section class="main-section">
     {{> flash_messages}}
     <h1>Your workspaces</h1>
-    <p>Select one of the workspaces you belong to or 
-      <a href="/workspace-create">create a new one</a></p>
+    <div class="header">
+      <p>Select one of the workspaces you belong to or</p>
+      <button class="btn-create"><a href="/workspace-create">Create a new Workspace</a></button>
+    </div>
     <div class="ws-list">
     {{#each workspacesData}}
       <div class="ws-container">

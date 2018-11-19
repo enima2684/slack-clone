@@ -1,4 +1,4 @@
-<div class="workspace-create">
+{{!-- <div class="workspace-create">
   <section class="main-section">
     <h1>Create a new workspace</h1>
 
@@ -14,5 +14,35 @@
       <button>Create Workspace</button>
     </form>
   </section>
-</div>
+</div> --}}
 
+<section class="main">
+<div class="channel-create">
+
+  <h1>Create a new workspace 🚀✍️</h1>
+  <p class="desc">A Workspace is where communities are rooted. Create one for your work group!</p>
+
+  <p class="invite">Once your workspace is created, you can organize your conversation in Channels. Moreover you can invite people to join it ! 👫</p>
+
+  <form action="/workspace-create-process" method="post">
+    <div class="input-element">
+      <label for="">Name</label>
+      <div class="input-container">
+        <input type="text" placeholder="eg.leads" name="workspaceName">
+      </div>
+      <p class="info-form">Names must be shorter than 22 characters</p>
+      <label for="">Workspace Picture</label>
+      <div class="input-container">
+        <input type="text" placeholder="http://www.example.com/myPicture.jpg" name="imageUrl">
+      </div>
+
+      
+      <div class="buttons">
+        <a class="btn-cancel btn-form" href="/workspace-choice">Cancel</a>
+        <button class="btn-submit btn-form">Create Workspace</button>
+      </div>
+    </div>
+
+  </form>
+</div>
+</section>
