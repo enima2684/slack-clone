@@ -1,15 +1,16 @@
 <div class="channel-invite">
 
-  <h1>Invite others to {{channelName}}</h1>
+  <div class="form-container">
 
-  <!--<form action="/ws/{{workspaceName}}/{{channelId}}/add-user-process" method="post">-->
+    <h1>🐾 Invite others to {{channelName}}</h1>
 
-  <!--</form>-->
+    <form action="">
+      <input class="user-search-bar" type="text" placeholder="Name of your friend">
+      <input type="hidden" id="invitedUserId" name="invitedUserId">
+      <button>Invite</button>
+    </form>
 
-  <ul>
-    {{#each usersWorkspace}}
-      <li>{{this.nickname}}</li>
-    {{/each}}
-  </ul>
 
+  </div>
+  
 </div>
