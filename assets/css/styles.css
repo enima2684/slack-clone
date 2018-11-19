@@ -330,13 +330,16 @@ section.main .channel-create form .input-element .buttons .btn-submit {
 section.main .channel-create form .input-element .buttons .btn-cancel {
   color: #2c2d30;
 }
+section.main .duo-channel-create,
 section.main .channel-invite {
   height: 100%;
   width: 100%;
 }
+section.main .duo-channel-create .tt-hint,
 section.main .channel-invite .tt-hint {
   color: #999;
 }
+section.main .duo-channel-create .tt-menu,
 section.main .channel-invite .tt-menu {
   /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
   margin-top: 12px;
@@ -348,28 +351,34 @@ section.main .channel-invite .tt-menu {
   cursor: pointer;
   font-weight: 400;
 }
+section.main .duo-channel-create .tt-suggestion,
 section.main .channel-invite .tt-suggestion {
   padding: 3px 20px;
   font-size: 1.125rem;
   line-height: 24px;
 }
+section.main .duo-channel-create .tt-suggestion:hover,
 section.main .channel-invite .tt-suggestion:hover {
   background-color: #56B68B;
   color: white;
 }
+section.main .duo-channel-create .tt-suggestion p,
 section.main .channel-invite .tt-suggestion p {
   padding: 0.75rem;
   margin: 0;
 }
+section.main .duo-channel-create .user-match,
 section.main .channel-invite .user-match {
   display: flex;
   align-items: center;
 }
+section.main .duo-channel-create .user-match img,
 section.main .channel-invite .user-match img {
   height: 1.5rem;
   width: 1.5rem;
   margin-right: 0.5rem;
 }
+section.main .duo-channel-create .form-container,
 section.main .channel-invite .form-container {
   display: flex;
   flex-direction: column;
@@ -378,25 +387,30 @@ section.main .channel-invite .form-container {
   margin: 15% auto;
   max-width: 660px;
 }
+section.main .duo-channel-create .form-container h1,
 section.main .channel-invite .form-container h1 {
   color: #2c2d30;
   font-size: 2.125rem;
   font-weight: 900;
   margin-bottom: 0.5rem;
 }
+section.main .duo-channel-create .form-container > p,
 section.main .channel-invite .form-container > p {
   text-align: center;
   margin-bottom: 2rem;
   color: #717274;
   font-size: 0.9rem;
 }
+section.main .duo-channel-create .form-container form,
 section.main .channel-invite .form-container form {
   width: 100%;
   display: flex;
 }
+section.main .duo-channel-create .form-container form #bloodhound,
 section.main .channel-invite .form-container form #bloodhound {
   width: 100%;
 }
+section.main .duo-channel-create .form-container form #bloodhound input.user-search-bar,
 section.main .channel-invite .form-container form #bloodhound input.user-search-bar {
   border: 1px solid #717274;
   box-shadow: inset 0 0 0 1px rgba(44, 45, 48, 0.3);
@@ -407,9 +421,11 @@ section.main .channel-invite .form-container form #bloodhound input.user-search-
   border-radius: 5px;
   box-sizing: border-box;
 }
+section.main .duo-channel-create .form-container form #bloodhound input.user-search-bar:focus,
 section.main .channel-invite .form-container form #bloodhound input.user-search-bar:focus {
   outline: none;
 }
+section.main .duo-channel-create .form-container form button,
 section.main .channel-invite .form-container form button {
   border: none;
   margin-left: 1rem;

@@ -1,0 +1,18 @@
+<div class="duo-channel-create">
+
+  <div class="form-container">
+    <h1>Create a new discusssion 🚶🏻‍♀🏃‍♀️️</h1>
+    <p class="desc">Discussions are where <strong>two</strong> members can communicate.</p>
+    <form action="/ws/{{workspaceName}}/create-duo-channel-process" method="post">
+      <div id="bloodhound">
+        <input class="user-search-bar typeahead" type="text" placeholder="Name of your friend">
+      </div>
+      <input type="hidden" id="invitedUserId" name="invitedUserId">
+      <button>Invite</button>
+    </form>
+  </div>
+
+</div>
+
+<script src="/assets/js/duoChannelInviteIndex.js"></script>
+
