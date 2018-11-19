@@ -12,6 +12,11 @@ class Channel extends Sequelize.Model {
         name: {
           type: DataTypes.STRING,
           allowNull: false
+        },
+        channelType: {
+          type: DataTypes.ENUM,
+          values: ['duo', 'group'],
+          defaultValue: 'group'
         }
       },
       {
@@ -24,8 +29,7 @@ class Channel extends Sequelize.Model {
         ]
       })
   }
-
-
+  
   static associate(models) {
     // here we have the different associations with other models
 
