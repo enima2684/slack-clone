@@ -32,6 +32,15 @@ class Workspace extends Sequelize.Model {
     Workspace.hasMany(models.Channel, {foreignKey: 'workspaceId'});
   }
 
+
+  /**
+   * Finds a workspace by name
+   * @param name
+   */
+  static findOneByName(name){
+    return Workspace.findOne({where: {name: name}});
+  }
+
 }
 
 

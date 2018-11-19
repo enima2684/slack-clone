@@ -2,7 +2,7 @@
 
 const db      = require('../../index.js').db;
 const logger  = require('../../../config/logger.js');
-const {User, Workspace, Message, Channel} = db.sql;
+const {User, Workspace, Message, Channel, Session} = db.sql;
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
@@ -16,6 +16,7 @@ function initDb(){
     .then(() => Workspace.destroy({ where: {}, truncate: { cascade: true }}))
     .then(() => Message.destroy({ where: {}, truncate: { cascade: true }}))
     .then(() => Channel.destroy({ where: {}, truncate: { cascade: true }}))
+    .then(() => Session.destroy({ where: {}, truncate: { cascade: true }}))
 }
 
 
@@ -23,22 +24,22 @@ function initDb(){
 let users = [];
 
 users.push(
-  new User({nickname: 'amine', email:'amine@gmail.com'})
+  new User({nickname: 'amine', email:'amine@gmail.com', avatar: '/assets/avatars/avatar-6.png'})
 );
 users.push(
-  new User({nickname: 'corrado', email:'corrado@gmail.com', avatar:'myAvatar'})
+  new User({nickname: 'corrado', email:'corrado@gmail.com', avatar: '/assets/avatars/avatar-4.png'})
 );
 users.push(
-  new User({nickname: 'niccolo', email:'niccolo@gmail.com'})
+  new User({nickname: 'niccolo', email:'niccolo@gmail.com', avatar: '/assets/avatars/avatar-3.png'})
 );
 users.push(
-  new User({nickname: 'fareha', email:'fareha@gmail.com'})
+  new User({nickname: 'fareha', email:'fareha@gmail.com', avatar: '/assets/avatars/avatar-1.png'})
 );
 users.push(
-  new User({nickname: 'nizar', email:'nizar@gmail.com'})
+  new User({nickname: 'nizar', email:'nizar@gmail.com', avatar: '/assets/avatars/avatar-5.png'})
 );
 users.push(
-  new User({nickname: 'marie', email:'marie@gmail.com'})
+  new User({nickname: 'marie', email:'marie@gmail.com', avatar: '/assets/avatars/avatar-2.png'})
 );
 
 users.forEach(user => {
