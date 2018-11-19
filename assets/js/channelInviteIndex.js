@@ -2,7 +2,6 @@
 
 function configAutocompletion(names){
 
-  console.log("😹😹😹😹😹😹😹😹😹😹😹😹😹");
   console.log(names);
   let BloodhoundEngine = new Bloodhound({
   datumTokenizer: function(datum) {
@@ -51,7 +50,6 @@ $(document).ready(()=>{
   $.get(getAjaxUrl(), {})
     .done(configAutocompletion)
     .fail((jqXhr, textStatus, errorThrown) => {
-      console.log("👹👹👹👹👹👹👹👹👹👹");
       console.log(errorThrown);
     });
 
