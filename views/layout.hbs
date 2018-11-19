@@ -39,7 +39,7 @@
         <a href="/ws/{{workspaceName}}/create"><i class="far fa-plus-square"></i></a>
       </div>
       <ul class="ul-sidebar">
-        {{#each channelInfos}}
+        {{#each groupChannelInfos}}
           <li>#
             <a href="/ws/{{../workspaceName}}/{{this.id}}">
               <span>{{this.name}}</span>
@@ -55,7 +55,7 @@
         <a href="#0"><i class="far fa-plus-square"></i></a>
       </div>
       <ul class="ul-sidebar">
-        {{#each discussionInfos}}
+        {{#each duoChannelsInfo}}
           <li>
             <i class="fas fa-circle"></i>
             <a href="/ws/{{../workspaceName}}/{{this.id}}">

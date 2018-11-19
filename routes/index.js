@@ -33,55 +33,39 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
     // get channels on the workspace
     let channels = await user.getChannelsInWorkspace(workspace);
 
-    // we do not need to query the users here, we need to query channels with two persons involving user
-    // the channel will be named as the other user
-    // channels contains all channels, with two persons and more
 
-    let numberUsers = await Promise.all(
-      channels.map(channel => channel.getNumberUsers())
-    );
 
-    let discussions = [];  // less or equal than 2 people
-    let bigDiscussions = []; // more than 2 people
-    channels.forEach((channel, index) =>{
-      let nbUsers = numberUsers[index];
-      if(nbUsers > 2){
-        bigDiscussions.push(channel);
-      } else {
-        discussions.push(channel)
-      }
-    });
-
-    async function getOtherUser(channel){
-      let users = await channel.getUsers();
-      let otherUser = users.filter(person => person.id !== user.id)[0];
-      if(users.length <= 1){
-        return `(${channel.name})`
-      } else {
-        return `${otherUser.nickname} (${channel.name})`
-      }
-    }
-
-    let otherUserNames = await Promise.all(discussions.map(getOtherUser));
-
-    let discussionInfos = discussions.map((discussion, index) => {
-      return {
-        otherUserName: otherUserNames[index],
-        id: discussion.id
-      }
-    });
-
-    let channelInfos = bigDiscussions.map((channel, index) => {
+    // get the info needed for group channels
+    let groupChannels = channels.filter(channel => channel.channelType === 'group');
+    let groupChannelInfos = groupChannels.map((channel, index) => {
       return {
         name: channel.name,
         id: channel.id
       }
     });
 
-    let users = await workspace.getUsers();
-    let userNames = users.map(user => user.nickname);
+    // get info needed for duo channels
+   let duoChannels = channels.filter(channel => channel.channelType === 'duo');
 
-    return {channelInfos, discussionInfos, userBelongsToWorkspace, userNames, workspaceName}
+    async function getOtherUser(channel){
+      let users = await channel.getUsers();
+      let otherUser = users.filter(person => person.id !== user.id)[0];
+      if(users.length <= 1){
+        return `(${user.nickname})`
+      } else {
+        return `${otherUser.nickname}`
+      }
+    }
+    let otherUserNames = await Promise.all(duoChannels.map(getOtherUser));
+
+    let duoChannelsInfo = duoChannels.map((discussion, index) => {
+      return {
+        otherUserName: otherUserNames[index],
+        id: discussion.id
+      }
+    });
+
+    return {groupChannelInfos, duoChannelsInfo, userBelongsToWorkspace, workspaceName}
 
 }
 
@@ -159,7 +143,7 @@ router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) 
     }
 
     // create the channel
-    let channel = new Channel({name: channelName, workspaceId: workspace.id});
+    let channel = new Channel({name: channelName, workspaceId: workspace.id, channelType:'group'});
     channel = await channel.save();
     await channel.addUser(user);
 
@@ -169,7 +153,6 @@ router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) 
   } catch (err){ next(err) }
 
 });
-
 
 router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
@@ -209,7 +192,6 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
   }
 
 });
-
 
 router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res, next) => {
   /**
