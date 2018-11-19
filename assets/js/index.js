@@ -5,7 +5,6 @@ $(document).ready(()=>{
 
   const socket = io();
   const socketManager = new window.SocketManager({socket});
-  console.log(socketManager)
 
   const messageDomHandler = new MessageDomHandler({
     MessageSocketSender,
