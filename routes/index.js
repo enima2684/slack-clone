@@ -98,7 +98,7 @@ router.get('/ws/:workspaceName', (req, res, next) => {
 
 });
 
-router.get('/ws/:workspaceName/create', async (req, res, next) => {
+router.get('/ws/:workspaceName/create-group-channel', async (req, res, next) => {
 
   try {
 
@@ -118,7 +118,7 @@ router.get('/ws/:workspaceName/create', async (req, res, next) => {
 
 });
 
-router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) => {
+router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, next) => {
 
   try{
 
@@ -138,7 +138,7 @@ router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) 
 
     if (channelSameNameExists) {
       req.flash('error', 'A channel with the same name already exists on this workspace 🧐');
-      res.redirect(`/ws/${workspaceName}/create`);
+      res.redirect(`/ws/${workspaceName}/create-group-channel`);
       return;
     }
 
