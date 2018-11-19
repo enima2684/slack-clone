@@ -88,6 +88,10 @@ router.get('/', (req, res, next) => {
   }
 });
 
+router.get('/workspace-choice', (req, res, next) => {
+  res.render('workspace_choice');
+});
+
 router.get('/ws/:workspaceName', (req, res, next) => {
 
   if(!req.user){
@@ -184,6 +188,7 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
       return;
     }
     locals.channelName = channel.name;
+    locals.channelId = channel.id;
 
     // get number of users in the channel
     locals.nbUsersChannel = await channel.getNumberUsers();
@@ -199,9 +204,71 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
 });
 
-router.get('/workspace-choice', (req, res, next) => {
-  res.render('workspace_choice');
+router.get('/ws/:workspaceName/:channelId/addUser', async (req, res, next) => {
+
+  if(!req.user){
+    req.flash('info', `Please login before trying to access your messages`);
+    res.redirect('/login');
+    return;
+  }
+
+  let user = req.user;
+  let {workspaceName, channelId} = req.params;
+
+  let locals = await getWorkspaceLocalVariable(req, res, next,user, workspaceName);
+
+  // get the channel name
+  let channel = await Channel.findById(channelId);
+  if(channel === null){
+    req.flash('error', '🧐 The channel you try to access  does not exist');
+    res.redirect('/');
+    return;
+  }
+  locals.channelName = channel.name;
+  locals.channelId = channel.id;
+
+  // get users on the workspace
+  let workspace = await Workspace.findOneByName(workspaceName);
+  let usersWorkspace = await workspace.getUsers();
+
+  // remove users already belonging to the channel
+  let nonAppartenanceArray = await Promise.all(
+    usersWorkspace.map(person => channel.hasUser(person))
+  );
+  usersWorkspace = usersWorkspace.filter((person, index) => !nonAppartenanceArray[index]);
+
+  locals.usersWorkspace = usersWorkspace.map(person => {
+    return {
+      id: person.id,
+      nickname: person.nickname,
+      avatar: person.avatar
+    }
+  });
+
+
+  res.render('channel_invite', locals);
 });
+
+router.post('/ws/:workspaceName/:channelId/add-user-process', (req, res, next) => {
+  /**
+   * Route activated when a user is added to a channel
+   */
+
+
+  if(!req.user){
+    req.flash('info', `Please login before trying to access your messages`);
+    res.redirect('/login');
+    return;
+  }
+
+  let user = req.user;
+  let {workspaceName, channelId} = req.params;
+
+  // req.flash(`${}`)
+  // res.redirect('/ws')
+
+});
+
 
 router.get('/login', (req, res, next) =>{
   if(req.user){

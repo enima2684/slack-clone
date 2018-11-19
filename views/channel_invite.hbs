@@ -1,0 +1,15 @@
+<div class="channel-invite">
+
+  <h1>Invite others to {{channelName}}</h1>
+
+  <!--<form action="/ws/{{workspaceName}}/{{channelId}}/add-user-process" method="post">-->
+
+  <!--</form>-->
+
+  <ul>
+    {{#each usersWorkspace}}
+      <li>{{this.nickname}}</li>
+    {{/each}}
+  </ul>
+
+</div>

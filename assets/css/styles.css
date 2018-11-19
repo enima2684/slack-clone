@@ -157,6 +157,13 @@ section.main .header .meta-conv {
 section.main .header .meta-conv .separator {
   padding: 0 5px;
 }
+section.main .header .meta-conv .add-user a {
+  text-decoration: none;
+  color: #717274;
+}
+section.main .header .meta-conv .add-user a:hover {
+  color: #008952;
+}
 section.main .message-container {
   margin-top: 10px;
   flex-grow: 1;
