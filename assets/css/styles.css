@@ -100,11 +100,11 @@ section.main .info-for-user {
 }
 section.main .info-for-user img {
   margin: 0 30%;
-  width: 40%;
+  height: 40%;
 }
 section.main .info-for-user p {
-  padding: 5% 20%;
-  margin: 30% auto 0 auto;
+  padding: 10% 20%;
+  margin: 0 auto;
   font-size: 1.5rem;
   text-align: center;
   color: #2c2d30;

@@ -38,12 +38,13 @@ class MessageDomHandler{
     // send message
     let messageSender =
       new this.MessageSocketSender({
+        id: 'message:subscribe',
         content: 'Subscribe to room',
         socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
       });
-    messageSender.send('message:subscribe');
+    messageSender.send();
   }
 
   /**
@@ -59,12 +60,13 @@ class MessageDomHandler{
     // send message
     let messageSender =
       new this.MessageSocketSender({
+        id:"message:submit",
         content: messageContent,
         socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
       });
-    messageSender.send('message:submit');
+    messageSender.send();
 
     // clear the input
     this.clearInput();
