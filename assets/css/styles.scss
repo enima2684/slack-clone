@@ -4,12 +4,14 @@ $color-bg: #4D394B;
 $color-bg-highlight: #3E313C;
 $color-detail-text: #717274;
 $color-green-bg: #008952;
+$color-light-green-bg: #56B68B;
 
 $side-bar-padding-left   : 15px;
 $side-bar-padding-right  : 12px;
 
 
 * { padding: 0; margin: 0; }
+.twitter-typeahead, .tt-hint, .tt-input, .tt-menu { width: 100%; }
 
 html, body {
   margin : 0;
@@ -422,6 +424,47 @@ section.main{
     height: 100%;
     width: 100%;
 
+
+    //REQUIRED FOR TYPEAHEAD
+    .tt-hint {
+        color: #999;
+    }
+    .tt-menu { /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
+      margin-top: 12px;
+      padding: 8px 0;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 5px 10px rgba(0,0,0,.2);
+      cursor: pointer;
+      font-weight: 400;
+    }
+    .tt-suggestion {
+        padding: 3px 20px;
+        font-size: 1.125rem;
+        line-height: 24px;
+    }
+    .tt-suggestion:hover{
+      background-color: $color-light-green-bg;
+      color: white;
+    }
+    .tt-suggestion p {
+        padding: 0.75rem;
+        margin: 0;
+    }
+    .user-match{
+      display: flex;
+      align-items: center;
+      img{
+        height: 24px;
+        width: 24px;
+        margin-right: 0.5rem;
+      }
+
+
+    }
+
+
     .form-container{
 
       display: flex;
@@ -450,8 +493,8 @@ section.main{
 
        #bloodhound{
         width: 100%;
-        input.user-search-bar{
 
+        input.user-search-bar{
           border: 1px solid $color-detail-text;
           box-shadow: inset 0 0 0 1px rgba(44,45,48,.3);
           font-size: 1.125rem;
@@ -466,7 +509,6 @@ section.main{
           outline: none;
         }
        }
-
 
       button{
           border:none;
@@ -512,3 +554,4 @@ section.main{
 
 
 }
+

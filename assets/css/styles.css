@@ -3,6 +3,10 @@
   margin: 0;
 }
 
+.twitter-typeahead, .tt-hint, .tt-input, .tt-menu {
+  width: 100%;
+}
+
 html, body {
   margin: 0;
   min-height: 100% !important;
@@ -329,6 +333,42 @@ section.main .channel-create form .input-element .buttons .btn-cancel {
 section.main .channel-invite {
   height: 100%;
   width: 100%;
+}
+section.main .channel-invite .tt-hint {
+  color: #999;
+}
+section.main .channel-invite .tt-menu {
+  /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
+  margin-top: 12px;
+  padding: 8px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-weight: 400;
+}
+section.main .channel-invite .tt-suggestion {
+  padding: 3px 20px;
+  font-size: 1.125rem;
+  line-height: 24px;
+}
+section.main .channel-invite .tt-suggestion:hover {
+  background-color: #56B68B;
+  color: white;
+}
+section.main .channel-invite .tt-suggestion p {
+  padding: 0.75rem;
+  margin: 0;
+}
+section.main .channel-invite .user-match {
+  display: flex;
+  align-items: center;
+}
+section.main .channel-invite .user-match img {
+  height: 24px;
+  width: 24px;
+  margin-right: 0.5rem;
 }
 section.main .channel-invite .form-container {
   display: flex;
