@@ -3,6 +3,7 @@ const router     = express.Router();
 const User       = require('../db/index').db.sql.User;
 const Channel    = require('../db/index').db.sql.Channel;
 const Workspace  = require('../db/index').db.sql.Workspace;
+const logger     = require('../config/logger');
 
 
 /***
@@ -166,7 +167,6 @@ router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) 
 });
 
 
-
 router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
   try{
@@ -207,34 +207,38 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 });
 
 
-
-router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (res, req, next) => {
+router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res, next) => {
   /**
    * Called when inviting a user to a channel.
-   * It is a AJAX request used to get the list of users that can be invite'd to a channel
+   * It is a AJAX request used to get the list of users that can be invited to a channel
    */
+  try{
+    let {workspaceName, channelId} = req.params;
 
-  let {workspaceName, channelId} = req.params;
+    // get users on the workspace
+    let workspace = await Workspace.findOneByName(workspaceName);
+    let channel = await  Channel.findOne({where: {id: channelId}});
+    let usersWorkspace = await workspace.getUsers();
 
-  // get users on the workspace
-  let workspace = await Workspace.findOneByName(workspaceName);
-  let channel = await  Channel.findOne({where: {id: channelId}});
-  let usersWorkspace = await workspace.getUsers();
+    // remove users already belonging to the channel
+    let nonAppartenanceArray = await Promise.all(
+      usersWorkspace.map(person => channel.hasUser(person))
+    );
+    usersWorkspace = usersWorkspace.filter((person, index) => !nonAppartenanceArray[index]);
+    let usersCanBeInvited = usersWorkspace.map(person => {
+      return {
+        id: person.id,
+        nickname: person.nickname,
+        avatar: person.avatar
+      };
+    });
 
-  // remove users already belonging to the channel
-  let nonAppartenanceArray = await Promise.all(
-    usersWorkspace.map(person => channel.hasUser(person))
-  );
-  usersWorkspace = usersWorkspace.filter((person, index) => !nonAppartenanceArray[index]);
-  let usersCanBeInvited = usersWorkspace.map(person => {
-    return {
-      id: person.id,
-      nickname: person.nickname,
-      avatar: person.avatar
-    };
-  });
+    res.send(usersCanBeInvited);
 
-  res.send(usersCanBeInvited);
+  } catch(err) {
+    next(err);
+  }
+
 
 });
 
@@ -277,11 +281,13 @@ router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, n
       return;
     }
 
+    let {workspaceName, channelId} = req.params;
     let {invitedUserId} = req.body;
 
     // add user to the channel
     let channel = await Channel.findOne({where: {id: channelId}});
-    let invitedUser = await User.findOne({wwhere: {id: invitedUserId}});
+    let invitedUser = await User.findOne({where: {id: invitedUserId}});
+
     await channel.addUser(invitedUser);
     logger.debug(`Added user ${invitedUser.id} to channel ${channel.id}`);
 
