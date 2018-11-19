@@ -366,15 +366,17 @@ section.main .channel-invite .user-match {
   align-items: center;
 }
 section.main .channel-invite .user-match img {
-  height: 24px;
-  width: 24px;
+  height: 1.5rem;
+  width: 1.5rem;
   margin-right: 0.5rem;
 }
 section.main .channel-invite .form-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 20% 10%;
+  justify-content: center;
+  margin: 15% auto;
+  max-width: 660px;
 }
 section.main .channel-invite .form-container h1 {
   color: #2c2d30;

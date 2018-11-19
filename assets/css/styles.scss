@@ -424,7 +424,6 @@ section.main{
     height: 100%;
     width: 100%;
 
-
     //REQUIRED FOR TYPEAHEAD
     .tt-hint {
         color: #999;
@@ -456,21 +455,22 @@ section.main{
       display: flex;
       align-items: center;
       img{
-        height: 24px;
-        width: 24px;
+        height: 1.5rem;
+        width: 1.5rem;
         margin-right: 0.5rem;
       }
 
 
     }
 
-
     .form-container{
 
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin: 20% 10%;
+      justify-content: center;
+      margin: 15% auto;
+      max-width: 660px;
 
       h1{
         color: $color-primary;
