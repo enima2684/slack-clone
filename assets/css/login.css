@@ -67,7 +67,8 @@ main {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 128px 32px; }
+  padding: 0 32px;
+  margin: 100px 0 300px 0; }
   main .form-container {
     background-color: #FFFFFF;
     width: 66%;
@@ -123,7 +124,7 @@ main {
 
 footer {
   border-top: 1px solid #e8e8e8;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   background-color: #FFFFFF;
