@@ -1,7 +1,7 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
 const db = require('../db/index').db;
 const logger        = require('../config/logger.js');
-const {Message, User, Channel, Workspace} = require('../db/index').db.sql;
+const Message= require('../db/index').db.sql.Message;
 
 class SocketMessageHandler{
 
@@ -95,40 +95,18 @@ class SocketMessageHandler{
       });
       logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
 
+      // save message to database
       let messageForDb = new Message({
-        content: broadcastedMessage.content
+        content: broadcastedMessage.content,
+        userId: message.senderId,
+        channelId: message.channelId,
       });
       await messageForDb.save();
-
-      // Message.save({
-      //   content: broadcastedMessage.content,
-      //   user: {userId: 31},
-      //   channel: {channelId: 16},
-      //   workspace: 'Some Channel'
-      // }, {
-      //   include: [{
-      //     model: User,
-      //     as: 'user'
-      //   },
-      //   {
-      //     model: Channel,
-      //     as: 'channel'
-      //   },
-      //   {
-      //     model: Workspace,
-      //     as: 'workspace'
-      //   },
-      // ]
-      // })
-
       return this
-
     }
     catch (err){
       throw err;
     }
-
-
   }
 
   /**
