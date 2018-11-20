@@ -228,7 +228,7 @@ router.post('/ws/:workspaceName/create-duo-channel-process', async (req, res, ne
     } else {
       // else, create the new channel
       channel = new Channel({
-        name: `${user.nickname}_${invitedUser.nickname}`,
+        name: `${user.nickname} / ${invitedUser.nickname}`,
         workspaceId: workspace.id,
         channelType:'duo'});
 
@@ -327,6 +327,9 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
     // get number of users in the channel
     locals.nbUsersChannel = await channel.getNumberUsers();
+
+    // check type of channel : group or duo
+    locals.isGroupChannel = channel.channelType === 'group';
 
     // load the messages
     locals.chatMessages = await channel.getLatestMessages();
