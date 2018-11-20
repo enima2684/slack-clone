@@ -62,6 +62,8 @@ class Channel extends Sequelize.Model {
     const User = require('./index').User;
 
     let messages = await this.getMessages({
+      order: [['createdAt', 'ASC']],
+      limit: 100,
       include: [{
         model: User,
         as: 'sender',

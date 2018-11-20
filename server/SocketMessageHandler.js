@@ -1,6 +1,7 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
-const logger  = require('../config/logger.js');
 const db = require('../db/index').db;
+const logger        = require('../config/logger.js');
+const Message= require('../db/index').db.sql.Message;
 
 class SocketMessageHandler{
 
@@ -93,6 +94,14 @@ class SocketMessageHandler{
         senderIsServer: true,
       });
       logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
+
+      // save message to database
+      let messageForDb = new Message({
+        content: broadcastedMessage.content,
+        userId: message.senderId,
+        channelId: message.channelId,
+      });
+      await messageForDb.save();
       return this
     }
     catch (err){

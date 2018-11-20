@@ -10,13 +10,13 @@ const SocketMessageHandler = require('../../server/SocketMessageHandler').Socket
 const SocketManager = require('../../socket/SocketManager').SocketManager;
 
 describe("server/SocketMessageHandler", () => {
-
-  describe("initListenners", ()=>{
-    it('should run without returning an error', ()=>{
-      let socketMessageHandler = new SocketMessageHandler({io});
-      socketMessageHandler.initListenners();
-    })
-  });
+  //
+  // describe("initListenners", ()=>{
+  //   it('should run without returning an error', ()=>{
+  //     let socketMessageHandler = new SocketMessageHandler({io});
+  //     socketMessageHandler.initListenners();
+  //   })
+  // });
 
   describe("onSubmission", () => {
     // it('onSubmission does not return an error', () => {
