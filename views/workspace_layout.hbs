@@ -18,7 +18,7 @@
 </head>
 <body>
   <div class="body-container">
-  <div class="side-bar">
+  <div class="side-bar side-bar-stick">
     <div class="header">
       <h2 id="workspace">{{workspaceName}}</h2>
       <div class="user-status">
@@ -38,7 +38,7 @@
     </section>
 
   </div>
+  {{> flash_messages}}
   {{{body}}}
-  </div>
 </body>
 </html>

@@ -65,7 +65,7 @@ function createUsers(users){
 /*** Workspaces ***/
 let workspaces = [];
 workspaces.push(new Workspace({name: "wsA", image: "https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/54/4f/9b/544f9b86-5073-2793-f825-699c9f547375/AppIcon-1x_U007emarketing-0-85-220-0-5.png/246x0w.jpg"}));
-workspaces.push(new Workspace({name: "wsB", image: "https://pbs.twimg.com/profile_images/1011171409471524864/vDjaHTj8_400x400.jpg"}));
+workspaces.push(new Workspace({name: "wsB", image: "https://www.ivp.com/wp-content/uploads/2016/06/slack_portfolio.png"}));
 
 function createWorkspace(ws) {
   return ws.save()

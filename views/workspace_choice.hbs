@@ -1,22 +1,23 @@
 <div class="workspace-choice">
-  <section class="main-section">
-    {{> flash_messages}}
+  <div class="header">
     <h1>Your workspaces</h1>
-    <div class="header">
-      <p>Select one of the workspaces you belong to or</p>
-      <button class="btn-create"><a href="/workspace-create">Create a new Workspace</a></button>
-    </div>
+    <p class="desc">To communicate with your colleagues, select one of the workspaces you belong to.</p>
+    <p class="create">Otherwise, proceed to the creation of a new one!</p>
+    <a href="/workspace-create"><button class="btn-create">Create a new Workspace</button></a>
+  </div>
+  <section class="main-section">
     <div class="ws-list">
     {{#each workspacesData}}
-      <div class="ws-container">
-        {{!-- <a href="/ws/{{this.name}}"><img src="https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/54/4f/9b/544f9b86-5073-2793-f825-699c9f547375/AppIcon-1x_U007emarketing-0-85-220-0-5.png/246x0w.jpg"></a>         --}}
-        <a href="/ws/{{this.name}}"><img src="{{this.image}}"></a>
-        <div class="ws-details">
-          <h3><a href="/ws/{{this.name}}">{{this.name}}</a></h3>
-          <p>{{this.numberOfUsers}} users have joined this workspace</p>
-          <p>{{this.numberOfChannels}} open channels</p>
+      <a href="/ws/{{this.name}}">
+        <div class="ws-container">
+          <img src="{{this.image}}">
+          <div class="ws-details">
+            <h3>{{this.name}}</h3>
+            <p>{{this.numberOfUsers}} users have joined this workspace</p>
+            <p>{{this.numberOfChannels}} active channels</p>
+          </div>
         </div>
-      </div>
+      </a>
     {{/each}}
     </div>
 

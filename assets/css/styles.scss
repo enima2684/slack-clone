@@ -7,6 +7,7 @@ $color-green-bg: #008952;
 
 $side-bar-padding-left   : 15px;
 $side-bar-padding-right  : 12px;
+$side-bar-width          : 200px;
 
 
 * { padding: 0; margin: 0; }
@@ -30,10 +31,14 @@ ul{
   height: 100%;
 }
 
+.side-bar-stick{
+  position: fixed;
+}
+
 .side-bar{
   background-color: #4D394B;
   height: 100%;
-  flex-basis: 200px;
+  flex-basis: $side-bar-width ;
   flex-grow: 0;
   flex-shrink: 0;
   color: $color-secondary;
@@ -452,13 +457,44 @@ section.main{
 }
 
 .workspace-choice {
-  width: 100%;
-  display: flex;
-  height: 100%;
+  margin-left: $side-bar-width;
+  .header {
+    display: flex;
+    flex-direction: column;
+    margin: 10% auto 0 auto;
+    width: 80%;
+    max-width: 640px;
+    h1 {
+      margin-bottom: 1rem;
+    }
+    p.desc{
+      font-size: 0.9rem;
+      color: $color-detail-text;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.02em;
+    }
+
+    p.create{
+      font-size: 1.0rem;
+      color: $color-primary;
+      margin-bottom: 1.5rem;
+    }
+    .btn-create{
+      padding: 0.875rem 1.125rem 1.0rem 1.125rem;
+      text-decoration: none;
+      border: 1px solid $color-detail-text;
+      font-size: 1.25rem;
+      font-weight: 700;
+      border-radius: 0.3rem;
+      cursor: pointer;
+      box-shadow: inset 0 0 0 1px rgba(44,45,48,.3);
+      background-color: $color-green-bg;
+      color: white;
+    }
+  }
   .main-section{
     width: 100%;
-    height: 100%;
-    padding-top: 11px;
+    padding-top: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -475,57 +511,34 @@ section.main{
       margin-bottom: 1rem;
       color: $color-primary;
     }
-    .header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 50px;
-      p{
-        font-size: 1.0rem;
-        color: $color-primary;
-      }
-    }
-    .btn-create{
-      padding: 0.875rem 1.125rem 1.0rem 1.125rem;
-      text-decoration: none;
-      border: 1px solid $color-detail-text;
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-left: 0.5rem;
-      border-radius: 0.3rem;
-      cursor: pointer;
-      box-shadow: inset 0 0 0 1px rgba(44,45,48,.3);
-      background-color: $color-green-bg;
-      a {
-        color: white;
-      }
-    }
     .ws-list {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       width: 80%;
-
-      .ws-container {
-        width: 40%;
-        display: flex;
-        align-items: center;
-        border: 2px solid $color-secondary;
-        margin-bottom: 20px;
-        height: 120px;
-        img {
-          width: 80px;
-          height: 80px;
-          padding: 0 20px;
-        }
-        .ws-details {
+      a {
+        width: 40%;      
+        .ws-container {
           display: flex;
-          flex-direction: column;
-          h3 {
-            font-size: 1.4rem;
+          align-items: center;
+          border-left: 4px solid $color-secondary;
+          margin-bottom: 20px;
+          height: 120px;
+          img {
+            width: 80px;
+            height: 80px;
+            padding: 0 20px;
           }
-          p {
-            color: $color-detail-text;
-            margin-top: 0.2rem;
+          .ws-details {
+            display: flex;
+            flex-direction: column;
+            h3 {
+              font-size: 1.4rem;
+            }
+            p {
+              color: $color-detail-text;
+              margin-top: 0.2rem;
+            }
           }
         }
       }
@@ -534,9 +547,8 @@ section.main{
 }
 
 .workspace-create {
-  width: 100%;
+  margin-left: $side-bar-width;
   display: flex;
-  height: 100%;
   .main-section{
     width: 100%;
     height: 100%;

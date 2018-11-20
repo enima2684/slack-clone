@@ -251,7 +251,7 @@ router.post('/workspace-create-process', async (req, res, next) => {
     }
   
     const user = req.user;
-    const {workspaceName, imageUrl} = req.body;
+    const {workspaceName} = req.body;
 
     let workspaceSameNameExists = await Workspace.findOneByName(workspaceName);
     if (workspaceSameNameExists) {
@@ -261,7 +261,7 @@ router.post('/workspace-create-process', async (req, res, next) => {
     }
     
     // create the workspace
-    let workspace = new Workspace({name: workspaceName, image: imageUrl, createdBy: user.id });
+    let workspace = new Workspace({name: workspaceName, createdBy: user.id });
     workspace = await workspace.save();
     await workspace.addUser(user);
 
