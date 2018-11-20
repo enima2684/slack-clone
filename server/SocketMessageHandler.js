@@ -1,5 +1,5 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
-const db = require('../db/index').db;
+const db            = require('../db/index').db;
 const logger        = require('../config/logger.js');
 const Message= require('../db/index').db.sql.Message;
 
@@ -30,6 +30,11 @@ class SocketMessageHandler{
       socketManager.on('message:subscribe', message => this.onJoin(socketManager,message));
 
       socketManager.on('disconnect', reason =>this.onDisconnect(reason, socketManager));
+
+      socketManager.on('error', error => {
+        logger.error(error);
+        throw error;
+      });
 
       return this
     });

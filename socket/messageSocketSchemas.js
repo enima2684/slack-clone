@@ -56,8 +56,13 @@
     channelId             : Joi.number().required(),
   });
 
-  /*** user:disconnect ***/
+  /*** disconnect ***/
   messageSocketSchemas["disconnect"] = Joi.object().keys({});
+
+  /*** error ***/
+  messageSocketSchemas["error"] = Joi.object().keys({});
+
+
 
 
   exports.messageSocketSchemas = messageSocketSchemas;
