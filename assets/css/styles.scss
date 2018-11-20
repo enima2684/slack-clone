@@ -584,6 +584,7 @@ section.main{
   .header {
     display: flex;
     flex-direction: column;
+    align-items: center;
     margin: 10% auto 0 auto;
     width: 80%;
     max-width: 640px;
@@ -659,6 +660,7 @@ section.main{
               font-size: 1.4rem;
             }
             p {
+              font-weight: 400;
               color: $color-detail-text;
               margin-top: 0.2rem;
             }
