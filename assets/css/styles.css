@@ -44,11 +44,20 @@ ul {
         color: #cac4c9; }
       .side-bar .header .switch-workspace a:hover {
         color: white; }
-    .side-bar .header #workspace {
-      color: white;
-      cursor: pointer;
-      margin: 3px 0;
-      font-size: 1.1rem; }
+    .side-bar .header .workspace-div {
+      display: flex;
+      justify-content: space-between;
+      align-items: center; }
+      .side-bar .header .workspace-div a {
+        text-decoration: none;
+        color: #cac4c9; }
+        .side-bar .header .workspace-div a #workspace {
+          color: white;
+          cursor: pointer;
+          margin: 3px 0;
+          font-size: 1.1rem; }
+        .side-bar .header .workspace-div a i:hover {
+          color: white; }
     .side-bar .header .user-status {
       display: flex;
       align-items: center;
@@ -62,7 +71,7 @@ ul {
         margin-right: 5px; }
       .side-bar .header .user-status span {
         flex-grow: 2;
-        cursor: none; }
+        cursor: default; }
       .side-bar .header .user-status a {
         text-decoration: none;
         color: #cac4c9; }

@@ -66,11 +66,28 @@ ul{
       }
     }
 
-    #workspace{
-      color: white;
-      cursor: pointer;
-      margin: 3px 0;
-      font-size: 1.1rem;
+    .workspace-div{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      a{
+        text-decoration: none;
+        color: $color-secondary;
+        #workspace{
+          color: white;
+          cursor: pointer;
+          margin: 3px 0;
+          font-size: 1.1rem;
+        }
+        i:hover{
+          color: white;
+        }
+
+      }
+
+
+
     }
 
     .user-status{
@@ -90,7 +107,7 @@ ul{
 
       span{
         flex-grow: 2;
-        cursor: none;
+        cursor: default;
       }
 
       a{
@@ -444,6 +461,7 @@ section.main{
   }
 
   .duo-channel-create,
+
   .channel-invite{
     //margin-top: 25%;
     height: 100%;
