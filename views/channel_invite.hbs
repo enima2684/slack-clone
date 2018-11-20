@@ -1,0 +1,15 @@
+<div class="channel-invite">
+  <div class="form-container">
+    <h1>🐾 Invite your friends to {{channelName}}</h1>
+    <p>New members will be able to see all of {{channelName}}’s history, including any files that have been shared in the channel.</p>
+    <form action="/ws/{{workspaceName}}/{{channelId}}/add-user-process" method="post">
+      <div id="bloodhound">
+        <input class="user-search-bar typeahead" type="text" placeholder="Name of your friend">
+      </div>
+      <input type="hidden" id="invitedUserId" name="invitedUserId">
+      <button>Invite</button>
+    </form>
+  </div>
+</div>
+
+<script src="/assets/js/channelInviteIndex.js"></script>

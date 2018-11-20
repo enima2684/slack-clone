@@ -3,6 +3,7 @@ const router     = express.Router();
 const User       = require('../db/index').db.sql.User;
 const Channel    = require('../db/index').db.sql.Channel;
 const Workspace  = require('../db/index').db.sql.Workspace;
+const logger     = require('../config/logger');
 
 
 /***
@@ -53,8 +54,12 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
 
     async function getOtherUser(channel){
       let users = await channel.getUsers();
-      let otherUser = users.filter(person => person.id !== user.id);
-      return otherUser.nickname ? otherUser.nickname : `empty (${channel.name})`;
+      let otherUser = users.filter(person => person.id !== user.id)[0];
+      if(users.length <= 1){
+        return `(${channel.name})`
+      } else {
+        return `${otherUser.nickname} (${channel.name})`
+      }
     }
 
     let otherUserNames = await Promise.all(discussions.map(getOtherUser));
@@ -86,6 +91,10 @@ router.get('/', (req, res, next) => {
   } else {
     res.redirect('/login');
   }
+});
+
+router.get('/workspace-choice', (req, res, next) => {
+  res.render('workspace_choice');
 });
 
 router.get('/ws/:workspaceName', (req, res, next) => {
@@ -161,6 +170,7 @@ router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) 
 
 });
 
+
 router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
   try{
@@ -184,6 +194,7 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
       return;
     }
     locals.channelName = channel.name;
+    locals.channelId = channel.id;
 
     // get number of users in the channel
     locals.nbUsersChannel = await channel.getNumberUsers();
@@ -199,8 +210,100 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
 });
 
-router.get('/workspace-choice', (req, res, next) => {
-  res.render('workspace_choice');
+
+router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res, next) => {
+  /**
+   * Called when inviting a user to a channel.
+   * It is a AJAX request used to get the list of users that can be invited to a channel
+   */
+  try{
+    let {workspaceName, channelId} = req.params;
+
+    // get users on the workspace
+    let workspace = await Workspace.findOneByName(workspaceName);
+    let channel = await  Channel.findOne({where: {id: channelId}});
+    let usersWorkspace = await workspace.getUsers();
+
+    // remove users already belonging to the channel
+    let nonAppartenanceArray = await Promise.all(
+      usersWorkspace.map(person => channel.hasUser(person))
+    );
+    usersWorkspace = usersWorkspace.filter((person, index) => !nonAppartenanceArray[index]);
+    let usersCanBeInvited = usersWorkspace.map(person => {
+      return {
+        id: person.id,
+        nickname: person.nickname,
+        avatar: person.avatar
+      };
+    });
+
+    res.send(usersCanBeInvited);
+
+  } catch(err) {
+    next(err);
+  }
+
+
+});
+
+router.get('/ws/:workspaceName/:channelId/addUser', async (req, res, next) => {
+
+  if(!req.user){
+    req.flash('info', `Please login before trying to access your messages`);
+    res.redirect('/login');
+    return;
+  }
+
+  let user = req.user;
+  let {workspaceName, channelId} = req.params;
+
+  let locals = await getWorkspaceLocalVariable(req, res, next,user, workspaceName);
+
+  // get the channel name
+  let channel = await Channel.findById(channelId);
+  if(channel === null){
+    req.flash('error', '🧐 The channel you try to access  does not exist');
+    res.redirect('/');
+    return;
+  }
+  locals.channelName = channel.name;
+  locals.channelId = channel.id;
+
+  res.render('channel_invite', locals);
+});
+
+router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, next) => {
+  /**
+   * Route activated when a user is added to a channel
+   */
+
+  try{
+
+    if(!req.user){
+      req.flash('info', `Please login before trying to access your messages`);
+      res.redirect('/login');
+      return;
+    }
+
+    let {workspaceName, channelId} = req.params;
+    let {invitedUserId} = req.body;
+
+    // add user to the channel
+    let channel = await Channel.findOne({where: {id: channelId}});
+    let invitedUser = await User.findOne({where: {id: invitedUserId}});
+
+    await channel.addUser(invitedUser);
+    logger.debug(`Added user ${invitedUser.id} to channel ${channel.id}`);
+
+    // return
+    req.flash('success', `${invitedUser.nickname} is now part of the channel ${channel.name} ! Give him a warm welcome ! 🙌`)
+    res.redirect(`/ws/${workspaceName}/${channelId}`);
+
+  } catch(err) {
+    next(err);
+  }
+
+
 });
 
 router.get('/login', (req, res, next) =>{
