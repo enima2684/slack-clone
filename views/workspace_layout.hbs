@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -15,68 +15,30 @@
   <script src="https://cdn.jsdelivr.net/npm/joi-browser@13.4.0/dist/joi-browser.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.12/handlebars.min.js"></script>
-  <script src="/assets/external/typeahead.js/typeahead.jquery.js"></script>
-  <script src="/assets/external/typeahead.js/bloodhound.js"></script>
-
 </head>
 <body>
-
-<div class="body-container">
-
-  <div class="side-bar">
+  <div class="body-container">
+  <div class="side-bar side-bar-stick">
     <div class="header">
-      <p class="switch-workspace"><a href="/workspace-choice">Change Workspace</a></p>
       <h2 id="workspace">{{workspaceName}}</h2>
       <div class="user-status">
         <i class="fas fa-circle"></i>
         <span>{{currentUser.nickname}}</span>
         <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
       </div>
+      <div class="switch-workspace"><a href="/workspace-choice">Select a Workspace</a></div>
     </div>
+
     <div class="separator"></div>
     <section class="channels">
-      <div class="title-section">
-        <h3>Channels</h3>
-        <a href="/ws/{{workspaceName}}/create"><i class="far fa-plus-square"></i></a>
+      <div class="title-section">        
+        <a href="/workspace-create"><h3>Create a Workspace</h3></i></a>
+        <a href="/workspace-create"><i class="far fa-plus-square"></i></a>
       </div>
-      <ul class="ul-sidebar">
-        {{#each channelInfos}}
-          <li>#
-            <a href="/ws/{{../workspaceName}}/{{this.id}}">
-              <span>{{this.name}}</span>
-            </a>
-          </li>
-        {{/each}}
-      </ul>
     </section>
-    <div class="separator"></div>
-    <section class="direct-messages">
-      <div class="title-section">
-        <h3>Direct Messages</h3>
-        <a href="#0"><i class="far fa-plus-square"></i></a>
-      </div>
-      <ul class="ul-sidebar">
-        {{#each discussionInfos}}
-          <li>
-            <i class="fas fa-circle"></i>
-            <a href="/ws/{{../workspaceName}}/{{this.id}}">
-              <span class="other-user">{{this.otherUserName}}</span>
-            </a>
-          </li>
-        {{/each}}
-      </ul>
-    </section>
+
   </div>
-
-
-  <section class="main">
   {{> flash_messages}}
   {{{body}}}
-  </section>
-
-
-</div>
-
-
 </body>
 </html>

@@ -19,6 +19,13 @@ app.use('/assets', express.static('assets'));
 app.use('/socket', express.static('socket'));
 app.use('/views', express.static('views'));
 
+/*** setup sass middleware ***/
+app.use(require('node-sass-middleware')({
+  src:  path.join(__dirname, 'assets'),
+  dest: path.join(__dirname, 'assets'),
+  force: true,
+}));
+
 /*** setup view engine : hbs ***/
 app.set('view engine', 'hbs');
 hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
