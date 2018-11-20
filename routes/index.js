@@ -190,7 +190,7 @@ router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, 
   try{
 
     if(!req.user){
-      req.flash('info', `Please login before trying to access your messages`);
+      req.flash('error', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -247,7 +247,7 @@ router.post('/ws/:workspaceName/create-duo-channel-process', async (req, res, ne
   try{
 
     if(!req.user){
-      req.flash('info', `Please login before trying to access your messages`);
+      req.flash('error', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -351,7 +351,7 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
   try{
 
     if(!req.user){
-      req.flash('info', `Please login before trying to access your messages`);
+      req.flash('error', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -466,7 +466,7 @@ router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res
 router.get('/ws/:workspaceName/:channelId/addUser', async (req, res, next) => {
 
   if(!req.user){
-    req.flash('info', `Please login before trying to access your messages`);
+    req.flash('error', `Please login before trying to access your messages`);
     res.redirect('/login');
     return;
   }
@@ -497,7 +497,7 @@ router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, n
   try{
 
     if(!req.user){
-      req.flash('info', `Please login before trying to access your messages`);
+      req.flash('error', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
