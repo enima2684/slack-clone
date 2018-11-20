@@ -33,55 +33,37 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
     // get channels on the workspace
     let channels = await user.getChannelsInWorkspace(workspace);
 
-    // we do not need to query the users here, we need to query channels with two persons involving user
-    // the channel will be named as the other user
-    // channels contains all channels, with two persons and more
-
-    let numberUsers = await Promise.all(
-      channels.map(channel => channel.getNumberUsers())
-    );
-
-    let discussions = [];  // less or equal than 2 people
-    let bigDiscussions = []; // more than 2 people
-    channels.forEach((channel, index) =>{
-      let nbUsers = numberUsers[index];
-      if(nbUsers > 2){
-        bigDiscussions.push(channel);
-      } else {
-        discussions.push(channel)
-      }
-    });
-
-    async function getOtherUser(channel){
-      let users = await channel.getUsers();
-      let otherUser = users.filter(person => person.id !== user.id)[0];
-      if(users.length <= 1){
-        return `(${channel.name})`
-      } else {
-        return `${otherUser.nickname} (${channel.name})`
-      }
-    }
-
-    let otherUserNames = await Promise.all(discussions.map(getOtherUser));
-
-    let discussionInfos = discussions.map((discussion, index) => {
-      return {
-        otherUserName: otherUserNames[index],
-        id: discussion.id
-      }
-    });
-
-    let channelInfos = bigDiscussions.map((channel, index) => {
+    // get the info needed for group channels
+    let groupChannels = channels.filter(channel => channel.channelType === 'group');
+    let groupChannelInfos = groupChannels.map((channel, index) => {
       return {
         name: channel.name,
         id: channel.id
       }
     });
 
-    let users = await workspace.getUsers();
-    let userNames = users.map(user => user.nickname);
+    // get info needed for duo channels
+   let duoChannels = channels.filter(channel => channel.channelType === 'duo');
 
-    return {channelInfos, discussionInfos, userBelongsToWorkspace, userNames, workspaceName}
+    async function getOtherUser(channel){
+      let users = await channel.getUsers();
+      let otherUser = users.filter(person => person.id !== user.id)[0];
+      if(users.length <= 1){
+        return `(${user.nickname})`
+      } else {
+        return `${otherUser.nickname}`
+      }
+    }
+    let otherUserNames = await Promise.all(duoChannels.map(getOtherUser));
+
+    let duoChannelsInfo = duoChannels.map((discussion, index) => {
+      return {
+        otherUserName: otherUserNames[index],
+        id: discussion.id
+      }
+    });
+
+    return {groupChannelInfos, duoChannelsInfo, userBelongsToWorkspace, workspaceName}
 
 }
 
@@ -184,7 +166,7 @@ router.get('/ws/:workspaceName', (req, res, next) => {
 
 });
 
-router.get('/ws/:workspaceName/create', async (req, res, next) => {
+router.get('/ws/:workspaceName/create-group-channel', async (req, res, next) => {
 
   try {
 
@@ -204,7 +186,7 @@ router.get('/ws/:workspaceName/create', async (req, res, next) => {
 
 });
 
-router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) => {
+router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, next) => {
 
   try{
 
@@ -224,12 +206,12 @@ router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) 
 
     if (channelSameNameExists) {
       req.flash('error', 'A channel with the same name already exists on this workspace 🧐');
-      res.redirect(`/ws/${workspaceName}/create`);
+      res.redirect(`/ws/${workspaceName}/create-group-channel`);
       return;
     }
 
     // create the channel
-    let channel = new Channel({name: channelName, workspaceId: workspace.id});
+    let channel = new Channel({name: channelName, workspaceId: workspace.id, channelType:'group'});
     channel = await channel.save();
     await channel.addUser(user);
 
@@ -237,6 +219,154 @@ router.post('/ws/:workspaceName/channel-create-process', async (req, res, next) 
     res.redirect(`/ws/${workspaceName}/${channel.id}`);
 
   } catch (err){ next(err) }
+
+});
+
+router.get('/ws/:workspaceName/create-duo-channel', async (req, res, next) => {
+
+  try {
+
+    if (!req.user) {
+      req.flash('info', `Please login before trying to access your messages`);
+      res.redirect('/login');
+      return;
+    }
+
+    let user = req.user;
+    let workspaceName = req.params.workspaceName;
+
+    let locals = await getWorkspaceLocalVariable(req, res, next, user, workspaceName);
+    res.render('duoChannel_create', locals);
+
+  } catch(err) {next(err);}
+
+
+});
+
+router.post('/ws/:workspaceName/create-duo-channel-process', async (req, res, next) => {
+
+  try{
+
+    if(!req.user){
+      req.flash('info', `Please login before trying to access your messages`);
+      res.redirect('/login');
+      return;
+    }
+
+    let user = req.user;
+    let workspaceName = req.params.workspaceName;
+    let {invitedUserId} = req.body;
+
+    async function getOtherUser(channel){
+      let users = await channel.getUsers();
+      let otherUserList = users.filter(person => person.id !== user.id);
+      if(otherUserList.length === 0){
+        return
+      }
+      return otherUserList[0]
+    }
+
+
+    // check that the channel does not exist already
+    let workspace = await Workspace.findOneByName(workspaceName);
+    let invitedUser = await User.findOne({where: {id: invitedUserId}});
+
+    // check if already have a discussion with him on the channel
+
+
+    // get all duo channels in the workspace on which user participates
+    let myDuoChannels = await Channel
+      .findAll({
+        where: {channelType: 'duo', workspaceId: workspace.id},
+        include: [{
+          model: User,
+          as: 'users',
+          through: 'ChannelsUsers',
+          where: {id: user.id}
+        }]
+      });
+    let usersIAlreadyDiscussWith = await Promise.all(myDuoChannels.map(getOtherUser));
+    let alreadyDiscussWithInvitee = usersIAlreadyDiscussWith.some( person => person.id === invitedUser.id);
+
+    let channel;
+    // if yes, redirect to this channel
+    if(alreadyDiscussWithInvitee){
+
+      let indexChannel = usersIAlreadyDiscussWith.map(person => person.id).indexOf(invitedUser.id);
+      channel = myDuoChannels[indexChannel];
+      req.flash('info', `Joining discussion with ${invitedUser.nickname}`);
+    } else {
+      // else, create the new channel
+      channel = new Channel({
+        name: `${user.nickname} / ${invitedUser.nickname}`,
+        workspaceId: workspace.id,
+        channelType:'duo'});
+
+      channel = await channel.save();
+      await channel.addUser(user);
+      await channel.addUser(invitedUser);
+
+      req.flash('info', `New discussion with ${invitedUser.nickname} created`);
+    }
+
+    res.redirect(`/ws/${workspaceName}/${channel.id}`);
+
+
+  } catch (err){ next(err) }
+
+});
+
+router.get('/ws/:workspaceName/getPotentialDuoInvitees', async (req, res, next) => {
+  /**
+   * Called when inviting a user to join a discussion.
+   * It is a AJAX request used to get the list of users that can be invited to a channel
+   */
+  try{
+    let {workspaceName} = req.params;
+    let user = req.user;
+    // let {invitedUserId} = req.body;
+    //
+    //
+
+
+    // get users on the workspace
+    let workspace = await Workspace.findOneByName(workspaceName);
+    let usersWorkspace = await workspace.getUsers();
+    let usersCanBeInvited = usersWorkspace.filter(person => person.id !== user.id);
+    // let invitedUser = await User.findOne({where: {id: invitedUserId}});
+
+
+    //
+
+    usersCanBeInvited = usersCanBeInvited.map(person => {
+      return {
+        id: person.id,
+        nickname: person.nickname,
+        avatar: person.avatar
+      };
+    });
+
+    res.send(usersCanBeInvited);
+
+
+    // // Check if invited user is in already existing duoChannels
+    //
+    //
+    //
+    // let channel;
+    // if(alreadyPresentDiscussion){
+    //   // return the already existing channel
+    //
+    // }
+    // else{
+    //   // // create new channel
+
+    // }
+
+  } catch(err) {
+    next(err);
+  }
+
 
 });
 
@@ -267,6 +397,9 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
     // get number of users in the channel
     locals.nbUsersChannel = await channel.getNumberUsers();
+
+    // check type of channel : group or duo
+    locals.isGroupChannel = channel.channelType === 'group';
 
     // load the messages
     locals.chatMessages = await channel.getLatestMessages();
@@ -364,7 +497,7 @@ router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, n
     logger.debug(`Added user ${invitedUser.id} to channel ${channel.id}`);
 
     // return
-    req.flash('success', `${invitedUser.nickname} is now part of the channel ${channel.name} ! Give him a warm welcome ! 🙌`)
+    req.flash('success', `${invitedUser.nickname} is now part of the channel ${channel.name} ! Give him a warm welcome ! 🙌`);
     res.redirect(`/ws/${workspaceName}/${channelId}`);
 
   } catch(err) {
