@@ -14,19 +14,23 @@
       <span>{{nbUsersChannel}}</span>
     </div>
 
+    {{#if isGroupChannel}}
+     <div class="separator">|</div>
+
+      <div class="item add-user">
+        <a href="/ws/{{workspaceName}}/{{channelId}}/addUser"><i class="fas fa-user-plus"></i></a>
+      </div>
+    {{/if}}
+
   </div>
 </div>
 
 <div class="message-container">
-  {{> flash_messages}}
-  <!--<div class="inner-container">-->
-    <ul id="msg-ul">
-      {{#each chatMessages}}
-        {{> message}}
-      {{/each}}
-    </ul>
-  <!--</div>-->
-
+  <ul id="msg-ul">
+    {{#each chatMessages}}
+      {{> message}}
+    {{/each}}
+  </ul>
 </div>
 
 <div class="input-container">
