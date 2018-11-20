@@ -69,9 +69,10 @@ class Channel extends Sequelize.Model {
     });
     return messages.map(message => {
       return {
-        senderId: message.sender.nickname,
+        senderId: message.sender.id,
+        senderNickname: message.sender.nickname,
+        senderAvatar: message.sender.avatar,
         content: message.content,
-        avatar: message.sender.avatar,
         timestamp: this.getFormatedTime(message.createdAt),
       };
     });

@@ -7,10 +7,13 @@ class MessageDomHandler{
    *
    * @param MessageSocketSender: constructor of the MessageSocketSender class
    * @param socketManager: instance of a SocketManager
+   * @param sessionInfo: object containing data about the current session (user, channel, workspace).
+   * This is coming from the server through an AJAX request.
    */
-  constructor({socketManager, MessageSocketSender}){
+  constructor({socketManager, MessageSocketSender, sessionInfo}){
     this.socketManager = socketManager;
     this.MessageSocketSender = MessageSocketSender;
+    this.sessionInfo = sessionInfo;
   }
 
   /**
@@ -84,16 +87,14 @@ class MessageDomHandler{
    * Gets the id of the sender
    */
   getSenderId(){
-    // FIXME : information has to come from the current session
-    return "placeholder"
+    return this.sessionInfo.currentUser.id
   }
 
   /**
    * Gets the id of the channel to which the message will be sent
    */
   getChannelId(){
-    // channelId consists of :workspaceName/:channelName
-    return window.location.pathname.slice(4);
+    return this.sessionInfo.currentChannel.id
   }
 
   /**
@@ -104,17 +105,20 @@ class MessageDomHandler{
   /**
    *
    * @param senderId : id of sender of the message
+   * @param senderAvatar: avatar of the sender
+   * @param senderNickname: nickname of the sender
    * @param timestamp : timestamp associated with the message
    * @param content : content of the message
    */
-  renderMessage({senderId, timestamp, content}){
+  renderMessage({senderId, senderAvatar, senderNickname, timestamp, content}){
 
     $.get('/views/partials/message.hbs', messageTemplate => {
       let renderMessage = Handlebars.compile(messageTemplate);
       let templateParams = {
         senderId,
         content,
-        avatar: '/assets/avatars/avatar-7.png',
+        senderNickname,
+        senderAvatar,
         timestamp: this.getFormatedTime(timestamp)
       };
 

@@ -254,19 +254,11 @@ router.get('/ws/:workspaceName/getPotentialDuoInvitees', async (req, res, next) 
   try{
     let {workspaceName} = req.params;
     let user = req.user;
-    // let {invitedUserId} = req.body;
-    //
-    //
-
 
     // get users on the workspace
     let workspace = await Workspace.findOneByName(workspaceName);
     let usersWorkspace = await workspace.getUsers();
     let usersCanBeInvited = usersWorkspace.filter(person => person.id !== user.id);
-    // let invitedUser = await User.findOne({where: {id: invitedUserId}});
-
-
-    //
 
     usersCanBeInvited = usersCanBeInvited.map(person => {
       return {
@@ -277,21 +269,6 @@ router.get('/ws/:workspaceName/getPotentialDuoInvitees', async (req, res, next) 
     });
 
     res.send(usersCanBeInvited);
-
-
-    // // Check if invited user is in already existing duoChannels
-    //
-    //
-    //
-    // let channel;
-    // if(alreadyPresentDiscussion){
-    //   // return the already existing channel
-    //
-    // }
-    // else{
-    //   // // create new channel
-
-    // }
 
   } catch(err) {
     next(err);
@@ -339,6 +316,46 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
   } catch (err) {
     next(err);
   }
+
+});
+
+router.get('/ws/:workspaceName/:channelId/get-current-session-info', async (req, res, next) => {
+  /**
+   * This request is trigeerred with an Ajax request from the front end. It is used to send to the client information about its own session.
+   */
+
+  try {
+
+    // data to send back to the client
+    let out = {};
+
+    let {workspaceName, channelId} = req.params;
+    logger.debug(`sending session information data to the client for workspace ${workspaceName} - channel ${channelId}`);
+
+    // fetch necessary data
+    let user = req.user;
+    let channel = await Channel.findOne({where: {id: channelId}});
+
+    // channel information needed
+    out.currentChannel = {
+      id: channel.id,
+      name: channel.name,
+      channelType: channel.channelType
+    };
+
+
+    // user information needed
+    out.currentUser = {
+      id: user.id,
+      nickname: user.nickname,
+      avatar: user.avatar
+    };
+
+    res.send(out);
+
+  } catch (err) { next(err);}
+
+
 
 });
 

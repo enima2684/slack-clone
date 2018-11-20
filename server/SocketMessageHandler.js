@@ -1,5 +1,6 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
 const logger  = require('../config/logger.js');
+const db = require('../db/index').db;
 
 class SocketMessageHandler{
 
@@ -22,9 +23,6 @@ class SocketMessageHandler{
       socketManager.on('message:submit', message => this.onMessageSubmit(socketManager,message));
 
       socketManager.on('message:subscribe', message => this.onJoin(socketManager,message));
-
-      // Do we even need something like this? An user should already leave a room when disconnecting, right?
-      // socketManager.on('message:unsubscribe', message => socketManager.leave(message.channelId));
 
       socketManager.on('disconnect', ()=>this.onDisconnect(socketManager));
 
@@ -49,13 +47,19 @@ class SocketMessageHandler{
    * @param message
    * @param socketManager: instance of a SocketManager
    */
-  onMessageSubmit(socketManager, message) {
+  async onMessageSubmit(socketManager, message) {
 
     logger.debug(`message submitted from user ${message.senderId}`);
 
     // add the broadcasting time to the message
     let broadcastedMessage = Object.assign({}, message);
     broadcastedMessage.broadcastingTimestamp = +new Date();
+
+    // TODO: Here code for saving message
+    // add data about the sender
+    let sender = await db.sql.User.findOne({where: {id: message.senderId}});
+    broadcastedMessage.senderAvatar = sender.avatar;
+    broadcastedMessage.senderNickname = sender.nickname;
 
     // broadcast this new message to all clients
     socketManager.in(message.channelId).emit({

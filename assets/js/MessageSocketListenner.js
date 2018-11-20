@@ -17,7 +17,9 @@ class MessageSocketListenner{
     const messageToDisplay = {
       senderId: message.senderId,
       content: message.content,
-      timestamp: message.broadcastingTimestamp
+      timestamp: message.broadcastingTimestamp,
+      senderAvatar: message.senderAvatar,
+      senderNickname: message.senderNickname
     };
 
     this.domHandler.renderMessage(messageToDisplay);
