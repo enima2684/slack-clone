@@ -1,6 +1,9 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
 const logger        = require('../config/logger.js');
-const Message       = require('../db/index').db.sql.Workspace;
+const Message       = require('../db/index').db.sql.Message;
+const User       = require('../db/index').db.sql.User;
+const Channel       = require('../db/index').db.sql.Channel;
+const Workspace       = require('../db/index').db.sql.Workspace;
 
 class SocketMessageHandler{
 
@@ -73,26 +76,26 @@ class SocketMessageHandler{
     });
     await messageForDb.save();
 
-    Message.save({
-      content: broadcastedMessage.content,
-      user: {userId: 31},
-      channel: {channelId: 16},
-      workspace: 'Some Channel'
-    }, {
-      include: [{
-        model: User,
-        as: 'user'
-      },
-      {
-        model: Channel,
-        as: 'channel'
-      },
-      {
-        model: Workspace,
-        as: 'workspace'
-      },
-    ]
-    })
+    // Message.save({
+    //   content: broadcastedMessage.content,
+    //   user: {userId: 31},
+    //   channel: {channelId: 16},
+    //   workspace: 'Some Channel'
+    // }, {
+    //   include: [{
+    //     model: User,
+    //     as: 'user'
+    //   },
+    //   {
+    //     model: Channel,
+    //     as: 'channel'
+    //   },
+    //   {
+    //     model: Workspace,
+    //     as: 'workspace'
+    //   },
+    // ]
+    // })
 
     return this
   }
