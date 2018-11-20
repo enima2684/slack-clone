@@ -1,8 +1,7 @@
 
 
 function configAutocompletion(names){
-
-  console.log(names);
+  
   let BloodhoundEngine = new Bloodhound({
   datumTokenizer: function(datum) {
     let nameTokens = Bloodhound.tokenizers.whitespace(datum.nickname);
