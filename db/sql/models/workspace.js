@@ -1,5 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
+const gravatar = require('gravatar');
 
 // check this link for documentaion on how to integrate a class inside a sequelize model
 // https://codewithhugo.com/using-es6-classes-for-sequelize-4-models/
@@ -17,7 +18,16 @@ class Workspace extends Sequelize.Model {
         image: DataTypes.STRING,
         createdBy: DataTypes.STRING,
       },
-      {sequelize})
+      {
+        sequelize,
+        hooks: {
+          afterValidate: (workspace, options) => {
+            if(!workspace.image){
+              workspace.image = gravatar.url(`${workspace.name}@workspace.slack.com`, {s: '100', r: 'x', d: 'retro'}, false);
+            }
+          }
+        }
+      })
   }
 
   static associate(models) {

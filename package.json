@@ -29,6 +29,7 @@
     "cookie-parser": "^1.4.3",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "gravatar": "^1.7.0",
     "hbs": "^4.0.1",
     "joi": "^14.0.4",
     "joi-browser": "^13.4.0",
