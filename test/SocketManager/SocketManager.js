@@ -66,8 +66,8 @@ describe("socket/SocketManager", () => {
       let message = {
         content: "test message",
         sendingTimestamp: +new Date(),
-        senderId: "senderId",
-        channelId: "receiverd"
+        senderId: 1,
+        channelId: 2
       };
       assert(
         socketManager.validateSchema('test:message', message)
@@ -98,8 +98,8 @@ describe("socket/SocketManager", () => {
         message: {
           content: "test message",
           sendingTimestamp: +new Date(),
-          senderId: "senderId",
-          channelId: "receiverd"
+          senderId: 1,
+          channelId: 2
         }
       })
     });

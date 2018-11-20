@@ -20,7 +20,11 @@ class SocketMessageHandler{
 
       let socketManager = new SocketManager({socket: client, io: this.io});
       
-      socketManager.on('message:submit', message => this.onMessageSubmit(socketManager,message));
+      socketManager.on('message:submit', message => {
+        try{
+          this.onMessageSubmit(socketManager,message);
+        } catch(err) {throw err}
+      });
 
       socketManager.on('message:subscribe', message => this.onJoin(socketManager,message));
 
@@ -82,9 +86,10 @@ class SocketMessageHandler{
       logger.debug(`message submitted from user ${message.senderId}`);
 
       // broadcast new message to all clients
+      let broadcastedMessage = await this.buildBroadcastedMessage(message);
       socketManager.in(message.channelId).emit({
         id: "message:broadcast",
-        message: await this.buildBroadcastedMessage(message),
+        message: broadcastedMessage,
         senderIsServer: true,
       });
       logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
