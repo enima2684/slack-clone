@@ -528,6 +528,7 @@ router.get('/login', (req, res, next) =>{
   if(req.user){
     req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
     res.redirect('/workspace-choice');
+    return;
   }
   res.render('auth/login.hbs', {layout: 'auth/auth_layout.hbs'});
 });

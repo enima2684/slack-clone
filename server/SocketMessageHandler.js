@@ -93,16 +93,11 @@ class SocketMessageHandler{
         senderIsServer: true,
       });
       logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
-
       return this
-
     }
     catch (err){
       throw err;
-      
     }
-
-
   }
 
   /**
