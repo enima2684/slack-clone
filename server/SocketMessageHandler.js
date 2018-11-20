@@ -106,6 +106,7 @@ class SocketMessageHandler{
     }
     catch (err){
       throw err;
+      
     }
   }
 
