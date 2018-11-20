@@ -5,7 +5,9 @@ class MessageSocketListenner{
     this.socket = socket;
     this.domHandler = domHandler;
 
-    this.socket.on('message:broadcast', message=>this.onReceiveBroadcastedMessage(message))
+    this.socket.on('message:broadcast', message => this.onReceiveBroadcastedMessage(message));
+
+    this.socket.on('disconnect', reason => this.onDisconnect(reason));
   }
 
   /**
@@ -23,6 +25,17 @@ class MessageSocketListenner{
     };
 
     this.domHandler.renderMessage(messageToDisplay);
+  }
+
+
+  onDisconnect(reason){
+
+    if (reason === 'io server disconnect') {
+      // the disconnection was initiated by the server, you need to reconnect manually
+      this.socket.connect();
+    }
+    // else the socket will automatically try to reconnect
+
   }
 
 }

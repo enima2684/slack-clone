@@ -29,7 +29,7 @@ class SocketMessageHandler{
 
       socketManager.on('message:subscribe', message => this.onJoin(socketManager,message));
 
-      socketManager.on('disconnect', ()=>this.onDisconnect(socketManager));
+      socketManager.on('disconnect', reason =>this.onDisconnect(reason, socketManager));
 
       return this
     });
@@ -112,10 +112,17 @@ class SocketMessageHandler{
 
   /**
    * Executed when a user is disconnected
+   * @param reason : param of disconnect event of socket io - either ‘io server disconnect’ or ‘io client disconnect’
    * @param socketManager
    */
-  onDisconnect(socketManager){
+  onDisconnect(reason, socketManager){
     logger.debug(`user ${socketManager.socket.id} is now disconnected`);
+     if (reason === 'io server disconnect') {
+        // the disconnection was initiated by the server, you need to reconnect manually
+        logger.debug('trying to reconnect ..');
+        socketManager.socket.connect();
+      }
+
     return this
   }
 
