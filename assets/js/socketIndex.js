@@ -40,13 +40,14 @@ function initializeSockets({currentUser, currentChannel}){
 
 
 $(document).ready(()=>{
-
   let {workspaceName, channelId} = getCurrentWorkspaceSession();
-
- // We make an ajax request to get the info about the current user/channel.
+  
+  // We make an ajax request to get the info about the current user/channel.
   // And only then we initialize the sockets that will use this data.
   $.get({url: `/ws/${workspaceName}/${channelId}/get-current-session-info`})
   .done(initializeSockets)
   .fail((jqXHR, textStatus, errorThrown) => {console.log(errorThrown); throw errorThrown;})
-
+  
 });
+
+$(".message-container").scrollTop( $("#msg-ul").height());
