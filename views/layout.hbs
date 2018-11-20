@@ -25,47 +25,51 @@
 
   <div class="side-bar">
     <div class="header">
-      <p class="switch-workspace"><a href="/workspace-choice">Change Workspace</a></p>
-      <h2 id="workspace">{{workspaceName}}</h2>
+      {{#if workspaceName}}
+        <p class="switch-workspace"><a href="/workspace-choice">Change Workspace</a></p>
+        <h2 id="workspace">{{workspaceName}}</h2>
+      {{/if}}
       <div class="user-status">
         <i class="fas fa-circle"></i>
         <span>{{currentUser.nickname}}</span>
         <a href="/logout"><i class="fas fa-sign-out-alt"></i></a>
       </div>
     </div>
-    <div class="separator"></div>
-    <section class="channels">
-      <div class="title-section">
-        <h3>Channels</h3>
-        <a href="/ws/{{workspaceName}}/create-group-channel"><i class="far fa-plus-square"></i></a>
-      </div>
-      <ul class="ul-sidebar">
-        {{#each groupChannelInfos}}
-          <li>#
-            <a href="/ws/{{../workspaceName}}/{{this.id}}">
-              <span>{{this.name}}</span>
-            </a>
-          </li>
-        {{/each}}
-      </ul>
-    </section>
-    <div class="separator"></div>
-    <section class="direct-messages">
-      <div class="title-section">
-        <h3>Direct Messages</h3>
-        <a href="/ws/{{workspaceName}}/create-duo-channel"><i class="far fa-plus-square"></i></a>
-      </div>
-      <ul class="ul-sidebar">
-        {{#each duoChannelsInfo}}
-          <li>
-            <i class="fas fa-circle"></i>
-            <a href="/ws/{{../workspaceName}}/{{this.id}}">
-              <span class="other-user">{{this.otherUserName}}</span>
-            </a>
-          </li>
-        {{/each}}
-      </ul>
-    </section>
+    {{#if workspaceName}}
+      <div class="separator"></div>
+      <section class="channels">
+        <div class="title-section">
+          <h3>Channels</h3>
+          <a href="/ws/{{workspaceName}}/create-group-channel"><i class="far fa-plus-square"></i></a>
+        </div>
+        <ul class="ul-sidebar">
+          {{#each groupChannelInfos}}
+            <li>#
+              <a href="/ws/{{../workspaceName}}/{{this.id}}">
+                <span>{{this.name}}</span>
+              </a>
+            </li>
+          {{/each}}
+        </ul>
+      </section>
+      <div class="separator"></div>
+      <section class="direct-messages">
+        <div class="title-section">
+          <h3>Direct Messages</h3>
+          <a href="/ws/{{workspaceName}}/create-duo-channel"><i class="far fa-plus-square"></i></a>
+        </div>
+        <ul class="ul-sidebar">
+          {{#each duoChannelsInfo}}
+            <li>
+              <i class="fas fa-circle"></i>
+              <a href="/ws/{{../workspaceName}}/{{this.id}}">
+                <span class="other-user">{{this.otherUserName}}</span>
+              </a>
+            </li>
+          {{/each}}
+        </ul>
+      </section>
+    {{/if}}
   </div>
 
 
