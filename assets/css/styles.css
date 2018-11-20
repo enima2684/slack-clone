@@ -1,3 +1,13 @@
+.flash-success,
+.flash-info,
+.flash-error {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid #4D394B;
+  font-size: 1.0rem;
+  color: white;
+  font-weight: 700; }
+
 * {
   padding: 0;
   margin: 0; }
@@ -488,13 +498,3 @@ section.main {
       margin-bottom: 50px; }
     .workspace-create .main-section label {
       display: block; }
-
-.flash-success,
-.flash-info,
-.flash-error {
-  padding: 10px;
-  text-align: center;
-  border: 2px solid #4D394B;
-  font-size: 1.0rem;
-  color: white;
-  font-weight: 500; }

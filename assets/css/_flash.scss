@@ -1,0 +1,14 @@
+@import "colors.scss";
+
+
+.flash-success,
+.flash-info,
+.flash-error
+{
+  padding: 10px;
+  text-align: center;
+  border: 2px solid $color-bg;
+  font-size: 1.0rem;
+  color: white;
+  font-weight: 700;
+}

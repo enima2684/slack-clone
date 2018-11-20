@@ -1,10 +1,5 @@
-$color-primary: #2c2d30;
-$color-secondary: #cac4c9;
-$color-bg: #4D394B;
-$color-bg-highlight: #3E313C;
-$color-detail-text: #717274;
-$color-green-bg: #008952;
-$color-light-green-bg: #56B68B;
+@import "colors.scss";
+@import "flash.scss";
 
 $side-bar-padding-left   : 15px;
 $side-bar-padding-right  : 12px;
@@ -698,16 +693,4 @@ section.main{
       display: block;
     }
   }
-}
-
-.flash-success,
-.flash-info,
-.flash-error{
-  padding: 10px;
-  text-align: center;
-  border: 2px solid $color-bg;
-  font-size: 1.0rem;
-  color: white;
-  font-weight: 500;
-
 }
