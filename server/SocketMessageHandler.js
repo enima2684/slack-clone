@@ -1,9 +1,7 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
+const db = require('../db/index').db;
 const logger        = require('../config/logger.js');
-const Message       = require('../db/index').db.sql.Message;
-const User       = require('../db/index').db.sql.User;
-const Channel       = require('../db/index').db.sql.Channel;
-const Workspace       = require('../db/index').db.sql.Workspace;
+const {Message, User, Channel, Workspace} = require('../db/index').db.sql;
 
 class SocketMessageHandler{
 
@@ -23,12 +21,13 @@ class SocketMessageHandler{
 
       let socketManager = new SocketManager({socket: client, io: this.io});
       
-      socketManager.on('message:submit', message => this.onMessageSubmit(socketManager,message));
+      socketManager.on('message:submit', message => {
+        try{
+          this.onMessageSubmit(socketManager,message);
+        } catch(err) {throw err}
+      });
 
       socketManager.on('message:subscribe', message => this.onJoin(socketManager,message));
-
-      // Do we even need something like this? An user should already leave a room when disconnecting, right?
-      // socketManager.on('message:unsubscribe', message => socketManager.leave(message.channelId));
 
       socketManager.on('disconnect', ()=>this.onDisconnect(socketManager));
 
@@ -48,6 +47,34 @@ class SocketMessageHandler{
     }
   }
 
+
+  /**
+   * Builds the broadcasted message given the received message
+   * @param receivedMessage: received Message from the socket io (submit:message event)
+   */
+  async buildBroadcastedMessage(receivedMessage){
+
+    try{
+
+      // add the broadcasting time to the message
+      let broadcastedMessage = Object.assign({}, receivedMessage);
+      broadcastedMessage.broadcastingTimestamp = +new Date();
+
+      // add data about the sender
+      let sender = await db.sql.User.findOne({where: {id: receivedMessage.senderId}});
+      broadcastedMessage.senderAvatar = sender.avatar;
+      broadcastedMessage.senderNickname = sender.nickname;
+
+      return broadcastedMessage
+    }
+    catch (err) {
+      logger.error(err.message);
+      throw err;
+    }
+
+
+  }
+
   /**
    * Executed when a submitted message is received on the server
    * @param message
@@ -55,49 +82,53 @@ class SocketMessageHandler{
    */
   async onMessageSubmit(socketManager, message) {
 
-    logger.debug(`message submitted from user ${message.senderId}`);
+    try{
 
-    // add the broadcasting time to the message
-    let broadcastedMessage = Object.assign({}, message);
-    broadcastedMessage.broadcastingTimestamp = +new Date();
+      logger.debug(`message submitted from user ${message.senderId}`);
 
-    console.log(broadcastedMessage);
+      // broadcast new message to all clients
+      let broadcastedMessage = await this.buildBroadcastedMessage(message);
+      socketManager.in(message.channelId).emit({
+        id: "message:broadcast",
+        message: broadcastedMessage,
+        senderIsServer: true,
+      });
+      logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
 
-    // broadcast this new message to all clients
-    socketManager.in(message.channelId).emit({
-      id: "message:broadcast",
-      message: broadcastedMessage,
-      senderIsServer: true,
-    });
-    logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
+      let messageForDb = new Message({
+        content: broadcastedMessage.content
+      });
+      await messageForDb.save();
 
-    let messageForDb = new Message({
-      content: broadcastedMessage.content
-    });
-    await messageForDb.save();
+      // Message.save({
+      //   content: broadcastedMessage.content,
+      //   user: {userId: 31},
+      //   channel: {channelId: 16},
+      //   workspace: 'Some Channel'
+      // }, {
+      //   include: [{
+      //     model: User,
+      //     as: 'user'
+      //   },
+      //   {
+      //     model: Channel,
+      //     as: 'channel'
+      //   },
+      //   {
+      //     model: Workspace,
+      //     as: 'workspace'
+      //   },
+      // ]
+      // })
 
-    // Message.save({
-    //   content: broadcastedMessage.content,
-    //   user: {userId: 31},
-    //   channel: {channelId: 16},
-    //   workspace: 'Some Channel'
-    // }, {
-    //   include: [{
-    //     model: User,
-    //     as: 'user'
-    //   },
-    //   {
-    //     model: Channel,
-    //     as: 'channel'
-    //   },
-    //   {
-    //     model: Workspace,
-    //     as: 'workspace'
-    //   },
-    // ]
-    // })
+      return this
 
-    return this
+    }
+    catch (err){
+      throw err;
+    }
+
+
   }
 
   /**

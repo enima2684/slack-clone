@@ -24,8 +24,8 @@
   messageSocketSchemas["test:message"] = Joi.object().keys({
     content          : Joi.string().min(1).required(),
     sendingTimestamp : Joi.number().min(0).integer().required(),
-    senderId         : Joi.string().required(),
-    channelId        : Joi.string().required(),
+    senderId         : Joi.number().required(),
+    channelId        : Joi.number().required(),
   });
 
 
@@ -33,8 +33,8 @@
   messageSocketSchemas["message:submit"] = Joi.object().keys({
     content          : Joi.string().min(1).required(),
     sendingTimestamp : Joi.number().min(0).integer().required(),
-    senderId         : Joi.string().required(),
-    channelId        : Joi.string().required(),
+    senderId         : Joi.number().required(),
+    channelId        : Joi.number().required(),
   });
 
   /*** message:broadcast ***/
@@ -42,16 +42,18 @@
     content               : Joi.string().min(1).required(),
     sendingTimestamp      : Joi.number().min(0).integer().required(),
     broadcastingTimestamp : Joi.number().min(0).integer().required(),
-    senderId              : Joi.string().required(),
-    channelId             : Joi.string().required(),
+    senderId              : Joi.number().required(),
+    senderAvatar          : Joi.string().required(),
+    senderNickname        : Joi.string().required(),
+    channelId             : Joi.number().required(),
   });
 
   /*** message:broadcast ***/
   messageSocketSchemas["message:subscribe"] = Joi.object().keys({
     content               : Joi.string().min(1).required(),
     sendingTimestamp      : Joi.number().min(0).integer().required(),
-    senderId              : Joi.string().required(),
-    channelId             : Joi.string().required(),
+    senderId              : Joi.number().required(),
+    channelId             : Joi.number().required(),
   });
 
   /*** user:disconnect ***/
