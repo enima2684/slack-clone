@@ -143,6 +143,11 @@ router.post('/workspace-create-process', async (req, res, next) => {
     workspace = await workspace.save();
     await workspace.addUser(user);
 
+    // create a general channel
+    let channel = new Channel({name: 'general', workspaceId: workspace.id});
+    await channel.save();
+    await channel.addUser(user);
+
     req.flash('success', `Nice ! The workspace ${workspaceName} has been created ! `);
     res.redirect(`/ws/${workspaceName}`);
 
