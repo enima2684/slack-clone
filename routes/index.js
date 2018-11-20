@@ -103,7 +103,6 @@ router.get('/workspace-choice', async (req, res, next) => {
       }
     });
 
-    // res.send(workspacesData);
     res.render('workspace_choice', {layout: 'workspace_layout.hbs', workspacesData});
   } catch (err){ next(err) }
 });
@@ -532,38 +531,35 @@ router.get('/login', (req, res, next) =>{
   res.render('auth/login.hbs', {layout: 'auth/auth_layout.hbs'});
 });
 
-router.post('/process-login', (req, res, next) => {
+router.post('/process-login', async (req, res, next) => {
 
   const {email, originalPassword} = req.body;
 
-  async function login(){
 
-    let user = await User.findOne({where: {email: email}});
+  let user = await User.findOne({where: {email: email}});
 
-    if(user === null){
-      // user not found
-      req.flash('error', `User ${email} is not registered yes on Slack! SIgn Up and Enjoy all Slack functionnalities for free !! 🙌`);
-      res.redirect('/login');
-      return
-    }
-
-    // check password
-    let isValidPassword = user.checkPassword(originalPassword);
-
-    if(!isValidPassword){
-      req.flash('error', `Sorry ! 🤭 Wrong Password ! `);
-      res.redirect('/login');
-      return
-    }
-
-    req.logIn(user, (err) => {
-      if (err) { return next(err); }
-      req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
-      res.redirect('/workspace-choice');
-    });
-
+  if(user === null){
+    // user not found
+    req.flash('error', `User ${email} is not registered yes on Slack! SIgn Up and Enjoy all Slack functionnalities for free !! 🙌`);
+    res.redirect('/login');
+    return
   }
-  login();
+
+  // check password
+  let isValidPassword = user.checkPassword(originalPassword);
+
+  if(!isValidPassword){
+    req.flash('error', `Sorry ! 🤭 Wrong Password ! `);
+    res.redirect('/login');
+    return
+  }
+
+  req.logIn(user, (err) => {
+    if (err) { return next(err); }
+    req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
+    res.redirect('/workspace-choice');
+  });
+
 
 });
 
