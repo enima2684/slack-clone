@@ -1,5 +1,6 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
-const logger  = require('../config/logger.js');
+const logger        = require('../config/logger.js');
+const Message       = require('../db/index').db.sql.Workspace;
 
 class SocketMessageHandler{
 
@@ -49,13 +50,15 @@ class SocketMessageHandler{
    * @param message
    * @param socketManager: instance of a SocketManager
    */
-  onMessageSubmit(socketManager, message) {
+  async onMessageSubmit(socketManager, message) {
 
     logger.debug(`message submitted from user ${message.senderId}`);
 
     // add the broadcasting time to the message
     let broadcastedMessage = Object.assign({}, message);
     broadcastedMessage.broadcastingTimestamp = +new Date();
+
+    console.log(broadcastedMessage);
 
     // broadcast this new message to all clients
     socketManager.in(message.channelId).emit({
@@ -64,6 +67,32 @@ class SocketMessageHandler{
       senderIsServer: true,
     });
     logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
+
+    let messageForDb = new Message({
+      content: broadcastedMessage.content
+    });
+    await messageForDb.save();
+
+    Message.save({
+      content: broadcastedMessage.content,
+      user: {userId: 31},
+      channel: {channelId: 16},
+      workspace: 'Some Channel'
+    }, {
+      include: [{
+        model: User,
+        as: 'user'
+      },
+      {
+        model: Channel,
+        as: 'channel'
+      },
+      {
+        model: Workspace,
+        as: 'workspace'
+      },
+    ]
+    })
 
     return this
   }
