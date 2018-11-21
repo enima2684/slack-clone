@@ -1,0 +1,15 @@
+<div class="channel-invite">
+  <div class="form-container">
+    <h1>🐾 Invite your friends to {{workspaceName}}</h1>
+    <p>New members will be able to interact, discuss and share ideas with all users in {{workspaceName}}.</p>
+    <form action="/ws/{{workspaceName}}/invite-user-process" method="post">
+      <div id="bloodhound">
+        <input class="user-search-bar typeahead" type="text" placeholder="Name of your friend">
+      </div>
+      <input type="hidden" id="invitedUserId" name="invitedUserId">
+      <button>Invite</button>
+    </form>
+  </div>
+</div>
+
+<script src="/assets/js/workspaceInviteIndex.js"></script>

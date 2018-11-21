@@ -26,7 +26,15 @@
   <div class="side-bar">
     <div class="header">
       <p class="switch-workspace"><a href="/workspace-choice">Change Workspace</a></p>
-      <h2 id="workspace">{{workspaceName}}</h2>
+      <div class="workspace-div">
+        <a href="/ws/{{workspaceName}}">
+          <h2 id="workspace">{{workspaceName}}</h2>
+        </a>
+        <a href="/ws/{{workspaceName}}/invite-user">
+          <i class="far fa-plus-square"></i>
+        </a>
+      </div>
+
       <div class="user-status">
         <i class="fas fa-circle"></i>
         <span>{{currentUser.nickname}}</span>
