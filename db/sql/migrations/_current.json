@@ -18,9 +18,6 @@
                     "seqType": "Sequelize.STRING"
                 },
                 "avatar": {
-                    "defaultValue": {
-                        "value": "/assets/avatars/avatar.png"
-                    },
                     "seqType": "Sequelize.STRING"
                 },
                 "password": {
@@ -258,5 +255,5 @@
             "indexes": []
         }
     },
-    "revision": 16
+    "revision": 17
 }
