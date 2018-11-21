@@ -107,6 +107,7 @@ router.get('/workspace-choice', async (req, res, next) => {
   try {
     let user = req.user;
     let workspaces = await Workspace.findAll({
+      order: [['name', 'ASC']],
       include: [{
         model: User,
         as: 'users',
