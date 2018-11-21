@@ -7,7 +7,8 @@
     "test": "mocha --recursive",
     "makemigration": "node ./helpers/sequelize-auto-migrations/bin/makemigration.js",
     "runmigration": "node ./helpers/sequelize-auto-migrations/bin/runmigration.js",
-    "mockdata": "node ./db/sql/seeders/mock.js"
+    "mockdata": "node ./db/sql/seeders/mock.js",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "connect-pg-simple": "^5.0.0",
     "connect-session-sequelize": "^6.0.0",
     "cookie-parser": "^1.4.3",
+    "dotenv": "^6.1.0",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "gravatar": "^1.7.0",
