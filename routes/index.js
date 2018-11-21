@@ -106,7 +106,7 @@ router.get('/workspace-choice', async (req, res, next) => {
     });
 
     // res.send(workspacesData);
-    res.render('workspace_choice', {layout: 'workspace_layout.hbs', workspacesData});
+    res.render('workspace_choice', {workspacesData});
   } catch (err){ next(err) }
 });
 
@@ -116,7 +116,7 @@ router.get('/workspace-create', (req, res, next) => {
     res.redirect('/login');
     return;
   }
-  res.render('workspace_create', {layout: 'workspace_layout.hbs'});
+  res.render('workspace_create');
 });
 
 router.post('/workspace-create-process', async (req, res, next) => {
