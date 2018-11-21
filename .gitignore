@@ -4,3 +4,4 @@ node_modules/
 config/config-sequelize.js
 *.css
 *.css.map
+.vscode/launch.json
