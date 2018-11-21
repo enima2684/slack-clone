@@ -30,7 +30,7 @@ class User extends Sequelize.Model {
         hooks: {
           afterValidate: (user, options) => {
             if(!user.avatar){
-              workspace.image = gravatar.url(user.email, {s: '30', r: 'x', d: 'monsterid'}, false);
+              user.avatar = gravatar.url(user.email, {s: '30', r: 'x', d: 'monsterid'}, false);
             }
           }
         }
