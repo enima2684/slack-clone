@@ -5,4 +5,5 @@ config/config-sequelize.js
 *.css
 *.css.map
 assets/css/login.css.map
-.vscode/launch.json
+.vscode/launch.json.env
+.env
