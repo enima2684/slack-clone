@@ -7,10 +7,12 @@
 {
   padding: 10px;
   text-align: center;
-  border: 2px solid $color-bg;
+  //border: 2px solid $color-bg;
+  border-radius: 5px;
   font-size: 1.0rem;
   color: white;
   font-weight: 700;
+  margin-bottom: 1.0rem;
 }
 
 .flash-error {
