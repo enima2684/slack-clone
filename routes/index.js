@@ -220,7 +220,7 @@ router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, 
     channel = await channel.save();
     await channel.addUser(user);
 
-    await req.flash('success', `Nice ! The channel ${channelName} has been created !`);
+    req.flash('success', `Nice ! The channel ${channelName} has been created !`);
     res.redirect(`/ws/${workspaceName}/${channel.id}`);
 
   } catch (err){ next(err) }
