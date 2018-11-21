@@ -24,6 +24,7 @@ class MessageSocketSender{
    * @param id: identifier of the message (key)
    */
   send(){
+    console.log(`Sending message from ${this.senderId} to ${this.channelId}`);
     let message = this.buildMessage();
     this.socketManager.emit({
       id: this.id,

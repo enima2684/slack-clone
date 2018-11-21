@@ -16,6 +16,8 @@ class MessageSocketListenner{
    */
   onReceiveBroadcastedMessage(message){
 
+    console.log(`received broadcasted message from ${message.senderNickname}`);
+
     const messageToDisplay = {
       senderId: message.senderId,
       content: message.content,
