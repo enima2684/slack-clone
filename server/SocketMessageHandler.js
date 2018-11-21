@@ -89,7 +89,7 @@ class SocketMessageHandler{
 
     try{
 
-      logger.debug(`message submitted from user ${message.senderId}`);
+      logger.debug(`message "${message.content}" submitted from user ${message.senderId}`);
 
       // broadcast new message to all clients
       let broadcastedMessage = await this.buildBroadcastedMessage(message);
@@ -98,7 +98,7 @@ class SocketMessageHandler{
         message: broadcastedMessage,
         senderIsServer: true,
       });
-      logger.debug(`broadcasting message from ${message.senderId} to ${message.channelId}`);
+      logger.debug(`broadcasted message "${message.content}" from ${message.senderId} to ${message.channelId}`);
 
       // save message to database
       let messageForDb = new Message({
@@ -107,6 +107,8 @@ class SocketMessageHandler{
         channelId: message.channelId,
       });
       await messageForDb.save();
+
+      logger.debug(`saved message "${message.content}" in db from ${message.senderId} to ${message.channelId}`);
       return this
     }
     catch (err){
