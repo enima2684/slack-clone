@@ -1,6 +1,7 @@
 'use strict';
 const Sequelize = require('sequelize');
 const bcrypt = require('bcryptjs');
+const gravatar = require('gravatar');
 
 // check this link for documentaion on how to integrate a class inside a sequelize model
 // https://codewithhugo.com/using-es6-classes-for-sequelize-4-models/
