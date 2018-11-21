@@ -19,14 +19,22 @@ class User extends Sequelize.Model {
           unique: true
         },
         avatar: {
-          type: DataTypes.STRING,
-          defaultValue: '/assets/avatars/avatar.png'
+          type: DataTypes.STRING
         },
         password: {
           type: DataTypes.STRING
         }
       },
-      {sequelize})
+      {
+        sequelize,
+        hooks: {
+          afterValidate: (user, options) => {
+            if(!user.avatar){
+              workspace.image = gravatar.url(user.email, {s: '30', r: 'x', d: 'monsterid'}, false);
+            }
+          }
+        }
+      })
   }
 
 
