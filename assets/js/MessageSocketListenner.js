@@ -7,6 +7,8 @@ class MessageSocketListenner{
 
     this.socket.on('message:broadcast', message => this.onReceiveBroadcastedMessage(message));
 
+    this.socket.on('message:typing', message => this.onReceiveMessageTyping(message));
+
     this.socket.on('disconnect', reason => this.onDisconnect(reason));
   }
 
@@ -29,6 +31,13 @@ class MessageSocketListenner{
     this.domHandler.renderMessage(messageToDisplay);
   }
 
+
+  onReceiveMessageTyping(message){
+
+    //message.content contains the name if the person typing
+    this.domHandler.renderTypingMessage(message.content);
+
+  }
 
   onDisconnect(reason){
 

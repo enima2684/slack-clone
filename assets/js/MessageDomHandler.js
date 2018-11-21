@@ -33,7 +33,6 @@ class MessageDomHandler{
       this.onSubmit();
     }
 
-    console.log('🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆');
     // send a message:typing message
     let messageSender =
       new this.MessageSocketSender({
@@ -46,7 +45,18 @@ class MessageDomHandler{
     messageSender.send();
 
   }
-  
+
+  /**
+   * Renders the typing message
+   * @param name: name of the person typing
+   */
+  renderTypingMessage(name){
+    $("#typing-indicator").html(`...${name} is typing`);
+    setTimeout(()=>{
+      $("#typing-indicator").html("");
+    }, 3000)
+  }
+
   /**
    * Subscription to channel on page load
    */
