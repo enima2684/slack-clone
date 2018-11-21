@@ -6,8 +6,6 @@ const Workspace  = require('../db/index').db.sql.Workspace;
 const db         = require('../db/index').db.sql;
 const logger     = require('../config/logger');
 
-
-
 /***
  * Helper function to make queries to get the data to render for a workspace route
  * It is externalised from the /ws/:workspace route in order to use the same code in the route /ws/:workspace/:id
@@ -198,7 +196,7 @@ router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, 
   try{
 
     if(!req.user){
-      req.flash('info', `Please login before trying to access your messages`);
+      req.flash('error', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -255,7 +253,7 @@ router.post('/ws/:workspaceName/create-duo-channel-process', async (req, res, ne
   try{
 
     if(!req.user){
-      req.flash('info', `Please login before trying to access your messages`);
+      req.flash('error', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -365,17 +363,19 @@ router.get('/ws/:workspaceName/getPotentialInvitees', async (req, res, next) => 
 
     // get users on the workspace
     let workspace = await Workspace.findOneByName(workspaceName);
+
+    // all users with workspace info
     let users = await User.findAll({
-      include:[{
+      attributes: ['id', 'nickname', 'avatar'],
+      include: [{
         model: Workspace,
         as: 'workspaces',
-        where: {
-          id: {
-            [db.Sequelize.Op.ne]: workspace.id
-          }
-        }
+        attributes: ['id', 'name']
       }]
     });
+
+    // remove users that belong to the current worksapce
+    users = users.filter(person => !person.workspaces.some( ws => ws.id === workspace.id));
 
     let usersCanBeInvited = users.map(person => {
       return {
@@ -447,7 +447,7 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
   try{
 
     if(!req.user){
-      req.flash('info', `Please login before trying to access your messages`);
+      req.flash('error', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -508,7 +508,6 @@ router.get('/ws/:workspaceName/:channelId/get-current-session-info', async (req,
       channelType: channel.channelType
     };
 
-
     // user information needed
     out.currentUser = {
       id: user.id,
@@ -519,7 +518,6 @@ router.get('/ws/:workspaceName/:channelId/get-current-session-info', async (req,
     res.send(out);
 
   } catch (err) { next(err);}
-
 
 
 });
@@ -562,7 +560,7 @@ router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res
 router.get('/ws/:workspaceName/:channelId/addUser', async (req, res, next) => {
 
   if(!req.user){
-    req.flash('info', `Please login before trying to access your messages`);
+    req.flash('error', `Please login before trying to access your messages`);
     res.redirect('/login');
     return;
   }
@@ -593,7 +591,7 @@ router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, n
   try{
 
     if(!req.user){
-      req.flash('info', `Please login before trying to access your messages`);
+      req.flash('error', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -628,38 +626,35 @@ router.get('/login', (req, res, next) =>{
   res.render('auth/login.hbs', {layout: 'auth/auth_layout.hbs'});
 });
 
-router.post('/process-login', (req, res, next) => {
+router.post('/process-login', async (req, res, next) => {
 
   const {email, originalPassword} = req.body;
 
-  async function login(){
 
-    let user = await User.findOne({where: {email: email}});
+  let user = await User.findOne({where: {email: email}});
 
-    if(user === null){
-      // user not found
-      req.flash('error', `User ${email} is not registered yes on Slack! SIgn Up and Enjoy all Slack functionnalities for free !! 🙌`);
-      res.redirect('/login');
-      return
-    }
-
-    // check password
-    let isValidPassword = user.checkPassword(originalPassword);
-
-    if(!isValidPassword){
-      req.flash('error', `Sorry ! 🤭 Wrong Password ! `);
-      res.redirect('/login');
-      return
-    }
-
-    req.logIn(user, (err) => {
-      if (err) { return next(err); }
-      req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
-      res.redirect('/workspace-choice');
-    });
-
+  if(user === null){
+    // user not found
+    req.flash('error', `User ${email} is not registered yes on Slack! SIgn Up and Enjoy all Slack functionnalities for free !! 🙌`);
+    res.redirect('/login');
+    return
   }
-  login();
+
+  // check password
+  let isValidPassword = user.checkPassword(originalPassword);
+
+  if(!isValidPassword){
+    req.flash('error', `Sorry ! 🤭 Wrong Password ! `);
+    res.redirect('/login');
+    return
+  }
+
+  req.logIn(user, (err) => {
+    if (err) { return next(err); }
+    req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
+    res.redirect('/workspace-choice');
+  });
+
 
 });
 

@@ -1,0 +1,26 @@
+@import "colors.scss";
+
+
+.flash-success,
+.flash-info,
+.flash-error
+{
+  padding: 10px;
+  text-align: center;
+  //border: 2px solid $color-bg;
+  border-radius: 5px;
+  font-size: 1.0rem;
+  color: white;
+  font-weight: 700;
+  margin-bottom: 1.0rem;
+}
+
+.flash-error {
+  background-color: #b4374e;
+}
+.flash-success{
+  background-color: $color-green-bg;
+}
+.flash-info{
+  background-color: #007c89;
+}

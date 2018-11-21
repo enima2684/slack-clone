@@ -1,5 +1,5 @@
 const SocketManager = require('../socket/SocketManager').SocketManager;
-const db = require('../db/index').db;
+const db            = require('../db/index').db;
 const logger        = require('../config/logger.js');
 const Message= require('../db/index').db.sql.Message;
 
@@ -29,7 +29,12 @@ class SocketMessageHandler{
 
       socketManager.on('message:subscribe', message => this.onJoin(socketManager,message));
 
-      socketManager.on('disconnect', ()=>this.onDisconnect(socketManager));
+      socketManager.on('disconnect', reason =>this.onDisconnect(reason, socketManager));
+
+      socketManager.on('error', error => {
+        logger.error(error);
+        throw error;
+      });
 
       return this
     });
@@ -111,10 +116,17 @@ class SocketMessageHandler{
 
   /**
    * Executed when a user is disconnected
+   * @param reason : param of disconnect event of socket io - either ‘io server disconnect’ or ‘io client disconnect’
    * @param socketManager
    */
-  onDisconnect(socketManager){
+  onDisconnect(reason, socketManager){
     logger.debug(`user ${socketManager.socket.id} is now disconnected`);
+     if (reason === 'io server disconnect') {
+        // the disconnection was initiated by the server, you need to reconnect manually
+        logger.debug('trying to reconnect ..');
+        socketManager.socket.connect();
+      }
+
     return this
   }
 

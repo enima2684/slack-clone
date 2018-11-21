@@ -1,16 +1,18 @@
 /*** External imports ***/
-const bodyParser     = require('body-parser');
-const cookieParser   = require('cookie-parser');
-const path           = require('path');
-const express        = require('express');
-const app            = express();
-const http           = require('http').Server(app);
-const io             = require('socket.io')(http);
-const hbs            = require('hbs');
-const session        = require('express-session');
-const flash          = require('connect-flash');
-const passport       = require('passport');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const bodyParser         = require('body-parser');
+const cookieParser       = require('cookie-parser');
+const path               = require('path');
+const express            = require('express');
+const morgan             = require('morgan')
+const app                = express();
+const http               = require('http').Server(app);
+const io                 = require('socket.io')(http);
+const hbs                = require('hbs');
+const session            = require('express-session');
+const flash              = require('connect-flash');
+const passport           = require('passport');
+const SequelizeStore     = require('connect-session-sequelize')(session.Store);
+
 
 require('./config/config-passport.js');
 
@@ -34,7 +36,7 @@ hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-
+app.use(morgan('dev'));
 
 /*** Internal imports ***/
 const config  = require('./config/config.js');
@@ -74,17 +76,17 @@ app.use(flash());
 // default value for title local
 app.locals.title = 'Slack';
 
-// This is run before every route
-app.use((req, res, next) => {
-  res.locals.flashMessages = req.flash();
-  res.locals.currentUser = req.user;
-  next();
-});
-
-
 /*** Message Sockets ***/
 let socketMessageHandler = new SocketMessageHandler({io});
 socketMessageHandler.initListenners();
+
+
+// This is run before every route
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  res.locals.flashMessages = req.flash();
+  next();
+});
 
 /*** Routes ***/
 app.use('/', index);
