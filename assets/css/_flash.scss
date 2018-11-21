@@ -12,3 +12,13 @@
   color: white;
   font-weight: 700;
 }
+
+.flash-error {
+  background-color: #b4374e;
+}
+.flash-success{
+  background-color: $color-green-bg;
+}
+.flash-info{
+  background-color: #007c89;
+}
