@@ -222,7 +222,7 @@ router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, 
     channel = await channel.save();
     await channel.addUser(user);
 
-    req.flash('success', `Nice ! The channel ${channelName} has been created !`);
+    await req.flash('success', `Nice ! The channel ${channelName} has been created !`);
     res.redirect(`/ws/${workspaceName}/${channel.id}`);
 
   } catch (err){ next(err) }
@@ -508,7 +508,6 @@ router.get('/ws/:workspaceName/:channelId/get-current-session-info', async (req,
       channelType: channel.channelType
     };
 
-
     // user information needed
     out.currentUser = {
       id: user.id,
@@ -519,7 +518,6 @@ router.get('/ws/:workspaceName/:channelId/get-current-session-info', async (req,
     res.send(out);
 
   } catch (err) { next(err);}
-
 
 
 });
