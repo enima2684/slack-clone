@@ -83,6 +83,10 @@ socketMessageHandler.initListenners();
 
 // This is run before every route
 app.use((req, res, next) => {
+  if(req.path.startsWith('/ajax')) {
+    next();
+    return;
+  }
   res.locals.currentUser = req.user;
   res.locals.flashMessages = req.flash();
   next();

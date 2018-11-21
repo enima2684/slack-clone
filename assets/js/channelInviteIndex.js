@@ -42,7 +42,7 @@ function getAjaxUrl(){
   let currentUrl = window.location.href.split('/');
   let workspaceName = currentUrl[currentUrl.length - 3];
   let channelId = currentUrl[currentUrl.length - 2];
-  return `/ws/${workspaceName}/${channelId}/getPotentialInvitees`
+  return `/ajax/ws/${workspaceName}/${channelId}/getPotentialInvitees`
 }
 
 $(document).ready(()=>{

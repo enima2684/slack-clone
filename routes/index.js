@@ -25,9 +25,12 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
     // check appartenance to the workspace
     let userBelongsToWorkspace = await user.hasWorkspace(workspace);
     if(!userBelongsToWorkspace){
-      req.flash('error', '🧐 Ohh ! It seems like you need an invite to join this workspace !');
-      res.redirect('/workspace-choice');
-      return {}
+      redirectFlash(
+        'error', '🧐 Ohh ! It seems like you need an invite to join this workspace !',
+        '/workspace-choice',
+        req, res
+      );
+      return {};
     }
 
     // get channels on the workspace
@@ -67,6 +70,23 @@ async function getWorkspaceLocalVariable(req, res, next, user, workspaceName){
 
 }
 
+/**
+ * Helper function to save session before redirecting flash message
+ * THis allows us to make sur that the session with flash message is saved before redirecting to the new route
+ * @param type: tye of flash message (info, error, success)
+ * @param message
+ * @param route
+ * @param req
+ * @param res
+ */
+function redirectFlash(type, message, route, req, res){
+    req.flash(type, message);
+    req.session.save(() => {
+      res.redirect(route);
+    });
+}
+
+
 router.get('/', (req, res, next) => {
   if(req.user){
     res.redirect('/workspace-choice');
@@ -77,8 +97,11 @@ router.get('/', (req, res, next) => {
 
 router.get('/workspace-choice', async (req, res, next) => {
   if(!req.user){
-    req.flash('info', `Please login before trying to access the workspaces`);
-    res.redirect('/login');
+    redirectFlash(
+      'info', `Please login before trying to access the workspaces`,
+      '/login',
+      req, res
+    );
     return;
   }
   try {
@@ -110,8 +133,11 @@ router.get('/workspace-choice', async (req, res, next) => {
 
 router.get('/workspace-create', (req, res, next) => {
   if(!req.user){
-    req.flash('info', `Please login before trying to create a new workspace`);
-    res.redirect('/login');
+    redirectFlash(
+      'info', `Please login before trying to create a new workspace`,
+      '/login',
+      req, res
+    );
     return;
   }
   res.render('workspace_create');
@@ -121,8 +147,11 @@ router.post('/workspace-create-process', async (req, res, next) => {
 
   try {
     if (!req.user) {
-      req.flash('info', `Please login before trying to create a new workspace`);
-      res.redirect('/login');
+      redirectFlash(
+        'info', `Please login before trying to access the workspaces`,
+        '/login',
+        req, res
+      );
       return;
     }
 
@@ -131,9 +160,13 @@ router.post('/workspace-create-process', async (req, res, next) => {
 
     let workspaceSameNameExists = await Workspace.findOneByName(workspaceName);
     if (workspaceSameNameExists) {
-      req.flash('error', 'A workspace with the same name already exists on Slack');
-      res.redirect(`/workspace-create`);
+      redirectFlash(
+        'error', 'A workspace with the same name already exists on Slack',
+        `/workspace-create`,
+        req, res
+      );
       return;
+
     }
 
     // create the workspace
@@ -145,9 +178,11 @@ router.post('/workspace-create-process', async (req, res, next) => {
     let channel = new Channel({name: 'general', workspaceId: workspace.id});
     await channel.save();
     await channel.addUser(user);
-
-    req.flash('success', `Nice ! The workspace ${workspaceName} has been created ! `);
-    res.redirect(`/ws/${workspaceName}`);
+    redirectFlash(
+      'success', `Nice ! The workspace ${workspaceName} has been created ! `,
+      `/ws/${workspaceName}`,
+      req, res
+    );
 
   } catch (err) {
     next(err)
@@ -157,9 +192,14 @@ router.post('/workspace-create-process', async (req, res, next) => {
 router.get('/ws/:workspaceName', (req, res, next) => {
 
   if(!req.user){
-    req.flash('info', `Please login before trying to access your messages`);
-    res.redirect('/login');
+
+    redirectFlash(
+      'info', `Please login before trying to access your messages`,
+      '/login',
+      req, res
+    );
     return;
+
   }
 
   let user = req.user;
@@ -176,8 +216,11 @@ router.get('/ws/:workspaceName/create-group-channel', async (req, res, next) => 
   try {
 
     if (!req.user) {
-      req.flash('info', `Please login before trying to access your messages`);
-      res.redirect('/login');
+      redirectFlash(
+        'info', `Please login before trying to access your messages`,
+        '/login',
+        req, res
+      );
       return;
     }
 
@@ -196,9 +239,13 @@ router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, 
   try{
 
     if(!req.user){
-      req.flash('error', `Please login before trying to access your messages`);
-      res.redirect('/login');
+      redirectFlash(
+        'error', `Please login before trying to access your messages`,
+        '/login',
+        req, res
+      );
       return;
+
     }
 
     let user = req.user;
@@ -210,8 +257,11 @@ router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, 
     let channelSameNameExists = await Channel.exists(channelName, workspace);
 
     if (channelSameNameExists) {
-      req.flash('error', 'A channel with the same name already exists on this workspace 🧐');
-      res.redirect(`/ws/${workspaceName}/create-group-channel`);
+      redirectFlash(
+        'error', 'A channel with the same name already exists on this workspace 🧐',
+        `/ws/${workspaceName}/create-group-channel`,
+        req, res
+      );
       return;
     }
 
@@ -220,9 +270,12 @@ router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, 
     channel = await channel.save();
     await channel.addUser(user);
 
-    req.flash('success', `Nice ! The channel ${channelName} has been created !`);
-    res.redirect(`/ws/${workspaceName}/${channel.id}`);
-
+    redirectFlash(
+      'success', `Nice ! The channel ${channelName} has been created !`,
+      `/ws/${workspaceName}/${channel.id}`,
+      req, res
+    );
+    return;
   } catch (err){ next(err) }
 
 });
@@ -232,8 +285,11 @@ router.get('/ws/:workspaceName/create-duo-channel', async (req, res, next) => {
   try {
 
     if (!req.user) {
-      req.flash('info', `Please login before trying to access your messages`);
-      res.redirect('/login');
+      redirectFlash(
+        'info', `Please login before trying to access your messages`,
+        '/login',
+        req, res
+      );
       return;
     }
 
@@ -253,8 +309,11 @@ router.post('/ws/:workspaceName/create-duo-channel-process', async (req, res, ne
   try{
 
     if(!req.user){
-      req.flash('error', `Please login before trying to access your messages`);
-      res.redirect('/login');
+      redirectFlash(
+        'error', `Please login before trying to access your messages`,
+        '/login',
+        req, res
+      );
       return;
     }
 
@@ -299,7 +358,14 @@ router.post('/ws/:workspaceName/create-duo-channel-process', async (req, res, ne
 
       let indexChannel = usersIAlreadyDiscussWith.map(person => person.id).indexOf(invitedUser.id);
       channel = myDuoChannels[indexChannel];
-      req.flash('info', `Joining discussion with ${invitedUser.nickname}`);
+
+      redirectFlash(
+        'info', `Joining discussion with ${invitedUser.nickname}`,
+        `/ws/${workspaceName}/${channel.id}`,
+        req, res
+      );
+      return;
+
     } else {
       // else, create the new channel
       channel = new Channel({
@@ -310,18 +376,21 @@ router.post('/ws/:workspaceName/create-duo-channel-process', async (req, res, ne
       channel = await channel.save();
       await channel.addUser(user);
       await channel.addUser(invitedUser);
-
-      req.flash('info', `New discussion with ${invitedUser.nickname} created`);
+      redirectFlash(
+        'info', `New discussion with ${invitedUser.nickname} created`,
+        `/ws/${workspaceName}/${channel.id}`,
+        req, res
+      );
+      return;
     }
 
-    res.redirect(`/ws/${workspaceName}/${channel.id}`);
 
 
   } catch (err){ next(err) }
 
 });
 
-router.get('/ws/:workspaceName/getPotentialDuoInvitees', async (req, res, next) => {
+router.get('/ajax/ws/:workspaceName/getPotentialDuoInvitees', async (req, res, next) => {
   /**
    * Called when inviting a user to join a discussion.
    * It is a AJAX request used to get the list of users that can be invited to a channel
@@ -352,7 +421,7 @@ router.get('/ws/:workspaceName/getPotentialDuoInvitees', async (req, res, next) 
 
 });
 
-router.get('/ws/:workspaceName/getPotentialInvitees', async (req, res, next) => {
+router.get('/ajax/ws/:workspaceName/getPotentialInvitees', async (req, res, next) => {
   /**
    * Called when inviting a user to a workspace.
    * It is a AJAX request used to get the list of users that can be invited to a workspace
@@ -400,8 +469,11 @@ router.get('/ws/:workspaceName/invite-user', async (req, res, next) => {
    */
 
   if(!req.user){
-    req.flash('info', `Please login before trying to access your messages`);
-    res.redirect('/login');
+    redirectFlash(
+      'info', `Please login before trying to access your messages`,
+      '/login',
+      req, res
+    );
     return;
   }
 
@@ -417,8 +489,11 @@ router.post('/ws/:workspaceName/invite-user-process', async (req, res, next) => 
 
   try {
     if (!req.user) {
-      req.flash('info', `Please login before trying to access your messages`);
-      res.redirect('/login');
+      redirectFlash(
+        'info', `Please login before trying to access your messages`,
+        '/login',
+        req, res
+      );
       return;
     }
 
@@ -435,8 +510,13 @@ router.post('/ws/:workspaceName/invite-user-process', async (req, res, next) => 
     });
     generalChannel.addUser(invitedUser);
 
-    req.flash('success', `${invitedUser.nickname} has joined ${workspace.name} ! Give her/him a warm welcome ! 🐣`);
-    res.redirect(`/ws/${workspace.name}`);
+    redirectFlash(
+      'success', `${invitedUser.nickname} has joined ${workspace.name} ! Give her/him a warm welcome ! 🐣`,
+      `/ws/${workspace.name}`,
+      req, res
+    );
+    return;
+
 
   } catch(err){ next(err); }
 
@@ -446,9 +526,13 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
   try{
 
-    if(!req.user){
-      req.flash('error', `Please login before trying to access your messages`);
-      res.redirect('/login');
+    if(!req.user) {
+
+      redirectFlash(
+        'error', `Please login before trying to access your messages`,
+        '/login',
+        req, res
+      );
       return;
     }
 
@@ -460,8 +544,11 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
     // get the channel name
     let channel = await Channel.findById(channelId);
     if(channel === null){
-      req.flash('error', '🧐 The channel you try to access  does not exist');
-      res.redirect('/');
+      redirectFlash(
+        'error', '🧐 The channel you try to access  does not exist',
+        '/',
+        req, res
+      );
       return;
     }
     locals.channelName = channel.name;
@@ -484,7 +571,7 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
 });
 
-router.get('/ws/:workspaceName/:channelId/get-current-session-info', async (req, res, next) => {
+router.get('/ajax/ws/:workspaceName/:channelId/get-current-session-info', async (req, res, next) => {
   /**
    * This request is trigeerred with an Ajax request from the front end. It is used to send to the client information about its own session.
    */
@@ -522,7 +609,7 @@ router.get('/ws/:workspaceName/:channelId/get-current-session-info', async (req,
 
 });
 
-router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res, next) => {
+router.get('/ajax/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res, next) => {
   /**
    * Called when inviting a user to a channel.
    * It is a AJAX request used to get the list of users that can be invited to a channel
@@ -560,8 +647,11 @@ router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res
 router.get('/ws/:workspaceName/:channelId/addUser', async (req, res, next) => {
 
   if(!req.user){
-    req.flash('error', `Please login before trying to access your messages`);
-    res.redirect('/login');
+    redirectFlash(
+      'error', `Please login before trying to access your messages`,
+      '/login',
+      req, res
+    );
     return;
   }
 
@@ -573,8 +663,11 @@ router.get('/ws/:workspaceName/:channelId/addUser', async (req, res, next) => {
   // get the channel name
   let channel = await Channel.findById(channelId);
   if(channel === null){
-    req.flash('error', '🧐 The channel you try to access  does not exist');
-    res.redirect('/');
+    redirectFlash(
+      'error', '🧐 The channel you try to access  does not exist',
+      '/',
+      req, res
+    );
     return;
   }
   locals.channelName = channel.name;
@@ -591,8 +684,12 @@ router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, n
   try{
 
     if(!req.user){
-      req.flash('error', `Please login before trying to access your messages`);
-      res.redirect('/login');
+
+      redirectFlash(
+        'error', `Please login before trying to access your messages`,
+        '/login',
+        req, res
+      );
       return;
     }
 
@@ -607,8 +704,11 @@ router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, n
     logger.debug(`Added user ${invitedUser.id} to channel ${channel.id}`);
 
     // return
-    req.flash('success', `${invitedUser.nickname} is now part of the channel ${channel.name} ! Give him a warm welcome ! 🙌`);
-    res.redirect(`/ws/${workspaceName}/${channelId}`);
+    redirectFlash(
+      'success', `${invitedUser.nickname} is now part of the channel ${channel.name} ! Give him a warm welcome ! 🙌`,
+      `/ws/${workspaceName}/${channelId}`,
+      req, res
+    );
 
   } catch(err) {
     next(err);
@@ -619,8 +719,11 @@ router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, n
 
 router.get('/login', (req, res, next) =>{
   if(req.user){
-    req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
-    res.redirect('/workspace-choice');
+      redirectFlash(
+        'error', 'Hmmm 🤨.. You have to logout before trying to signup or login',
+        '/workspace-choice',
+        req, res
+      );
     return;
   }
   res.render('auth/login.hbs', {layout: 'auth/auth_layout.hbs'});
@@ -635,8 +738,11 @@ router.post('/process-login', async (req, res, next) => {
 
   if(user === null){
     // user not found
-    req.flash('error', `User ${email} is not registered yes on Slack! SIgn Up and Enjoy all Slack functionnalities for free !! 🙌`);
-    res.redirect('/login');
+    redirectFlash(
+      'error', `User ${email} is not registered yes on Slack! SIgn Up and Enjoy all Slack functionnalities for free !! 🙌`,
+      '/login',
+      req, res
+    );
     return
   }
 
@@ -644,15 +750,21 @@ router.post('/process-login', async (req, res, next) => {
   let isValidPassword = user.checkPassword(originalPassword);
 
   if(!isValidPassword){
-    req.flash('error', `Sorry ! 🤭 Wrong Password ! `);
-    res.redirect('/login');
+    redirectFlash(
+      'error', `Sorry ! 🤭 Wrong Password ! `,
+      `/login`,
+      req, res
+    );
     return
   }
 
   req.logIn(user, (err) => {
-    if (err) { return next(err); }
-    req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
-    res.redirect('/workspace-choice');
+    if (err) {return next(err);}
+    redirectFlash(
+      'success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`,
+      '/workspace-choice',
+      req, res
+    );
   });
 
 
@@ -662,8 +774,11 @@ router.get('/signup', (req, res, next) => {
 
   // if already connected, redirect
   if(req.user){
-    req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
-    res.redirect('/workspace-choice');
+    redirectFlash(
+      'error', 'Hmmm 🤨.. You have to logout before trying to signup or login',
+      '/workspace-choice',
+      req, res
+    );
     return;
   }
   res.render('auth/signup.hbs', {layout: 'auth/auth_layout.hbs'});
@@ -675,16 +790,22 @@ router.post('/process-signup', async (req, res, next) => {
     let {nickname, email, originalPassword, originalPassword2} = req.body;
 
     if(originalPassword !== originalPassword2){
-      req.flash('error', 'The two passwords you entered are not the same 🧐');
-      res.redirect('/signup');
+      redirectFlash(
+        'error', 'The two passwords you entered are not the same 🧐',
+        '/signup',
+        req, res
+      );
       return;
     }
 
     let userExists = await User.exists(email);
 
     if(userExists){
-      req.flash('error', 'Sorry bro 😩 ! A user with same email adress already exists ! ');
-      res.redirect('/signup');
+      redirectFlash(
+       'error', 'Sorry bro 😩 ! A user with same email adress already exists ! ',
+        '/signup',
+        req, res
+      );
       return;
     }
 
@@ -693,8 +814,12 @@ router.post('/process-signup', async (req, res, next) => {
 
     // create the user
     await user.save();
-    req.flash('success', "👏🙌🍾🎉 Congrats for joining the Slack community ! You can login into your account right now !");
-    res.redirect('/login');
+    redirectFlash(
+     'success', "👏🙌🍾🎉 Congrats for joining the Slack community ! You can login into your account right now !",
+      '/login',
+      req, res
+    );
+    return;
 
   } catch (err) {
     next(err);
@@ -705,6 +830,12 @@ router.post('/process-signup', async (req, res, next) => {
 router.get('/logout', (req, res, next) => {
   // req.logOut is not reliable ..
   // check https://stackoverflow.com/a/19132999/6744511
+
+  // redirectFlash(
+  // "success", "Logged Out Successfully! 👏",
+  // '/login',
+  // req, res
+  // );
   req.flash("success", "Logged Out Successfully! 👏");
   req.session.destroy(function (err) {
     res.redirect('/login');

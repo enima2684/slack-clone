@@ -232,13 +232,16 @@ section.main{
     flex-grow: 1;
     flex-shrink: 1; /* 2 */
     overflow: scroll;
-    display: block;
+    //display: block;
+    display: flex;
+    flex-direction: column;
+    //position: relative;
 
-    position: relative;
+    .empty{
+      flex-grow: 3;
+    }
 
     ul{
-      // position: absolute;
-      // bottom: 0;
 
       li{
         padding: 8px 0;

@@ -42,7 +42,7 @@ function configAutocompletion(names){
 function getAjaxUrl(){
   let currentUrl = window.location.href.split('/');
   let workspaceName = currentUrl[currentUrl.length - 2];
-  return `/ws/${workspaceName}/getPotentialDuoInvitees`
+  return `/ajax/ws/${workspaceName}/getPotentialDuoInvitees`
 }
 
 $(document).ready(()=>{
