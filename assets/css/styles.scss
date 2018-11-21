@@ -302,7 +302,7 @@ section.main{
     flex-direction: column;
     align-items: flex-end;
 
-    .typing-indicator{
+    #typing-indicator{
       color: $color-detail-text;
       font-size: 0.9rem;
       margin-right: 2.5%;

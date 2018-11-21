@@ -38,7 +38,6 @@ class MessageSocketSender{
    * Build the message that will be sent through the socket
    */
   buildMessage(){
-
     return {
       content: this.content,
       sendingTimestamp: +new Date(),

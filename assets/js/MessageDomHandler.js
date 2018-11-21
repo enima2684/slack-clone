@@ -32,6 +32,19 @@ class MessageDomHandler{
     if(event.keyCode === 13) {
       this.onSubmit();
     }
+
+    console.log('🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆🦆');
+    // send a message:typing message
+    let messageSender =
+      new this.MessageSocketSender({
+        id: 'message:typing',
+        content: this.getSenderNickname(),
+        socketManager: this.socketManager,
+        senderId: this.getSenderId(),
+        channelId: this.getChannelId(),
+      });
+    messageSender.send();
+
   }
   
   /**
@@ -88,6 +101,13 @@ class MessageDomHandler{
    */
   getSenderId(){
     return this.sessionInfo.currentUser.id
+  }
+
+   /**
+   * Gets the id of the sender
+   */
+  getSenderNickname(){
+    return this.sessionInfo.currentUser.nickname
   }
 
   /**
