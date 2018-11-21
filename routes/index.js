@@ -6,8 +6,6 @@ const Workspace  = require('../db/index').db.sql.Workspace;
 const db         = require('../db/index').db.sql;
 const logger     = require('../config/logger');
 
-
-
 /***
  * Helper function to make queries to get the data to render for a workspace route
  * It is externalised from the /ws/:workspace route in order to use the same code in the route /ws/:workspace/:id
