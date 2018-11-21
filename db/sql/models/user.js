@@ -1,6 +1,7 @@
 'use strict';
 const Sequelize = require('sequelize');
 const bcrypt = require('bcryptjs');
+const gravatar = require('gravatar');
 
 // check this link for documentaion on how to integrate a class inside a sequelize model
 // https://codewithhugo.com/using-es6-classes-for-sequelize-4-models/
@@ -19,14 +20,22 @@ class User extends Sequelize.Model {
           unique: true
         },
         avatar: {
-          type: DataTypes.STRING,
-          defaultValue: '/assets/avatars/avatar.png'
+          type: DataTypes.STRING
         },
         password: {
           type: DataTypes.STRING
         }
       },
-      {sequelize})
+      {
+        sequelize,
+        hooks: {
+          afterValidate: (user, options) => {
+            if(!user.avatar){
+              user.avatar = gravatar.url(user.email, {s: '30', r: 'x', d: 'monsterid'}, false);
+            }
+          }
+        }
+      })
   }
 
 
