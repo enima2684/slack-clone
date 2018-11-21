@@ -34,6 +34,7 @@ function configAutocompletion(names){
   $('#bloodhound .typeahead').bind('typeahead:selected', function(obj, datum, name) {
     $("#invitedUserId").val(datum.id);
     console.log(`user ${$("#invitedUserId").val()} selected !`)
+    $("button").removeAttr("disabled");
   });
 
 }
@@ -45,11 +46,15 @@ function getAjaxUrl(){
 }
 
 $(document).ready(()=>{
-
+  $("button").attr("disabled", "disabled");
   $.get(getAjaxUrl(), {})
     .done(configAutocompletion)
     .fail((jqXhr, textStatus, errorThrown) => {
       console.log(errorThrown);
     });
 
+});
+
+$(".typeahead").on('input', () => {
+  $("button").attr("disabled", "disabled");
 });
