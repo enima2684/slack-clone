@@ -365,17 +365,19 @@ router.get('/ws/:workspaceName/getPotentialInvitees', async (req, res, next) => 
 
     // get users on the workspace
     let workspace = await Workspace.findOneByName(workspaceName);
+
+    // all users with workspace info
     let users = await User.findAll({
-      include:[{
+      attributes: ['id', 'nickname', 'avatar'],
+      include: [{
         model: Workspace,
         as: 'workspaces',
-        where: {
-          id: {
-            [db.Sequelize.Op.ne]: workspace.id
-          }
-        }
+        attributes: ['id', 'name']
       }]
     });
+
+    // remove users that belong to the current worksapce
+    users = users.filter(person => !person.workspaces.some( ws => ws.id === workspace.id));
 
     let usersCanBeInvited = users.map(person => {
       return {

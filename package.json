@@ -34,6 +34,7 @@
     "joi": "^14.0.4",
     "joi-browser": "^13.4.0",
     "mocha": "^5.2.0",
+    "morgan": "^1.9.1",
     "node-sass-middleware": "^0.11.0",
     "passport": "^0.4.0",
     "pg": "^7.6.1",

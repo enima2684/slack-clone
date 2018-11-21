@@ -3,6 +3,7 @@ const bodyParser         = require('body-parser');
 const cookieParser       = require('cookie-parser');
 const path               = require('path');
 const express            = require('express');
+const morgan             = require('morgan')
 const app                = express();
 const http               = require('http').Server(app);
 const io                 = require('socket.io')(http);
@@ -11,6 +12,7 @@ const session            = require('express-session');
 const flash              = require('connect-flash');
 const passport           = require('passport');
 const SequelizeStore     = require('connect-session-sequelize')(session.Store);
+
 
 require('./config/config-passport.js');
 
@@ -34,6 +36,7 @@ hbs.registerPartials(path.join(__dirname, 'views', 'partials'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(morgan('dev'));
 
 /*** Internal imports ***/
 const config  = require('./config/config.js');
