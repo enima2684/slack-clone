@@ -3,9 +3,7 @@ const router     = express.Router();
 const User       = require('../db/index').db.sql.User;
 const Channel    = require('../db/index').db.sql.Channel;
 const Workspace  = require('../db/index').db.sql.Workspace;
-const db         = require('../db/index').db.sql;
 const logger     = require('../config/logger');
-
 
 
 /***
@@ -106,7 +104,7 @@ router.get('/workspace-choice', async (req, res, next) => {
     });
 
     // res.send(workspacesData);
-    res.render('workspace_choice', {workspacesData});
+    res.render('workspace_choice', {layout: 'workspace_layout.hbs', workspacesData});
   } catch (err){ next(err) }
 });
 
@@ -116,7 +114,7 @@ router.get('/workspace-create', (req, res, next) => {
     res.redirect('/login');
     return;
   }
-  res.render('workspace_create');
+  res.render('workspace_create', {layout: 'workspace_layout.hbs'});
 });
 
 router.post('/workspace-create-process', async (req, res, next) => {
@@ -142,11 +140,6 @@ router.post('/workspace-create-process', async (req, res, next) => {
     let workspace = new Workspace({name: workspaceName, createdBy: user.id});
     workspace = await workspace.save();
     await workspace.addUser(user);
-
-    // create a general channel
-    let channel = new Channel({name: 'general', workspaceId: workspace.id});
-    await channel.save();
-    await channel.addUser(user);
 
     req.flash('success', `Nice ! The workspace ${workspaceName} has been created ! `);
     res.redirect(`/ws/${workspaceName}`);
@@ -198,7 +191,7 @@ router.post('/ws/:workspaceName/create-group-channel-process', async (req, res, 
   try{
 
     if(!req.user){
-      req.flash('error', `Please login before trying to access your messages`);
+      req.flash('info', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -255,7 +248,7 @@ router.post('/ws/:workspaceName/create-duo-channel-process', async (req, res, ne
   try{
 
     if(!req.user){
-      req.flash('error', `Please login before trying to access your messages`);
+      req.flash('info', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -354,100 +347,12 @@ router.get('/ws/:workspaceName/getPotentialDuoInvitees', async (req, res, next) 
 
 });
 
-router.get('/ws/:workspaceName/getPotentialInvitees', async (req, res, next) => {
-  /**
-   * Called when inviting a user to a workspace.
-   * It is a AJAX request used to get the list of users that can be invited to a workspace
-   * It gets the list of all the users that do not belong to the workspace
-   */
-  try{
-    let {workspaceName} = req.params;
-
-    // get users on the workspace
-    let workspace = await Workspace.findOneByName(workspaceName);
-    let users = await User.findAll({
-      include:[{
-        model: Workspace,
-        as: 'workspaces',
-        where: {
-          id: {
-            [db.Sequelize.Op.ne]: workspace.id
-          }
-        }
-      }]
-    });
-
-    let usersCanBeInvited = users.map(person => {
-      return {
-        id: person.id,
-        nickname: person.nickname,
-        avatar: person.avatar
-      };
-    });
-
-    res.send(usersCanBeInvited);
-
-  } catch(err) {
-    next(err);
-  }
-
-
-});
-
-router.get('/ws/:workspaceName/invite-user', async (req, res, next) => {
-  /**
-   * Route called to add a new user to a workspace
-   */
-
-  if(!req.user){
-    req.flash('info', `Please login before trying to access your messages`);
-    res.redirect('/login');
-    return;
-  }
-
-  let user = req.user;
-  let workspaceName = req.params.workspaceName;
-  let locals = await getWorkspaceLocalVariable(req, res, next, user, workspaceName);
-
-  res.render('workspace_invite', locals);
-
-});
-
-router.post('/ws/:workspaceName/invite-user-process', async (req, res, next) => {
-
-  try {
-    if (!req.user) {
-      req.flash('info', `Please login before trying to access your messages`);
-      res.redirect('/login');
-      return;
-    }
-
-    let workspaceName = req.params.workspaceName;
-    let {invitedUserId} = req.body;
-
-    let workspace = await Workspace.findOneByName(workspaceName);
-    let invitedUser = await User.findOne({where: {id: invitedUserId}});
-    workspace.addUser(invitedUser);
-
-    // add user to the general channel
-    let generalChannel = await Channel.findOne({
-      where: { name: 'general', workspaceId: workspace.id }
-    });
-    generalChannel.addUser(invitedUser);
-
-    req.flash('success', `${invitedUser.nickname} has joined ${workspace.name} ! Give her/him a warm welcome ! 🐣`);
-    res.redirect(`/ws/${workspace.name}`);
-
-  } catch(err){ next(err); }
-
-});
-
 router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
 
   try{
 
     if(!req.user){
-      req.flash('error', `Please login before trying to access your messages`);
+      req.flash('info', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -562,7 +467,7 @@ router.get('/ws/:workspaceName/:channelId/getPotentialInvitees', async (req, res
 router.get('/ws/:workspaceName/:channelId/addUser', async (req, res, next) => {
 
   if(!req.user){
-    req.flash('error', `Please login before trying to access your messages`);
+    req.flash('info', `Please login before trying to access your messages`);
     res.redirect('/login');
     return;
   }
@@ -593,7 +498,7 @@ router.post('/ws/:workspaceName/:channelId/add-user-process', async (req, res, n
   try{
 
     if(!req.user){
-      req.flash('error', `Please login before trying to access your messages`);
+      req.flash('info', `Please login before trying to access your messages`);
       res.redirect('/login');
       return;
     }
@@ -623,40 +528,42 @@ router.get('/login', (req, res, next) =>{
   if(req.user){
     req.flash('error', 'Hmmm 🤨.. You have to logout before trying to signup or login');
     res.redirect('/workspace-choice');
-    return;
   }
   res.render('auth/login.hbs', {layout: 'auth/auth_layout.hbs'});
 });
 
-router.post('/process-login', async (req, res, next) => {
+router.post('/process-login', (req, res, next) => {
 
   const {email, originalPassword} = req.body;
 
+  async function login(){
 
-  let user = await User.findOne({where: {email: email}});
+    let user = await User.findOne({where: {email: email}});
 
-  if(user === null){
-    // user not found
-    req.flash('error', `User ${email} is not registered yes on Slack! SIgn Up and Enjoy all Slack functionnalities for free !! 🙌`);
-    res.redirect('/login');
-    return
+    if(user === null){
+      // user not found
+      req.flash('error', `User ${email} is not registered yes on Slack! SIgn Up and Enjoy all Slack functionnalities for free !! 🙌`);
+      res.redirect('/login');
+      return
+    }
+
+    // check password
+    let isValidPassword = user.checkPassword(originalPassword);
+
+    if(!isValidPassword){
+      req.flash('error', `Sorry ! 🤭 Wrong Password ! `);
+      res.redirect('/login');
+      return
+    }
+
+    req.logIn(user, (err) => {
+      if (err) { return next(err); }
+      req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
+      res.redirect('/workspace-choice');
+    });
+
   }
-
-  // check password
-  let isValidPassword = user.checkPassword(originalPassword);
-
-  if(!isValidPassword){
-    req.flash('error', `Sorry ! 🤭 Wrong Password ! `);
-    res.redirect('/login');
-    return
-  }
-
-  req.logIn(user, (err) => {
-    if (err) { return next(err); }
-    req.flash('success', `Welcome back ${user.nickname} ! Happy to see you ! 😁`);
-    res.redirect('/workspace-choice');
-  });
-
+  login();
 
 });
 

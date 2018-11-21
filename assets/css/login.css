@@ -8,6 +8,15 @@
   color: white;
   font-weight: 700; }
 
+.flash-error {
+  background-color: #b4374e; }
+
+.flash-success {
+  background-color: #008952; }
+
+.flash-info {
+  background-color: #007c89; }
+
 * {
   padding: 0;
   margin: 0; }
