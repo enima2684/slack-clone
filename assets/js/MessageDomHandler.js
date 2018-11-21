@@ -123,6 +123,7 @@ class MessageDomHandler{
       };
 
       $("#msg-ul").append(renderMessage(templateParams));
+      $(".message-container").scrollTop( $("#msg-ul").height());
 
       return this
     });
