@@ -8,7 +8,7 @@
     "makemigration": "node ./helpers/sequelize-auto-migrations/bin/makemigration.js",
     "runmigration": "node ./helpers/sequelize-auto-migrations/bin/runmigration.js",
     "mockdata": "node ./db/sql/seeders/mock.js",
-    "start": "node app.js"
+    "start": "node runmigration && node app.js"
   },
   "repository": {
     "type": "git",
