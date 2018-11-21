@@ -48,6 +48,6 @@ $(document).ready(()=>{
   .done(initializeSockets)
   .fail((jqXHR, textStatus, errorThrown) => {console.log(errorThrown); throw errorThrown;})
   
+  $(".message-container").scrollTop( $("#msg-ul").height());
 });
 
-$(".message-container").scrollTop( $("#msg-ul").height());
