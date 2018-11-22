@@ -1,7 +1,6 @@
 'use strict';
 const Sequelize = require('sequelize');
 const logger    = require('../../../config/logger');
-cosnt client    = 
 
 // check this link for documentaion on how to integrate a class inside a sequelize model
 // https://codewithhugo.com/using-es6-classes-for-sequelize-4-models/
@@ -58,7 +57,23 @@ class Channel extends Sequelize.Model {
    * @return {Promise<void>}
    */
 
-   async getLatestMessages(){
+   
+  async getLatestMessages(){
+    let messages = await Promise.all([this.getStoredMessages(), this.getCachedMessages()])
+    .then((data) => data)
+    .catch(err => {throw err})
+    // let dbMessages = await getStoredMessages()
+    // console.log(messages);
+    return messages[0];
+  }
+   
+  
+  getCachedMessages(){
+    const redis = require('../../index').db.redis;
+
+  }  
+
+  async getStoredMessages(){
 
     const User = require('./index').User;
 
