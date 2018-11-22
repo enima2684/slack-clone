@@ -60,12 +60,10 @@ class SocketMessageHandler{
    * @param receivedMessage: received Message from the socket io (submit:message event)
    */
   buildBroadcastedMessage(receivedMessage){
-
     // add the broadcasting time to the message
     let broadcastedMessage = Object.assign({}, receivedMessage);
     broadcastedMessage.broadcastingTimestamp = +new Date();
     return broadcastedMessage
-
   }
 
 
