@@ -564,7 +564,7 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
     // load the messages
     locals.chatMessages = await channel.getLatestMessages();
 
-    res.render('channel', locals);
+    res.render  ('channel', locals);
 
   } catch (err) {
     next(err);
