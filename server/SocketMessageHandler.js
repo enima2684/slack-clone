@@ -81,37 +81,6 @@ class SocketMessageHandler{
 
   }
 
-  /**
-   * Saved the message on the db
-   * @param message
-   * @return {Promise<void>}
-   */
-  async saveMessage(message){
-
-    try{
-      logger.debug(`..saving message on the db`);
-
-      // create sequelize message
-      let messageForDb = new Message({
-        content: message.content,
-        userId: message.senderId,
-        channelId: message.channelId,
-      });
-
-      let redisAdditionalInfo = {
-        serverReceptionTimestamp: +new Date(),
-        userAvatar: message.senderAvatar,
-        userNickname: message.senderNickname,
-      };
-
-      await messageForDb.saveInDb(redisAdditionalInfo);
-      logger.debug(`saved message "${message.content}" in db from ${message.senderId} to ${message.channelId}`);
-      return this
-    }
-    catch(err){
-      throw err
-    }
-  }
 
   /**
    * Executed when a submitted message is received on the server
@@ -123,7 +92,10 @@ class SocketMessageHandler{
     try{
 
       logger.debug(`received message "${message.content}" submitted from user ${message.senderId}`);
-      await this.saveMessage(message);
+
+      logger.debug(`..saving message on the db`);
+      message = await Message.redisSave(message);
+      logger.debug(`saved message on id ${message.id} "${message.content}" in db from ${message.senderId} to ${message.channelId}`);
 
       logger.debug(`..broadcasting message to the channel`);
       // broadcast new message to all clients
@@ -135,10 +107,10 @@ class SocketMessageHandler{
       });
       logger.debug(`broadcasted message "${message.content}" from ${message.senderId} to ${message.channelId}`);
 
-
       return this
     }
     catch (err){
+      // TODO: send here message to the user saying that the messag was not saved
       throw err;
     }
   }
