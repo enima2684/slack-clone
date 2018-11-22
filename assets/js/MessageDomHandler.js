@@ -35,17 +35,27 @@ class MessageDomHandler{
     }
 
     // send a message:typing message
-    let messageSender =
-      new this.MessageSocketSender({
-        id: 'message:typing',
-        content: this.getSenderNickname(),
-        socketManager: this.socketManager,
-        senderId: this.getSenderId(),
-        channelId: this.getChannelId(),
-        senderAvatar: this.getSenderAvatar(),
+    let messageSender = new this.MessageSocketSender({
+      id: 'message:typing',
+      message: {
         senderNickname: this.getSenderNickname(),
-      });
+        sendingTimestamp: +new Date(),
+        channelId: this.getChannelId(),
+      },
+    });
     messageSender.send();
+
+    // let messageSender =
+    //   new this.MessageSocketSender({
+    //     id: 'message:typing',
+    //     content: this.getSenderNickname(),
+    //     socketManager: this.socketManager,
+    //     senderId: this.getSenderId(),
+    //     channelId: this.getChannelId(),
+    //     senderAvatar: this.getSenderAvatar(),
+    //     senderNickname: this.getSenderNickname(),
+    //   });
+    // messageSender.send();
 
   }
 
@@ -135,13 +145,12 @@ class MessageDomHandler{
     return this.sessionInfo.currentUser.nickname
   }
 
-     /**
+   /**
    * Gets the avatar of the sender
    */
   getSenderAvatar(){
     return this.sessionInfo.currentUser.avatar
   }
-
 
   /**
    * Gets the id of the channel to which the message will be sent
@@ -152,10 +161,6 @@ class MessageDomHandler{
 
   /**
    * Renders a new message to the form
-   */
-
-
-  /**
    *
    * @param senderId : id of sender of the message
    * @param senderAvatar: avatar of the sender
@@ -183,7 +188,6 @@ class MessageDomHandler{
 
   }
 
-
   /**
    * Returns the formated HH h MM time from the timestamp
    * @param timestamp
@@ -195,6 +199,5 @@ class MessageDomHandler{
 
     return `${hours.substr(-2)} h ${minutes.substr(-2)}`
   }
-
 
 }

@@ -63,12 +63,10 @@
 
   /*** message:typing ***/
   messageSocketSchemas["message:typing"] = Joi.object().keys({
-    content          : Joi.string().min(1).required(),
-    sendingTimestamp : Joi.number().min(0).integer().required(),
     senderId         : Joi.number().required(),
+    senderNickname   : Joi.string().min(1).required(),
+    sendingTimestamp : Joi.number().min(0).integer().required(),
     channelId        : Joi.number().required(),
-    senderAvatar     : Joi.string().required(),
-    senderNickname   : Joi.string().required(),
   });
 
 
