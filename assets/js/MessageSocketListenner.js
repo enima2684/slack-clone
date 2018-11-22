@@ -34,8 +34,12 @@ class MessageSocketListenner{
 
   onReceiveMessageTyping(message){
 
+    console.log(message);
     //message.content contains the name if the person typing
-    this.domHandler.renderTypingMessage(message.content);
+    this.domHandler.renderTypingMessage({
+      name: message.content,
+      id: message.senderId
+    });
 
   }
 

@@ -14,6 +14,7 @@ class MessageDomHandler{
     this.socketManager = socketManager;
     this.MessageSocketSender = MessageSocketSender;
     this.sessionInfo = sessionInfo;
+    this.timeOutTyping = null;
   }
 
   /**
@@ -49,12 +50,20 @@ class MessageDomHandler{
   /**
    * Renders the typing message
    * @param name: name of the person typing
+   * @param id: id of the person typing
    */
-  renderTypingMessage(name){
+  renderTypingMessage({name, id}){
+
+    // do nothing if current user is the one typing a message
+    if (this.getSenderId() === id){
+      return
+    }
+
     $("#typing-indicator").html(`...${name} is typing`);
-    setTimeout(()=>{
+    clearTimeout(this.timeOutTyping);
+    this.timeOutTyping = setTimeout(()=>{
       $("#typing-indicator").html("");
-    }, 3000)
+    }, 2000)
   }
 
   /**
