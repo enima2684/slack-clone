@@ -78,7 +78,7 @@
 
       // 2. handle not valid message
       if(!isValidMessage){
-        throw new Error("Message with wrong schema through socket : " + error.message);
+        throw new Error(`Message ${id} with wrong schema through socket : ${error.message}`);
       }
 
       return isValidMessage

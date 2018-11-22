@@ -35,6 +35,8 @@
     sendingTimestamp : Joi.number().min(0).integer().required(),
     senderId         : Joi.number().required(),
     channelId        : Joi.number().required(),
+    senderAvatar     : Joi.string().required(),
+    senderNickname   : Joi.string().required(),
   });
 
   /*** message:broadcast ***/
@@ -54,6 +56,8 @@
     sendingTimestamp      : Joi.number().min(0).integer().required(),
     senderId              : Joi.number().required(),
     channelId             : Joi.number().required(),
+    senderAvatar          : Joi.string().required(),
+    senderNickname        : Joi.string().required(),
   });
 
 
@@ -63,6 +67,8 @@
     sendingTimestamp : Joi.number().min(0).integer().required(),
     senderId         : Joi.number().required(),
     channelId        : Joi.number().required(),
+    senderAvatar     : Joi.string().required(),
+    senderNickname   : Joi.string().required(),
   });
 
 
