@@ -28,7 +28,8 @@ class Message extends Sequelize.Model {
    */
   async saveInDb(){
     try{
-      this.save();
+      await this.save();
+      return this
     }
     catch(err){
       throw err;

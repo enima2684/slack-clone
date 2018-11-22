@@ -97,13 +97,14 @@ class SocketMessageHandler{
         channelId: message.channelId,
 
         // new - to be added on the socket message
-        timestamp: +new Date(),
-        userAvatar: message.senderAvatar,
-        userNickname: message.senderNickname,
+        // timestamp: +new Date(),
+        // userAvatar: message.senderAvatar,
+        // userNickname: message.senderNickname,
 
       });
       await messageForDb.saveInDb();
       logger.debug(`saved message "${message.content}" in db from ${message.senderId} to ${message.channelId}`);
+      return this
     }
     catch(err){
       throw err
