@@ -23,6 +23,18 @@ class Message extends Sequelize.Model {
     Message.belongsTo(models.Channel, {as: 'channel', foreignKey: 'channelId'});
   }
 
+  /**
+   * Saves the message into the database
+   */
+  async saveInDb(){
+    try{
+      this.save();
+    }
+    catch(err){
+      throw err;
+    }
+  }
+
 }
 
 

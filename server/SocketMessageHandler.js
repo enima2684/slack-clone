@@ -81,6 +81,34 @@ class SocketMessageHandler{
 
   }
 
+  /**
+   * Saved the message on the db
+   * @param message
+   * @return {Promise<void>}
+   */
+  async saveMessage(message){
+
+    try{
+      logger.debug(`..saving message on the db`);
+      // save message to database
+      let messageForDb = new Message({
+        content: message.content,
+        userId: message.senderId,
+        channelId: message.channelId,
+
+        // new - to be added on the socket message
+        timestamp: +new Date(),
+        userAvatar: message.senderAvatar,
+        userNickname: message.senderNickname,
+
+      });
+      await messageForDb.saveInDb();
+      logger.debug(`saved message "${message.content}" in db from ${message.senderId} to ${message.channelId}`);
+    }
+    catch(err){
+      throw err
+    }
+  }
 
   /**
    * Executed when a submitted message is received on the server
@@ -91,8 +119,10 @@ class SocketMessageHandler{
 
     try{
 
-      logger.debug(`message "${message.content}" submitted from user ${message.senderId}`);
+      logger.debug(`received message "${message.content}" submitted from user ${message.senderId}`);
+      await this.saveMessage(message);
 
+      logger.debug(`..broadcasting message to the channel`);
       // broadcast new message to all clients
       let broadcastedMessage = await this.buildBroadcastedMessage(message);
       socketManager.in(message.channelId).emit({
@@ -102,15 +132,7 @@ class SocketMessageHandler{
       });
       logger.debug(`broadcasted message "${message.content}" from ${message.senderId} to ${message.channelId}`);
 
-      // save message to database
-      let messageForDb = new Message({
-        content: broadcastedMessage.content,
-        userId: message.senderId,
-        channelId: message.channelId,
-      });
-      await messageForDb.save();
 
-      logger.debug(`saved message "${message.content}" in db from ${message.senderId} to ${message.channelId}`);
       return this
     }
     catch (err){
