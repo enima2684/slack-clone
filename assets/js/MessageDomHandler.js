@@ -42,6 +42,8 @@ class MessageDomHandler{
         socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
+        senderAvatar: this.getSenderAvatar(),
+        senderNickname: this.getSenderNickname(),
       });
     messageSender.send();
 
@@ -78,6 +80,8 @@ class MessageDomHandler{
         socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
+        senderNickname: this.getSenderNickname(),
+        senderAvatar: this.getSenderAvatar(),
       });
     messageSender.send();
   }

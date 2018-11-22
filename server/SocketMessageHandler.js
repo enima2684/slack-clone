@@ -50,7 +50,9 @@ class SocketMessageHandler{
    */
   onJoin(socketManager, message) {
     if (message.channelId) {
-      socketManager.join(message.channelId, () => logger.debug(`User ${message.senderId} joined channel ${message.channelId}`));
+      socketManager.join(message.channelId,
+        () => logger.debug(`User ${message.senderId} joined channel ${message.channelId}`)
+      );
     }
   }
 
@@ -63,9 +65,9 @@ class SocketMessageHandler{
     // add the broadcasting time to the message
     let broadcastedMessage = Object.assign({}, receivedMessage);
     broadcastedMessage.broadcastingTimestamp = +new Date();
+    delete broadcastedMessage.id;
     return broadcastedMessage
   }
-
 
   /**
    * Executed when a submitted message is received on the server
