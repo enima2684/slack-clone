@@ -112,7 +112,7 @@ router.get('/workspace-choice', async (req, res, next) => {
         model: User,
         as: 'users',
         where: { id: user.id }
-      }]
+      }],
     });
     let workspaceDetails = await Promise.all(
       workspaces.map(workspace => workspace.getWorkSpaceDetails())
