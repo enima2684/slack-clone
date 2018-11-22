@@ -90,19 +90,21 @@ class SocketMessageHandler{
 
     try{
       logger.debug(`..saving message on the db`);
-      // save message to database
+
+      // create sequelize message
       let messageForDb = new Message({
         content: message.content,
         userId: message.senderId,
         channelId: message.channelId,
-
-        // new - to be added on the socket message
-        // timestamp: +new Date(),
-        // userAvatar: message.senderAvatar,
-        // userNickname: message.senderNickname,
-
       });
-      await messageForDb.saveInDb();
+
+      let redisAdditionalInfo = {
+        serverReceptionTimestamp: +new Date(),
+        userAvatar: message.senderAvatar,
+        userNickname: message.senderNickname,
+      };
+
+      await messageForDb.saveInDb(redisAdditionalInfo);
       logger.debug(`saved message "${message.content}" in db from ${message.senderId} to ${message.channelId}`);
       return this
     }

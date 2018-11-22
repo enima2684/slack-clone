@@ -24,10 +24,16 @@ class Message extends Sequelize.Model {
   }
 
   /**
-   * Saves the message into the database
+   * Saves the message into redis Database
+   * It receives as an argument also the additional data that will be needed for saving into redis
    */
-  async saveInDb(){
+  static async saveInRedis({timestamp, userAvatar, userNickname}){
+
+
     try{
+
+
+
       await this.save();
       return this
     }
