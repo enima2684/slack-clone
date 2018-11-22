@@ -33,7 +33,7 @@ users.push(
   new User({nickname: 'niccolo', email:'niccolo@gmail.com', avatar: '/assets/avatars/avatar-3.png'})
 );
 users.push(
-  new User({nickname: 'fareha', email:'fareha@gmail.com', avatar: '/assets/avatars/avatar-1.png'})
+  new User({nickname: 'fareaha', email:'fareaha@gmail.com', avatar: '/assets/avatars/avatar-1.png'})
 );
 users.push(
   new User({nickname: 'nizar', email:'nizar@gmail.com', avatar: '/assets/avatars/avatar-5.png'})
@@ -41,6 +41,86 @@ users.push(
 users.push(
   new User({nickname: 'marie', email:'marie@gmail.com', avatar: '/assets/avatars/avatar-2.png'})
 );
+users.push(
+  new User({nickname: 'regis', email:'regis@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'mehdi', email:'mehdi@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'helene', email:'helene@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'antoine', email:'antoine@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'filippo', email:'filippo@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'geoffroy', email:'geoffroy@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'heather', email:'heather@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'mathis', email:'mathis@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'paul', email:'paul@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'abi', email:'abi@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'laura', email:'laura@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'cecile', email:'cecile@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'chloe', email:'chloe@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'arnit', email:'arnit@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'jean-nicolas', email:'jean-nicolas@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'nicola', email:'nicola@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'priyanka', email:'priyanka@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'adele', email:'adele@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'maya', email:'maya@gmail.com'})
+);
+
+users.push(
+  new User({nickname: 'christian', email:'christian@gmail.com'})
+);
+
 
 users.forEach(user => {
   user.setPassword("default");
@@ -64,8 +144,8 @@ function createUsers(users){
 
 /*** Workspaces ***/
 let workspaces = [];
-workspaces.push(new Workspace({name: "wsA", image: "https://is4-ssl.mzstatic.com/image/thumb/Purple128/v4/54/4f/9b/544f9b86-5073-2793-f825-699c9f547375/AppIcon-1x_U007emarketing-0-85-220-0-5.png/246x0w.jpg"}));
-workspaces.push(new Workspace({name: "wsB", image: "https://www.ivp.com/wp-content/uploads/2016/06/slack_portfolio.png"}));
+workspaces.push(new Workspace({name: "IronHack", image: "https://s3.amazonaws.com/bloc-global-assets/almanac-assets/bootcamps/logos/000/002/680/original/IronHack.png?1467187336"}));
+workspaces.push(new Workspace({name: "ParisJazz", image: "https://images-na.ssl-images-amazon.com/images/I/51UPvs0YcsL._SS500.jpg"}));
 
 function createWorkspace(ws) {
   return ws.save()
