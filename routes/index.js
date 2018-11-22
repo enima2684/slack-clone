@@ -565,7 +565,6 @@ router.get('/ws/:workspaceName/:channelId', async (req, res, next) => {
     locals.chatMessages = await channel.getLatestMessages();
 
     res.render  ('channel', locals);
-    // res.send(locals.chatMessages);
 
   } catch (err) {
     next(err);
