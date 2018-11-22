@@ -10,12 +10,16 @@ class MessageSocketSender{
    * @param socketManager - socketManager object
    * @param senderId - id of the user sending the message
    * @param channelId - id of the channel receiving the message. N.B : the channel cna be one user
+   * @param senderNickname - nickname of the sender
+   * @param senderAvatar - avatar of the sender
    */
-  constructor({id, content, socketManager, senderId, channelId}){
+  constructor({id, content, socketManager, senderId, senderNickname, senderAvatar, channelId}){
     this.id = id;
     this.socketManager = socketManager;
     this.content   = content;
     this.senderId  = senderId;
+    this.senderNickname = senderNickname;
+    this.senderAvatar = senderAvatar;
     this.channelId = channelId;
   }
 
@@ -42,7 +46,9 @@ class MessageSocketSender{
       content: this.content,
       sendingTimestamp: +new Date(),
       senderId: this.senderId,
-      channelId: this.channelId
+      channelId: this.channelId,
+      senderAvatar: this.senderAvatar,
+      senderNickname: this.senderNickname,
     };
   }
 
