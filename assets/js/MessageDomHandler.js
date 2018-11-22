@@ -45,18 +45,6 @@ class MessageDomHandler{
     });
     messageSender.send();
 
-    // let messageSender =
-    //   new this.MessageSocketSender({
-    //     id: 'message:typing',
-    //     content: this.getSenderNickname(),
-    //     socketManager: this.socketManager,
-    //     senderId: this.getSenderId(),
-    //     channelId: this.getChannelId(),
-    //     senderAvatar: this.getSenderAvatar(),
-    //     senderNickname: this.getSenderNickname(),
-    //   });
-    // messageSender.send();
-
   }
 
   /**
@@ -83,16 +71,14 @@ class MessageDomHandler{
    */
   joinRoom(){
     // send message
-    let messageSender =
-      new this.MessageSocketSender({
-        id: 'message:subscribe',
-        content: 'Subscribe to room',
-        socketManager: this.socketManager,
+    let messageSender = new this.MessageSocketSender({
+      id: 'message:subscribe',
+      message: {
+        sendingTimestamp: + new Date(),
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
-        senderNickname: this.getSenderNickname(),
-        senderAvatar: this.getSenderAvatar(),
-      });
+      },
+    });
     messageSender.send();
   }
 
@@ -107,16 +93,17 @@ class MessageDomHandler{
     if(messageContent === "") return;
 
     // send message
-    let messageSender =
-      new this.MessageSocketSender({
-        id:"message:submit",
+    let messageSender = new this.MessageSocketSender({
+      id: 'message:submit',
+      message: {
         content: messageContent,
         socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
         senderNickname: this.getSenderNickname(),
         senderAvatar: this.getSenderAvatar(),
-      });
+      }
+    });
     messageSender.send();
 
     // clear the input
