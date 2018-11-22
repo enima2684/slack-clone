@@ -21,9 +21,10 @@ function initializeSockets({currentUser, currentChannel}){
 
   const socket = io();
   const socketManager = new window.SocketManager({socket});
+  const messageSocketSender = new MessageSocketSender(socketManager);
 
   const messageDomHandler = new MessageDomHandler({
-    MessageSocketSender,
+    messageSocketSender,
     socketManager,
     sessionInfo
   });

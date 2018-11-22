@@ -6,50 +6,21 @@ class MessageSocketSender{
   /**
    *
    * @param id: identifier of the message
-   * @param content - content of the message to be sent
-   * @param socketManager - socketManager object
-   * @param senderId - id of the user sending the message
-   * @param channelId - id of the channel receiving the message. N.B : the channel cna be one user
-   * @param senderNickname - nickname of the sender
-   * @param senderAvatar - avatar of the sender
+   * @param message: message to send through socket - has to be schema compliant
    */
-  constructor({id, content, socketManager, senderId, senderNickname, senderAvatar, channelId}){
-    this.id = id;
+  constructor(socketManager){
     this.socketManager = socketManager;
-    this.content   = content;
-    this.senderId  = senderId;
-    this.senderNickname = senderNickname;
-    this.senderAvatar = senderAvatar;
-    this.channelId = channelId;
   }
 
   /**
    * Sends a message through the
    * @param id: identifier of the message (key)
    */
-  send(){
-    console.log(`Sending message from ${this.senderId} to ${this.channelId}`);
-    let message = this.buildMessage();
+  send({id, message}){
     this.socketManager.emit({
-      id: this.id,
+      id: id,
       message: message,
       senderIsServer: false
     });
-
   }
-
-  /**
-   * Build the message that will be sent through the socket
-   */
-  buildMessage(){
-    return {
-      content: this.content,
-      sendingTimestamp: +new Date(),
-      senderId: this.senderId,
-      channelId: this.channelId,
-      senderAvatar: this.senderAvatar,
-      senderNickname: this.senderNickname,
-    };
-  }
-
 }

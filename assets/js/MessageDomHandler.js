@@ -5,14 +5,12 @@ class MessageDomHandler{
 
   /**
    *
-   * @param MessageSocketSender: constructor of the MessageSocketSender class
-   * @param socketManager: instance of a SocketManager
+   * @param messageSocketSender: instance of the MessageSocketSender class
    * @param sessionInfo: object containing data about the current session (user, channel, workspace).
    * This is coming from the server through an AJAX request.
    */
-  constructor({socketManager, MessageSocketSender, sessionInfo}){
-    this.socketManager = socketManager;
-    this.MessageSocketSender = MessageSocketSender;
+  constructor({messageSocketSender, sessionInfo}){
+    this.messageSocketSender = messageSocketSender;
     this.sessionInfo = sessionInfo;
     this.timeOutTyping = null;
   }
@@ -35,18 +33,15 @@ class MessageDomHandler{
     }
 
     // send a message:typing message
-    let messageSender =
-      new this.MessageSocketSender({
-        id: 'message:typing',
-        content: this.getSenderNickname(),
-        socketManager: this.socketManager,
-        senderId: this.getSenderId(),
-        channelId: this.getChannelId(),
-        senderAvatar: this.getSenderAvatar(),
+    this.messageSocketSender.send({
+      id: 'message:typing',
+      message: {
         senderNickname: this.getSenderNickname(),
-      });
-    messageSender.send();
-
+        sendingTimestamp: +new Date(),
+        channelId: this.getChannelId(),
+        senderId: this.getSenderId(),
+      }
+    });
   }
 
   /**
@@ -73,17 +68,14 @@ class MessageDomHandler{
    */
   joinRoom(){
     // send message
-    let messageSender =
-      new this.MessageSocketSender({
-        id: 'message:subscribe',
-        content: 'Subscribe to room',
-        socketManager: this.socketManager,
+    this.messageSocketSender.send({
+      id: 'message:subscribe',
+      message: {
+        sendingTimestamp: + new Date(),
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
-        senderNickname: this.getSenderNickname(),
-        senderAvatar: this.getSenderAvatar(),
-      });
-    messageSender.send();
+      }
+    });
   }
 
   /**
@@ -97,17 +89,17 @@ class MessageDomHandler{
     if(messageContent === "") return;
 
     // send message
-    let messageSender =
-      new this.MessageSocketSender({
-        id:"message:submit",
+    this.messageSocketSender.send({
+      id: 'message:submit',
+      message: {
         content: messageContent,
-        socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
         senderNickname: this.getSenderNickname(),
         senderAvatar: this.getSenderAvatar(),
-      });
-    messageSender.send();
+        sendingTimestamp: +new Date(),
+      }
+    });
 
     // clear the input
     this.clearInput();
@@ -135,13 +127,12 @@ class MessageDomHandler{
     return this.sessionInfo.currentUser.nickname
   }
 
-     /**
+   /**
    * Gets the avatar of the sender
    */
   getSenderAvatar(){
     return this.sessionInfo.currentUser.avatar
   }
-
 
   /**
    * Gets the id of the channel to which the message will be sent
@@ -152,10 +143,6 @@ class MessageDomHandler{
 
   /**
    * Renders a new message to the form
-   */
-
-
-  /**
    *
    * @param senderId : id of sender of the message
    * @param senderAvatar: avatar of the sender
@@ -183,7 +170,6 @@ class MessageDomHandler{
 
   }
 
-
   /**
    * Returns the formated HH h MM time from the timestamp
    * @param timestamp
@@ -195,6 +181,5 @@ class MessageDomHandler{
 
     return `${hours.substr(-2)} h ${minutes.substr(-2)}`
   }
-
 
 }
