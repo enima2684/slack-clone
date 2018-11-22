@@ -62,15 +62,17 @@ class Channel extends Sequelize.Model {
     let messages = await Promise.all([this.getStoredMessages(), this.getCachedMessages()])
     .then((data) => data)
     .catch(err => {throw err})
-    // let dbMessages = await getStoredMessages()
-    // console.log(messages);
+    console.log('*****************', messages[1]);
     return messages[0];
   }
    
   
-  getCachedMessages(){
+  async getCachedMessages(){
     const redis = require('../../index').db.redis;
+    let hash = await redis.hgetallAsync('message#123');
+    console.log('#######', hash);
 
+    return hash;
   }  
 
   async getStoredMessages(){
