@@ -28,7 +28,6 @@ db.redis.getAsync('hello')
     throw err;
   });
 
-
 let events = [
   eventBigChannel,
   eventHighMemoryUsage,
