@@ -59,25 +59,12 @@ class SocketMessageHandler{
    * Builds the broadcasted message given the received message
    * @param receivedMessage: received Message from the socket io (submit:message event)
    */
-  async buildBroadcastedMessage(receivedMessage){
+  buildBroadcastedMessage(receivedMessage){
 
-    try{
-
-      // add the broadcasting time to the message
-      let broadcastedMessage = Object.assign({}, receivedMessage);
-      broadcastedMessage.broadcastingTimestamp = +new Date();
-
-      // add data about the sender
-      let sender = await db.sql.User.findOne({where: {id: receivedMessage.senderId}});
-      broadcastedMessage.senderAvatar = sender.avatar;
-      broadcastedMessage.senderNickname = sender.nickname;
-
-      return broadcastedMessage
-    }
-    catch (err) {
-      logger.error(err.message);
-      throw err;
-    }
+    // add the broadcasting time to the message
+    let broadcastedMessage = Object.assign({}, receivedMessage);
+    broadcastedMessage.broadcastingTimestamp = +new Date();
+    return broadcastedMessage
 
   }
 
@@ -99,7 +86,7 @@ class SocketMessageHandler{
 
       logger.debug(`..broadcasting message to the channel`);
       // broadcast new message to all clients
-      let broadcastedMessage = await this.buildBroadcastedMessage(message);
+      let broadcastedMessage = this.buildBroadcastedMessage(message);
       socketManager.in(message.channelId).emit({
         id: "message:broadcast",
         message: broadcastedMessage,
