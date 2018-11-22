@@ -36,7 +36,7 @@ class MessageSocketListenner{
 
     //message.content contains the name if the person typing
     this.domHandler.renderTypingMessage({
-      name: message.content,
+      name: message.senderNickname,
       id: message.senderId
     });
 

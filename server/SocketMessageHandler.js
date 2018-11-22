@@ -115,7 +115,6 @@ class SocketMessageHandler{
       message: message,
       senderIsServer: true,
     });
-
   }
 
   /**
