@@ -42,6 +42,8 @@ class MessageDomHandler{
         socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
+        senderAvatar: this.getSenderAvatar(),
+        senderNickname: this.getSenderNickname(),
       });
     messageSender.send();
 
@@ -78,6 +80,8 @@ class MessageDomHandler{
         socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
+        senderNickname: this.getSenderNickname(),
+        senderAvatar: this.getSenderAvatar(),
       });
     messageSender.send();
   }
@@ -100,6 +104,8 @@ class MessageDomHandler{
         socketManager: this.socketManager,
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
+        senderNickname: this.getSenderNickname(),
+        senderAvatar: this.getSenderAvatar(),
       });
     messageSender.send();
 
@@ -123,11 +129,19 @@ class MessageDomHandler{
   }
 
    /**
-   * Gets the id of the sender
+   * Gets the nickname of the sender
    */
   getSenderNickname(){
     return this.sessionInfo.currentUser.nickname
   }
+
+     /**
+   * Gets the avatar of the sender
+   */
+  getSenderAvatar(){
+    return this.sessionInfo.currentUser.avatar
+  }
+
 
   /**
    * Gets the id of the channel to which the message will be sent
