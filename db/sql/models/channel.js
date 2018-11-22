@@ -59,44 +59,69 @@ class Channel extends Sequelize.Model {
 
    
   async getLatestMessages(){
-    let messages = await Promise.all([this.getStoredMessages(), this.getCachedMessages()])
-    .then((data) => data)
-    .catch(err => {throw err})
-    console.log('*****************', messages[1]);
-    return messages[0];
+    // Db queries to retrieve latest messages in a channel
+    try {
+      let messages = await Promise.all([this.getMessageSql(), this.getMessagesRedis()]);
+      // Join and format results from queries
+      messages = messages
+      .reduce((p,n) => p.concat(n)) // concatenate results of the queries
+      .map(message => { // format the message properly for display
+        return {
+          senderId: message.sender.id,
+          senderNickname: message.sender.nickname,
+          senderAvatar: message.sender.avatar,
+          content: message.content,
+          timestamp: this.getFormatedTime(message.createdAt),
+        };
+      });
+
+      return messages;
+    } catch(err) {throw err}
   }
    
   
-  async getCachedMessages(){
-    const redis = require('../../index').db.redis;
-    let hash = await redis.hgetallAsync('message#123');
-    console.log('#######', hash);
+  async getMessagesRedis(){
+    const redisClient = require('../../index').db.redis;
+    try {
+      // Redis queries
+      let messageList = await redisClient.zrangeAsync(`channel#${this.id}`, 0, -1);
+      let messages = await Promise.all(messageList.map(message => redisClient.hgetallAsync(message)));
+      // build messages to match structure of messages in the Sql database
+      let builtMessages = messages.map(message => {
+        return {
+          content: message.content,
+          sender: {
+            id: message.senderId,
+            nickname: message.senderNickname,
+            avatar: message.senderAvatar,
+          },
+          createdAt: new Date(1*message.timestamp),
+        };
+      });
 
-    return hash;
-  }  
-
-  async getStoredMessages(){
-
-    const User = require('./index').User;
-
-    let messages = await this.getMessages({
-      order: [['createdAt', 'ASC']],
-      limit: 100,
-      include: [{
-        model: User,
-        as: 'sender',
-      }]
-    });
-    return messages.map(message => {
-      return {
-        senderId: message.sender.id,
-        senderNickname: message.sender.nickname,
-        senderAvatar: message.sender.avatar,
-        content: message.content,
-        timestamp: this.getFormatedTime(message.createdAt),
-      };
-    });
+      return builtMessages;
+    } catch(err) {throw err}
   }
+
+  async getMessageSql(){
+    try {
+      const User = require('./index').User;
+      // Sql query for latest messages and users
+      let messages = await this.getMessages({
+        order: [['createdAt', 'DESC']],
+        limit: 100,
+        include: [{
+          model: User,
+          as: 'sender',
+        }]
+      });
+      // revert to ascending order
+      messages = messages.reverse();
+      return messages;
+    }
+    catch(err) {throw err};
+  }
+    
 
   getFormatedTime(timestamp){
     let date = new Date(timestamp);
