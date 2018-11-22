@@ -5,14 +5,12 @@ class MessageDomHandler{
 
   /**
    *
-   * @param MessageSocketSender: constructor of the MessageSocketSender class
-   * @param socketManager: instance of a SocketManager
+   * @param messageSocketSender: instance of the MessageSocketSender class
    * @param sessionInfo: object containing data about the current session (user, channel, workspace).
    * This is coming from the server through an AJAX request.
    */
-  constructor({socketManager, MessageSocketSender, sessionInfo}){
-    this.socketManager = socketManager;
-    this.MessageSocketSender = MessageSocketSender;
+  constructor({messageSocketSender, sessionInfo}){
+    this.messageSocketSender = messageSocketSender;
     this.sessionInfo = sessionInfo;
     this.timeOutTyping = null;
   }
@@ -35,18 +33,15 @@ class MessageDomHandler{
     }
 
     // send a message:typing message
-    let messageSender = new this.MessageSocketSender({
+    this.messageSocketSender.send({
       id: 'message:typing',
       message: {
         senderNickname: this.getSenderNickname(),
         sendingTimestamp: +new Date(),
         channelId: this.getChannelId(),
         senderId: this.getSenderId(),
-      },
-      socketManager: this.socketManager
+      }
     });
-    messageSender.send();
-
   }
 
   /**
@@ -73,16 +68,14 @@ class MessageDomHandler{
    */
   joinRoom(){
     // send message
-    let messageSender = new this.MessageSocketSender({
+    this.messageSocketSender.send({
       id: 'message:subscribe',
       message: {
         sendingTimestamp: + new Date(),
         senderId: this.getSenderId(),
         channelId: this.getChannelId(),
-      },
-      socketManager: this.socketManager
+      }
     });
-    messageSender.send();
   }
 
   /**
@@ -96,7 +89,7 @@ class MessageDomHandler{
     if(messageContent === "") return;
 
     // send message
-    let messageSender = new this.MessageSocketSender({
+    this.messageSocketSender.send({
       id: 'message:submit',
       message: {
         content: messageContent,
@@ -105,10 +98,8 @@ class MessageDomHandler{
         senderNickname: this.getSenderNickname(),
         senderAvatar: this.getSenderAvatar(),
         sendingTimestamp: +new Date(),
-      },
-      socketManager: this.socketManager
+      }
     });
-    messageSender.send();
 
     // clear the input
     this.clearInput();

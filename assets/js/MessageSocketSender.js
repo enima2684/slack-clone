@@ -8,9 +8,7 @@ class MessageSocketSender{
    * @param id: identifier of the message
    * @param message: message to send through socket - has to be schema compliant
    */
-  constructor({id, message, socketManager}){
-    this.id = id;
-    this.message = message;
+  constructor(socketManager){
     this.socketManager = socketManager;
   }
 
@@ -18,26 +16,11 @@ class MessageSocketSender{
    * Sends a message through the
    * @param id: identifier of the message (key)
    */
-  send(){
+  send({id, message}){
     this.socketManager.emit({
-      id: this.id,
-      message: this.message,
+      id: id,
+      message: message,
       senderIsServer: false
     });
   }
-
-  // /**
-  //  * Build the message that will be sent through the socket
-  //  */
-  // buildMessage(){
-  //   return {
-  //     content: this.content,
-  //     sendingTimestamp: +new Date(),
-  //     senderId: this.senderId,
-  //     channelId: this.channelId,
-  //     senderAvatar: this.senderAvatar,
-  //     senderNickname: this.senderNickname,
-  //   };
-  // }
-
 }
