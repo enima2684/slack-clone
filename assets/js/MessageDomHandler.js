@@ -14,6 +14,7 @@ class MessageDomHandler{
     this.socketManager = socketManager;
     this.MessageSocketSender = MessageSocketSender;
     this.sessionInfo = sessionInfo;
+    this.timeOutTyping = null;
   }
 
   /**
@@ -32,8 +33,39 @@ class MessageDomHandler{
     if(event.keyCode === 13) {
       this.onSubmit();
     }
+
+    // send a message:typing message
+    let messageSender =
+      new this.MessageSocketSender({
+        id: 'message:typing',
+        content: this.getSenderNickname(),
+        socketManager: this.socketManager,
+        senderId: this.getSenderId(),
+        channelId: this.getChannelId(),
+      });
+    messageSender.send();
+
   }
-  
+
+  /**
+   * Renders the typing message
+   * @param name: name of the person typing
+   * @param id: id of the person typing
+   */
+  renderTypingMessage({name, id}){
+
+    // do nothing if current user is the one typing a message
+    if (this.getSenderId() === id){
+      return
+    }
+
+    $("#typing-indicator").html(`...${name} is typing`);
+    clearTimeout(this.timeOutTyping);
+    this.timeOutTyping = setTimeout(()=>{
+      $("#typing-indicator").html("");
+    }, 2000)
+  }
+
   /**
    * Subscription to channel on page load
    */
@@ -88,6 +120,13 @@ class MessageDomHandler{
    */
   getSenderId(){
     return this.sessionInfo.currentUser.id
+  }
+
+   /**
+   * Gets the id of the sender
+   */
+  getSenderNickname(){
+    return this.sessionInfo.currentUser.nickname
   }
 
   /**

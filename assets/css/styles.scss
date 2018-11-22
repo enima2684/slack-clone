@@ -193,7 +193,6 @@ section.main{
   flex-direction: column;
   justify-content: space-between;
 
-
   .header{
     margin-top: 11px;
     padding-left: 20.1px;
@@ -297,7 +296,17 @@ section.main{
   .input-container{
     height: 66px;
     flex-shrink: 0;
-    //margin-bottom: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    #typing-indicator{
+      height: 15px;
+      color: $color-detail-text;
+      font-size: 0.9rem;
+      margin-right: 2.5%;
+    }
 
     .input{
       height: 40px;
@@ -306,7 +315,6 @@ section.main{
       margin: 0 auto;
       border-radius: 5px;
       display: flex;
-      flex-grow: 1;
 
       .btn-attachment{
         height: 100%;

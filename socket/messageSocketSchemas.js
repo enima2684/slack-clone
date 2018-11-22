@@ -56,6 +56,16 @@
     channelId             : Joi.number().required(),
   });
 
+
+  /*** message:typing ***/
+  messageSocketSchemas["message:typing"] = Joi.object().keys({
+    content          : Joi.string().min(1).required(),
+    sendingTimestamp : Joi.number().min(0).integer().required(),
+    senderId         : Joi.number().required(),
+    channelId        : Joi.number().required(),
+  });
+
+
   /*** disconnect ***/
   messageSocketSchemas["disconnect"] = Joi.object().keys({});
 

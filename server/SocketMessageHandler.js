@@ -29,6 +29,8 @@ class SocketMessageHandler{
 
       socketManager.on('message:subscribe', message => this.onJoin(socketManager,message));
 
+      socketManager.on('message:typing', message => this.onMessageTyping(socketManager, message));
+
       socketManager.on('disconnect', reason =>this.onDisconnect(reason, socketManager));
 
       socketManager.on('error', error => {
@@ -77,8 +79,8 @@ class SocketMessageHandler{
       throw err;
     }
 
-
   }
+
 
   /**
    * Executed when a submitted message is received on the server
@@ -114,6 +116,22 @@ class SocketMessageHandler{
     catch (err){
       throw err;
     }
+  }
+
+  /**
+   * On reception of 'message:typing'
+   * @param socketManager
+   * @param message
+   */
+  onMessageTyping(socketManager, message){
+
+    // broadcast typing message to the room
+   socketManager.in(message.channelId).emit({
+      id: "message:typing",
+      message: message,
+      senderIsServer: true,
+    });
+
   }
 
   /**

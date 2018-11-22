@@ -1,6 +1,7 @@
 node_modules/
 .idea/
 .DS_Store
+config/config-sequelize.js
 *.css
 *.css.map
 assets/css/login.css.map
