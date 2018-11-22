@@ -8,9 +8,10 @@ class MessageSocketSender{
    * @param id: identifier of the message
    * @param message: message to send through socket - has to be schema compliant
    */
-  constructor(id, message){
+  constructor({id, message, socketManager}){
     this.id = id;
     this.message = message;
+    this.socketManager = socketManager;
   }
 
   /**
@@ -18,7 +19,6 @@ class MessageSocketSender{
    * @param id: identifier of the message (key)
    */
   send(){
-    console.log(`Sending message from ${this.senderId} to ${this.channelId}`);
     this.socketManager.emit({
       id: this.id,
       message: this.message,
