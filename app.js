@@ -46,7 +46,7 @@ const SocketMessageHandler = require('./server/SocketMessageHandler').SocketMess
 const db      = require('./db/index.js').db;
 const index   = require('./routes/index');
 
-/*** Test connection to the db ***/
+/*** Test connection to the Postgres db ***/
 db.sql.sequelize.authenticate()
   .then(() => {
     logger.info('Connection to SQL db has been established successfully.');
@@ -56,6 +56,15 @@ db.sql.sequelize.authenticate()
     throw err;
   });
 
+/*** Test connection to the Redis db ***/
+db.redis.getAsync('hello')
+  .then(()=>{
+    logger.info('Connection to Redis db has been established successfully.');
+  })
+  .catch(err => {
+    logger.error(err);
+    throw err;
+  });
 
 /*** Session + Passport + Flash ***/
 // app.set('trust proxy', 1); // trust first proxy

@@ -22,6 +22,7 @@
   "homepage": "https://github.com/enima2684/slack-clone#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.3",
     "body-parser": "^1.18.3",
     "chai": "^4.2.0",
     "connect-flash": "^0.1.1",
@@ -41,6 +42,7 @@
     "passport": "^0.4.0",
     "pg": "^7.6.1",
     "pg-hstore": "^2.3.2",
+    "redis": "^2.8.0",
     "sequelize": "^4.41.1",
     "sequelize-auto-migrations": "^1.0.2",
     "socket.io": "^2.1.1",
