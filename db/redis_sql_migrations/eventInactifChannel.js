@@ -3,25 +3,25 @@
  * In this case, NB_MIGRATED_MESSAGES messages is moved to the sql server and are removed from the Redis
  */
 
-const FREQUENCY = "* * * * *";
-
 const MigrationEvent = require('./MigrationEvent');
-const db             = require('../index').db;
+const db = require('../index').db;
+const redis = db.redis;
 
-async function trigger(){
 
-  // 1. Scan all channel keys
-  let channels = db.redis.zrangebyscoreAsync([])
 
+class EventInactifChannel extends MigrationEvent{
+
+
+  async getMessagesToMigrate(){
+    return []
+  }
 
 }
 
 
-let eventInactifChannel = new MigrationEvent({
-  name: "eventInactifChannel",
-  frequency: FREQUENCY,
-  trigger: () => true,
-  action: () => {console.log("🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙🐙")}
+let eventInactifChannel = new EventInactifChannel({
+  name: 'inactifChannel',
+  frequency: "* * * * *",
 });
 
 module.exports = eventInactifChannel;

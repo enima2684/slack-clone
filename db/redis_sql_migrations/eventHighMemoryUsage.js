@@ -1,14 +1,22 @@
 const MigrationEvent = require('./MigrationEvent');
+const db = require('../index').db;
+const redis = db.redis;
 
 
 
+class EventHighMemoryUsage extends MigrationEvent{
 
 
-let eventHighMemoryUsage = new MigrationEvent({
-  event: 'eventHighMemoryUsage',
+  async getMessagesToMigrate(){
+    return []
+  }
+
+}
+
+
+let eventHighMemoryUsage = new EventHighMemoryUsage({
+  name: 'highMemoryUsage',
   frequency: "* * * * *",
-  trigger: () => true,
-  action: () => {console.log("🐥🐥🐥🐥🐥🐥🐥🐥🐥🐥🐥🐥🐥🐥🐥🐥")}
 });
 
 module.exports = eventHighMemoryUsage;
