@@ -30,8 +30,8 @@ class Message extends Sequelize.Model {
    * @param message:  message respecting the Schema for 'message:submit'
    * @return {Promise<void>}
    */
-  static async redisSaveHash(message){
-    const redisClient = require('../../redis/index');
+  static async redisSaveMessageHash(message){
+    const redisClient = require('../../index').db.redis;
 
     try{
       logger.debug(`saving redis hash for message ${message.id}..`);
@@ -50,21 +50,66 @@ class Message extends Sequelize.Model {
     }
   }
 
+  /**
+   * Increment the count of the messages in the channel
+   * @param message
+   * @return {Promise<void>}
+   */
+  static async redisUpdateChannelMessageCountRedis(message){
+    const redisClient = require('../../index').db.redis;
+
+    try{
+      logger.debug(`updating the redis message count for channel ${message.channelId}`);
+      let nb_messages = await redisClient.zincrbyAsync([
+        'channel:message_count',
+        1,
+        `channel#${message.channelId}`
+      ]);
+      logger.debug(`redis message count updated for channel ${message.channelId} : ${nb_messages} messages`);
+
+    } catch(err){
+      throw err;
+    }
+
+  }
+
     /**
    * Saves the message zset into redis - used to track the messages on a given channel
    * @param message:  message respecting the Schema for 'message:submit'
    * @return {Promise<void>}
    */
-  static async redisSaveZset(message){
-    const redisClient = require('../../redis/index');
-    logger.debug(`saving redis zset for message ${message.id}..`);
+  static async redisSaveChannelMessageZset(message){
+    const redisClient = require('../../index').db.redis;
+
     try{
+      logger.debug(`saving redis zset for message ${message.id}..`);
       await redisClient.zaddAsync([
         `channel#${message.channelId}`,
         `${message.sendingTimestamp}`,
         `message#${message.id}`
       ]);
       logger.debug(`redis zset saved for message ${message.id}`);
+    } catch(err) {
+      throw err;
+    }
+  }
+
+    /**
+   * Saves the message zset into redis - used to track the messages on a given channel
+   * @param message:  message respecting the Schema for 'message:submit'
+   * @return {Promise<void>}
+   */
+  static async redisUpdateChannelLastUpdatedRedis(message){
+    const redisClient = require('../../index').db.redis;
+
+    try{
+      logger.debug(`updating redis last update timestamp for channel ${message.channelId}..`);
+      await redisClient.zaddAsync([
+        'channel:last_updated',
+        message.sendingTimestamp,
+        `channel#${message.channelId}`
+      ]);
+      logger.debug(`channel:last_updated updated in redis for channel ${message.channelId}`);
     } catch(err) {
       throw err;
     }
@@ -82,10 +127,16 @@ class Message extends Sequelize.Model {
 
       await Promise.all([
         // 1. create the hash entry
-        Message.redisSaveHash(message),
+        Message.redisSaveMessageHash(message),
 
         // 2. create the zset entry
-        Message.redisSaveZset(message)
+        Message.redisSaveChannelMessageZset(message),
+
+        // 3. update the message count for the channel
+        Message.redisUpdateChannelMessageCountRedis(message),
+
+        // 4. update the last_updated timestamp
+        Message.redisUpdateChannelLastUpdatedRedis(message),
       ]);
 
       return message

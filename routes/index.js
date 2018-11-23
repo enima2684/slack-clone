@@ -86,7 +86,6 @@ function redirectFlash(type, message, route, req, res){
     });
 }
 
-
 router.get('/', (req, res, next) => {
   if(req.user){
     res.redirect('/workspace-choice');
